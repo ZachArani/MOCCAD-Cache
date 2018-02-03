@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <Button android:id="@+id/relation_choice_button"
+	    android:layout_alignParentTop="true"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="@string/choose_relation"
+    	android:textSize="15sp" />
+	
+	<View android:id="@+id/split_view_before"
+	    android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:layout_marginLeft="4dp"
+		android:layout_marginRight="4dp"
+		android:background="?android:attr/dividerVertical"
+		android:layout_below="@id/relation_choice_button"/>
+	
+	<RelativeLayout android:id="@+id/title_add_predicate_view"
+	    android:layout_width="match_parent"
+	    android:layout_height="40dp"
+	    style="?android:attr/buttonBarStyle"
+	    android:layout_below="@id/split_view_before">
+	    
+	    <TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="17sp"
+			android:layout_centerVertical="true"
+			style="?android:attr/buttonBarButtonStyle"
+			android:paddingLeft="5dp"
+			android:text="@string/predicates"/>
+	    
+	    <ImageButton android:id="@+id/addButton"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_centerInParent="true"
+	        style="?android:attr/buttonBarButtonStyle"
+	        android:scaleType="centerInside"
+	        android:adjustViewBounds="true"
+	        android:src="@drawable/ic_action_new"
+	        android:contentDescription="@string/add_predicate"/>
+	    
+	    <View android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="?android:attr/dividerVertical"
+            android:layout_toLeftOf="@id/addButton" />
+	    
+	</RelativeLayout>
+			
+	<View android:id="@+id/split_view_after"
+	    android:layout_width="match_parent"
+		android:layout_height="1dip"
+		android:layout_marginLeft="4dp"
+		android:layout_marginRight="4dp"
+		android:background="?android:attr/dividerVertical"
+		android:layout_below="@id/title_add_predicate_view"/>
+    
+    <LinearLayout android:id="@+id/buttons_action_new_query"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:weightSum="2"
+        style="?android:attr/buttonBarStyle"
+        android:layout_alignParentBottom="true">
+        
+        <Button
+            android:id="@+id/cancelButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel" />
+        <Button
+            android:id="@+id/startButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/launch_query" />
+    </LinearLayout>
+    
+    <View android:id="@+id/split_view_before_buttons"
+	    android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:layout_marginLeft="4dp"
+		android:layout_marginRight="4dp"
+		android:background="?android:attr/dividerVertical"
+		android:layout_above="@id/buttons_action_new_query"/>
+    
+    <ScrollView android:layout_above="@id/split_view_before_buttons"
+        android:layout_below="@id/split_view_after"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fadeScrollbars="false">
+		
+		<LinearLayout android:id="@+id/new_predicate_view_list"
+		    android:orientation="vertical"
+		    android:gravity="top"
+	    	android:layout_width="match_parent"
+	    	android:layout_height="wrap_content" >
+		</LinearLayout>
+		
+	</ScrollView>
+	
+	
+     
+ </RelativeLayout>

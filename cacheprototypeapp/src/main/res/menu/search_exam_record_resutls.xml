@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="edu.ou.oudb.cacheprototypeapp.ui.SearchExamRecordResultsActivity">
+
+    <item
+        android:id="@+id/text_sort_by"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_sort_by" />
+
+    <item
+        android:id="@+id/spinner"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_sort_by"
+        android:actionViewClass="android.widget.Spinner"/>
+
+</menu>

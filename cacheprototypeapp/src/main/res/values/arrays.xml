@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="predicate_types">
+        <item>@string/XopCPredicate</item>
+        <item>@string/XopYPredicate</item>
+    </array>
+    <array name="operators">
+        <item>&lt;=</item>
+        <item>&lt;</item>
+        <item>=</item>
+        <item>&gt;</item>
+        <item>&gt;=</item>
+    </array>
+    <array name="attributes">
+        <item>ID</item>
+        <item>Patient First Name</item>
+        <item>Patient Last Name</item>
+        <item>Doctor First Name</item>
+        <item>Doctor Last Name</item>
+        <item>Description</item>
+        <item>Date</item>
+        <item>Time</item>
+        <item>Heart Rate</item>
+    </array>
+</resources>

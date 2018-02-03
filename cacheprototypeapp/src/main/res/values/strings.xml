@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AndroidCachePrototype</string>
+    <string name="title_activity_main">Cache Prototype Home Page</string>
+    <string name="processed_queries_section">Processed Queries</string>
+    <string name="query_cache_section">Query Cache</string>
+    <string name="mobile_estimation_cache_section">Mobile Estimation Cache</string>
+    <string name="cloud_estimation_cache_section">Cloud Estimation Cache</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+    <string name="no_processed_queries">No processed queries</string>
+    <string name="no_cached_entries">No cached entries</string>
+    <string name="action_new">New Query</string>
+    <string name="title_activity_new_query">Launch a new query</string>
+    <string name="predicates">Predicates:</string>
+    <string name="add_predicate">Add a predicate</string>
+    <string name="remove_predicate">Remove a predicate</string>
+    <string name="invalid_predicate">Invalid predicate</string>
+    <string name="invalid_predicate_message">This predicate is invalid:</string>
+    <string name="choose_relation">Choose a relation</string>
+    <string name="choose_predicate">Choose a type of predicate</string>
+    <string name="choose_attribute">Choose an attribute</string>
+    <string name="choose_operator">Choose an operator</string>
+    <string name="choose_value">Choose a value</string>
+    <string name="launch_query">Launch</string>
+    <string name="cancel">Cancel</string>
+    <string name="initialization">Application Initialization</string>
+    <string name="initialization_message">Initialization of the application, please wait…</string>
+    <string name="long_initialization_message">Initialization of the application, this may take a few minutes, please wait</string>
+    <string name="set_data_access_provider_message">Setting new data access provider…</string>
+    <string name="set_cache_type_message">Setting new cache type</string>
+    <string name="processing_query">Query processing</string>
+    <string name="processing_query_message">Please wait while your query result is being retrieved</string>
+    <string name="query_processing_error">Query processing error</string>
+    <string name="query_processing_error_message">An error occurred while processing the query</string>
+    <string name="no_connection_error">No Wifi Connection Established</string>
+    <string name="no_connection_error_message">Please connect to a wifi network</string>
+    <string name="ok">OK</string>
+    <string name="dialog_relaunch_query">Relaunch this query ?</string>
+    <string name="XopCPredicate">[Attribute] [operator] [Constant]</string>
+    <string name="XopYPredicate">[Attribute] [operator] [Attribute]</string>
+    <string name="title_activity_result">ResultActivity</string>
+    <string name="title_result_list">Results</string>
+    <string name="title_result_detail">Result Detail</string>
+    <string name="title_activity_query_segment">QuerySegmentActivity</string>
+    <string name="connection_error">Connection Error</string>
+    <string name="connection_error_message">Impossible to connect to the web service, please check the settings</string>
+    <string name="parsing_error_message">Data format error, the server does not return correct value(s)</string>
+    <string name="action_experimentation">Start Experimentation</string>
+    <string name="experimentation">Experimentation</string>
+    <string name="experimentation_message">Experimentations take time, please be patient</string>
+    <string name="warmup">Cache Set up</string>
+    <string name="warmup_message">The Cache is warming up before the experimentation</string>
+    <!-- Statistics Page -->
+    <string name="title_activity_statistics">Statistics</string>
+    <string name="action_save">Save Statistics</string>
+    <string name="action_delete">Delete Statistics</string>
+    <string name="action_stats">Display Statistics</string>
+    <string name="nbProcQue">Number of Processed Queries:</string>
+    <string name="nbQueCac">Number of Queries in Cache:</string>
+    <string name="nbProcQueMob">Estimated queries on Mobile:</string>
+    <string name="nbProcQueCloud">Estimated queries on Cloud:</string>
+    <string name="timeMob">Total time needed on Mobile:</string>
+    <string name="timeCloud">Total time needed on Cloud:</string>
+    <!-- Set Weights Page -->
+    <string name="title_activity_weights">Set Your Weight Profile</string>
+    <string name="instructions">Move the seekbars to set the weight you want on each objective.
+        \nThe buttons at the bottom of your screen are predefined weight profiles that you can use.</string>
+    <string name="time_text">Weight on time</string>
+    <string name="money_text">Weight on money</string>.
+    <string name="energy_text">Weight on energy</string>
+    <string name="confirm">Confirm</string>
+    <string name="moneySaver">Money Saver</string>
+    <string name="emergency">Emergency</string>
+    <string name="lowPower">Low Power</string>
+    <string name="reset">Reset</string>
+    <!-- Search Exam Record Page -->
+    <string name="title_activity_query_selection">Search An Exam Record</string>
+    <string name="project_name">MOCCAD</string>
+    <string name="title_activity_query_results">Results of your search</string>
+    <string name="id_heartrate_hint">Enter a number</string>
+    <string name="patient_doctor_hint">Enter a name</string>
+    <string name="description_hint">Enter a description</string>
+    <string name="date_hint">Enter a date</string>
+    <string name="time_hint">Enter a time</string>
+    <string name="search">Search</string>
+    <!-- Results List Page -->
+    <string name="action_sort_by">Sort By</string>
+    <string name="record_list">Record List</string>
+    <string name="show_costs">Show costs</string>
+    <string name="costsText">This response costs you:</string>
+    <!-- Results Details Page -->
+    <string name="title_activity_query_results_details">Details</string>
+    <string name="attr">ID:</string>
+    <string name="attr1full">Patient Name:</string>
+    <string name="attr1">Patient First Name:</string>
+    <string name="attr1bis">Patient Last Name:</string>
+    <string name="attr2full">Doctor Name:</string>
+    <string name="attr2">Doctor First Name:</string>
+    <string name="attr2bis">Doctor Last Name:</string>
+    <string name="attr3">Description:</string>
+    <string name="attr4">Date:</string>
+    <string name="attr5">Time:</string>
+    <string name="attr6">Heart Rate:</string>
+    <!-- Welcome Page -->
+    <string name="welcome_message">Welcome to the MOCCAD Prototype Application !
+        \n\n\nThis application allows you to search for information respecting your constraints / needs.
+        \n\nYou will firstly need to set / choose a weight profile. Then, enter the information you want to search.
+        \nClick the search button and results will be displayed.
+        \n\n\nOur system ensures the costs are the best, regarding your weight profile.</string>
+    <string name="get_started">Get Started !</string>
+
+</resources>

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="true">
+
+        <!-- Project Name -->
+        <TextView
+            android:id="@+id/project_name"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/project_name"
+            android:textSize="34sp" />
+
+        <!-- Attributes -->
+        <TextView
+            android:id="@+id/id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/project_name"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/attr"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/patientfirstname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/id"
+            android:layout_below="@id/id"
+            android:layout_marginTop="25dp"
+            android:text="@string/attr1"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/patientlastname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/id"
+            android:layout_below="@id/patientfirstname"
+            android:layout_marginTop="25dp"
+            android:text="@string/attr1bis"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/doctorfirstname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/id"
+            android:layout_below="@id/patientlastname"
+            android:layout_marginTop="25dp"
+            android:text="@string/attr2"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/doctorlastname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/id"
+            android:layout_below="@id/doctorfirstname"
+            android:layout_marginTop="25dp"
+            android:text="@string/attr2bis"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/id"
+            android:layout_below="@id/doctorlastname"
+            android:layout_marginTop="25dp"
+            android:text="@string/attr3"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/p_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/id"
+            android:layout_below="@id/description"
+            android:layout_marginTop="25dp"
+            android:text="@string/attr4"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/p_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/id"
+            android:layout_below="@id/p_date"
+            android:layout_marginTop="25dp"
+            android:text="@string/attr5"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/heartrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/id"
+            android:layout_below="@id/p_time"
+            android:layout_marginTop="25dp"
+            android:text="@string/attr6"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Operators -->
+        <Spinner
+            android:id="@+id/id_op"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/project_name"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/patientfirstname" />
+
+        <!-- If using the cache with Strings, switch the TextViews back to Spinners -->
+        <TextView
+            android:id="@+id/patient_op"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_toEndOf="@id/patientfirstname" />
+
+        <TextView
+            android:id="@+id/patient_second_op"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/patientfirstname"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_toEndOf="@id/patientfirstname" />
+
+        <TextView
+            android:id="@+id/doctor_op"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/patientlastname"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_toEndOf="@id/patientfirstname" />
+
+        <TextView
+            android:id="@+id/doctor_second_op"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/doctorfirstname"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_toEndOf="@id/patientfirstname" />
+
+        <TextView
+            android:id="@+id/description_op"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/doctorlastname"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_toEndOf="@id/patientfirstname" />
+
+        <Spinner
+            android:id="@+id/date_op"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description"
+            android:layout_marginTop="17dp"
+            android:layout_toEndOf="@id/patientfirstname" />
+
+        <Spinner
+            android:id="@+id/time_op"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/p_date"
+            android:layout_marginTop="21dp"
+            android:layout_toEndOf="@id/patientfirstname" />
+
+        <Spinner
+            android:id="@+id/heartrate_op"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/p_time"
+            android:layout_marginTop="16dp"
+            android:layout_toEndOf="@id/patientfirstname" />
+
+        <!-- Values -->
+        <EditText
+            android:id="@+id/id_value"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/project_name"
+            android:layout_toEndOf="@id/id_op"
+            android:hint="@string/id_heartrate_hint"
+            android:inputType="number" />
+
+        <AutoCompleteTextView
+            android:id="@+id/patient_first_value"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id_value"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/id_op"
+            android:hint="@string/patient_doctor_hint"
+            android:imeOptions="actionNext"
+            android:inputType="textAutoComplete" />
+
+        <AutoCompleteTextView
+            android:id="@+id/patient_second_value"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/patient_first_value"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/id_op"
+            android:hint="@string/patient_doctor_hint"
+            android:imeOptions="actionNext"
+            android:inputType="text" />
+
+        <AutoCompleteTextView
+            android:id="@+id/doctor_first_value"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/patient_second_value"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/id_op"
+            android:hint="@string/patient_doctor_hint"
+            android:imeOptions="actionNext"
+            android:inputType="text" />
+
+        <AutoCompleteTextView
+            android:id="@+id/doctor_second_value"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/doctor_first_value"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/id_op"
+            android:hint="@string/patient_doctor_hint"
+            android:imeOptions="actionNext"
+            android:inputType="text" />
+
+        <AutoCompleteTextView
+            android:id="@+id/description_value"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/doctor_second_value"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@id/id_op"
+            android:hint="@string/description_hint"
+            android:imeOptions="actionDone"
+            android:inputType="text" />
+
+        <!-- Displaying the pickers and the value when chosen -->
+        <Button
+            android:id="@+id/date_picker"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description_value"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/date_op"
+            android:text="@string/date_hint" />
+
+        <Button
+            android:id="@+id/time_picker"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/date_picker"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/time_op"
+            android:text="@string/time_hint" />
+
+        <EditText
+            android:id="@+id/heartrate_value"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/time_picker"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/heartrate_op"
+            android:hint="@string/id_heartrate_hint"
+            android:inputType="number" />
+
+        <!-- Launch Button-->
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/heartrate"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="@string/search" />
+
+    </RelativeLayout>
+
+</ScrollView>

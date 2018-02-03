@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="contentDescription">
+
+    <!-- IMAGE -->
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true" />
+
+    <!-- ID -->
+    <TextView
+        android:id="@+id/idText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/attr"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- PATIENT NAME -->
+    <TextView
+        android:id="@+id/patientnameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/idText"
+        android:layout_below="@id/idText"
+        android:layout_marginTop="20dp"
+        android:text="@string/attr1full"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- ID value sneaking in there
+     because of the layout_toEndOf -->
+    <TextView
+        android:id="@+id/idVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/patientnameText"
+        android:textSize="18sp" />
+
+    <!-- Back to PATIENT NAME -->
+    <TextView
+        android:id="@+id/patientVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/idText"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/patientnameText"
+        android:textSize="18sp" />
+
+    <!-- DOCTOR NAME -->
+    <TextView
+        android:id="@+id/doctornameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/idText"
+        android:layout_below="@id/patientnameText"
+        android:layout_marginTop="20dp"
+        android:text="@string/attr2full"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/doctorVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/patientnameText"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/patientnameText"
+        android:textSize="18sp" />
+
+    <!-- DESCRIPTION -->
+    <TextView
+        android:id="@+id/descriptionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/idText"
+        android:layout_below="@id/doctornameText"
+        android:layout_marginTop="20dp"
+        android:text="@string/attr3"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/descriptionVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/doctornameText"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/patientnameText"
+        android:textSize="18sp" />
+
+    <!-- DATE -->
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/idText"
+        android:layout_below="@id/descriptionText"
+        android:layout_marginTop="20dp"
+        android:text="@string/attr4"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dateVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/descriptionText"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/patientnameText"
+        android:textSize="18sp" />
+
+    <!-- TIME -->
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/idText"
+        android:layout_below="@id/dateText"
+        android:layout_marginTop="20dp"
+        android:text="@string/attr5"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/timeVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dateText"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/patientnameText"
+        android:textSize="18sp" />
+
+    <!-- HEART RATE -->
+    <TextView
+        android:id="@+id/heartrateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/idText"
+        android:layout_below="@id/timeText"
+        android:layout_marginTop="20dp"
+        android:text="@string/attr6"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/heartrateVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeText"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/patientnameText"
+        android:textSize="18sp" />
+
+</RelativeLayout>

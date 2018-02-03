@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- How to use text -->
+    <TextView
+        android:id="@+id/set_weights_instructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/instructions"
+        android:textSize="16sp" />
+
+    <!-- Time -->
+    <TextView
+        android:id="@+id/text_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/set_weights_instructions"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/time_text"
+        android:textSize="20sp" />
+
+    <SeekBar
+        android:id="@+id/seekBar_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/text_time" />
+
+    <TextView
+        android:id="@+id/timeNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBar_time"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal" />
+
+    <!-- Money -->
+    <TextView
+        android:id="@+id/text_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeNumber"
+        android:layout_marginStart="10dp"
+        android:text="@string/money_text"
+        android:textSize="20sp" />
+
+    <SeekBar
+        android:id="@+id/seekBar_money"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/text_money" />
+
+    <TextView
+        android:id="@+id/moneyNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/timeNumber"
+        android:layout_below="@+id/seekBar_money"
+        android:layout_gravity="center_horizontal" />
+
+    <!-- Energy -->
+    <TextView
+        android:id="@+id/text_energy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/moneyNumber"
+        android:layout_marginStart="10dp"
+        android:text="@string/energy_text"
+        android:textSize="20sp" />
+
+    <SeekBar
+        android:id="@+id/seekBar_energy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/text_energy" />
+
+    <TextView
+        android:id="@+id/energyNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/timeNumber"
+        android:layout_below="@+id/seekBar_energy"
+        android:layout_gravity="center_horizontal" />
+
+     <!-- Reset -->
+    <Button
+        android:id="@+id/resetButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/energyNumber"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/reset" />
+
+    <!-- Confirm and Cancel buttons -->
+    <LinearLayout
+        android:id="@+id/buttons_action_weights"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/cancelButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/confirmButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/confirm" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/split_view_before_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/buttons_action_weights"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:background="?android:attr/dividerVertical" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/split_view_before_buttons"
+        android:layout_below="@id/split_view_after"
+        android:fadeScrollbars="false">
+
+        <LinearLayout
+            android:id="@+id/new_predicate_view_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Preset Weight Profiles -->
+    <Button
+        android:id="@+id/emergencyButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/resetButton"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp"
+        android:text="@string/emergency" />
+
+    <Button
+        android:id="@+id/moneySaverButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/emergencyButton"
+        android:layout_centerHorizontal="true"
+        android:text="@string/moneySaver" />
+
+    <Button
+        android:id="@+id/lowPowerButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/moneySaverButton"
+        android:text="@string/lowPower" />
+
+</RelativeLayout>

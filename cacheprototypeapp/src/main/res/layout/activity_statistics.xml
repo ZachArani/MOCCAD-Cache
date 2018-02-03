@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+	<RelativeLayout android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:paddingBottom="@dimen/activity_vertical_margin"
+	    android:paddingLeft="@dimen/activity_horizontal_margin"
+	    android:paddingRight="@dimen/activity_horizontal_margin"
+	    android:paddingTop="@dimen/activity_vertical_margin"
+	    tools:context="edu.ou.oudb.acp.ui.StatisticsActivity" >
+
+		<!-- Number of Processed Queries -->
+		<TextView android:id="@+id/nbProcQue"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/nbProcQue"
+			android:textSize="16sp"
+			style="?android:attr/buttonBarButtonStyle"
+			android:gravity="start"/>
+
+		<TextView android:id="@+id/result_nbProcQue"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_toEndOf="@id/nbProcQue"
+			android:textSize="16sp"
+			style="?android:attr/buttonBarButtonStyle"
+			android:gravity="start"/>
+
+		<!-- Number of Queries in Cache -->
+		<TextView android:id="@+id/nbQueCac"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/nbProcQue"
+			android:text="@string/nbQueCac"
+			android:textSize="16sp"
+			style="?android:attr/buttonBarButtonStyle"
+			android:gravity="start"/>
+
+		<TextView android:id="@+id/result_nbQueCac"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/nbProcQue"
+			android:layout_toEndOf="@id/nbQueCac"
+			android:textSize="16sp"
+			style="?android:attr/buttonBarButtonStyle"
+			android:gravity="start"/>
+
+		<!-- Percentage of Processed Queries on Mobile device -->
+		<TextView android:id="@+id/nbProcQueMob"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/nbQueCac"
+			android:text="@string/nbProcQueMob"
+			android:textSize="16sp"
+			style="?android:attr/buttonBarButtonStyle"
+			android:gravity="start"/>
+
+		<TextView android:id="@+id/result_nbProcQueMob"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/nbQueCac"
+			android:layout_toEndOf="@id/nbProcQueMob"
+			android:textSize="16sp"
+			style="?android:attr/buttonBarButtonStyle"
+			android:gravity="start"/>
+
+		<!-- Percentage of Processed Queries on Cloud -->
+		<TextView android:id="@+id/nbProcQueCloud"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/nbProcQueMob"
+			android:text="@string/nbProcQueCloud"
+			android:textSize="16sp"
+			style="?android:attr/buttonBarButtonStyle"
+			android:gravity="start"/>
+
+		<TextView android:id="@+id/result_nbProcQueCloud"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/nbProcQueMob"
+			android:layout_toEndOf="@id/nbProcQueCloud"
+			android:textSize="16sp"
+			style="?android:attr/buttonBarButtonStyle"
+			android:gravity="start"/>
+
+		 <!-- Total time needed on Mobile -->
+		<TextView android:id="@+id/timeMob"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/nbProcQueCloud"
+			android:text="@string/timeMob"
+			android:textSize="16sp"
+			style="?android:attr/buttonBarButtonStyle"
+			android:gravity="start"/>
+
+		<TextView android:id="@+id/result_timeMob"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/nbProcQueCloud"
+			android:layout_toEndOf="@id/timeMob"
+			android:textSize="16sp"
+			style="?android:attr/buttonBarButtonStyle"
+			android:gravity="start"/>
+
+		<!-- Total time needed on Cloud -->
+		<TextView android:id="@+id/timeCloud"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/timeMob"
+			android:text="@string/timeCloud"
+			android:textSize="16sp"
+			style="?android:attr/buttonBarButtonStyle"
+			android:gravity="start"/>
+
+		<TextView android:id="@+id/result_timeCloud"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/timeMob"
+			android:layout_toEndOf="@id/timeMob"
+			android:textSize="16sp"
+			style="?android:attr/buttonBarButtonStyle"
+			android:gravity="start"/>
+	</RelativeLayout>
+</ScrollView>

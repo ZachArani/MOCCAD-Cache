@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Not used -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="11"
+    style="?android:attr/buttonBarStyle"
+    android:orientation="horizontal" >
+
+    <Button android:id="@+id/att_left_choice"
+        style="?android:attr/buttonBarButtonStyle"
+	    android:layout_weight="3"
+	    android:text="@string/choose_attribute"
+	    android:textSize="15sp"
+    	android:layout_width="0dp"
+    	android:layout_height="match_parent" />
+    
+    <Button android:id="@+id/operator"
+        style="?android:attr/buttonBarButtonStyle"
+	    android:layout_weight="3"
+	    android:textSize="15sp"
+	    android:text="@string/choose_operator"
+    	android:layout_width="0dp"
+    	android:layout_height="match_parent" />
+    
+    <Button android:id="@+id/att_right_choice"
+        style="?android:attr/buttonBarButtonStyle"
+	    android:layout_weight="3"
+	    android:textSize="15sp"
+	    android:text="@string/choose_attribute"
+    	android:layout_width="0dp"
+    	android:layout_height="match_parent" />
+    
+    <ImageButton android:id="@+id/deletePredicateButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"
+        android:layout_margin="2dp"
+        style="?android:attr/buttonBarButtonStyle"
+        android:src="@drawable/ic_action_remove"
+        android:contentDescription="@string/remove_predicate"/>
+
+</LinearLayout>
