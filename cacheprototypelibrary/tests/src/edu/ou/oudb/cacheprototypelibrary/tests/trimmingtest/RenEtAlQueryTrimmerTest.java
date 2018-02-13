@@ -127,7 +127,7 @@ public class RenEtAlQueryTrimmerTest extends TestCase {
 		}
 		
 		QueryTrimmingResult expectedResult = new QueryTrimmingResult();
-		expectedResult.type = QueryTrimmingType.CACHE_PARTIAL_HIT;
+		expectedResult.type = QueryTrimmingType.CACHE_HORIZONTAL;
 		expectedResult.entryQuery = segmentQuery;
 		expectedResult.probeQuery = inputQuery;
 		expectedResult.remainderQuery = new Query("testRelation");
@@ -155,7 +155,7 @@ public class RenEtAlQueryTrimmerTest extends TestCase {
 		}
 		
 		QueryTrimmingResult expectedResult = new QueryTrimmingResult();
-		expectedResult.type = QueryTrimmingType.CACHE_PARTIAL_HIT;
+		expectedResult.type = QueryTrimmingType.CACHE_HORIZONTAL;
 		expectedResult.entryQuery = segmentQuery;
 		expectedResult.probeQuery = inputQuery;
 		expectedResult.remainderQuery = new Query("testRelation");

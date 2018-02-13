@@ -60,7 +60,7 @@ public class WifiReceiver extends BroadcastReceiver{
 				WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 				mWifiInfo = wifiManager.getConnectionInfo();
 				isConnected = true;
-				
+
 			}
 			else
 			{

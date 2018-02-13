@@ -22,6 +22,7 @@ import java.util.Set;
 
 import edu.ou.oudb.cacheprototypeapp.R;
 import edu.ou.oudb.cacheprototypeapp.provider.ProcessedQueryDbHelper;
+import edu.ou.oudb.cacheprototypelibrary.connection.CloudDataAccessProvider;
 import edu.ou.oudb.cacheprototypelibrary.querycache.exception.InvalidPredicateException;
 import edu.ou.oudb.cacheprototypelibrary.querycache.exception.TrivialPredicateException;
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.Predicate;
@@ -232,6 +233,8 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
 
     public void launchQuery() {
         /*Base for the query*/
+//        String query = "SELECT * FROM patients WHERE ";
+        //String query = "SELECT noteid FROM patients WHERE ";
         String query = "SELECT * FROM patients WHERE ";
         int cpt = 0;
         /*Checks if the value is null (i.e. the user didn't enter anything)
@@ -362,6 +365,11 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
 
         Query query = null;
         Set<Predicate> predicates = new HashSet<Predicate>();
+        Set<String> attributes = new HashSet<String>();
+
+        String leftFrom = line.split("FROM")[0].trim();
+
+        String att = leftFrom.substring(7); //should be first non-space after SELECT
 
         String rightFrom = line.split("FROM")[1].trim();
 
@@ -369,8 +377,22 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
 
         query = new Query(table);
 
+        String[] attributeList;
+        if (!att.equals("*"))
+        {
+            attributeList = att.split(", ");
+        } else {
+            attributeList = new String[]
+                    {"noteid", "patientfirstname", "patientlastname", "doctorfirstname", "doctorlastname", "description", "p_date_time", "heartrate"};
+        }
+        for(String a: attributeList)
+        {
+            attributes.add(a);
+        }
+        query.addAttributes(attributes);
+
         /*Only takes requests having a WHERE statement*/
-        if (!line.equals("SELECT * FROM patients")) {
+        if (line.contains("WHERE")) {
 
             String predicateStr = rightFrom.split("WHERE")[1].trim();
 

@@ -92,12 +92,32 @@ public class SemanticQueryCacheContentManager implements CacheContentManager<Que
 						bestResult = curResult;
 					}
 					break;
-				case CACHE_PARTIAL_HIT:
+				case CACHE_HORIZONTAL:
 					// if the new entry has more tuples that can be taken from cache
-					if (bestResult.type != QueryTrimmingType.CACHE_PARTIAL_HIT
-						||	(bestResult.type == QueryTrimmingType.CACHE_PARTIAL_HIT
+					if (bestResult.type != QueryTrimmingType.CACHE_HORIZONTAL
+						||	(bestResult.type == QueryTrimmingType.CACHE_HORIZONTAL
 					&& mSegments.get(curResult.probeQuery).getNbTuples()
 						> mSegments.get(bestResult.probeQuery).getNbTuples()))
+					{
+						bestResult = curResult;
+					}
+					break;
+				case CACHE_VERTICAL:
+					// if the new entry has more tuples that can be taken from cache
+					if (bestResult.type != QueryTrimmingType.CACHE_VERTICAL
+							||	(bestResult.type == QueryTrimmingType.CACHE_VERTICAL
+							&& mSegments.get(curResult.probeQuery).getNbTuples()
+							> mSegments.get(bestResult.probeQuery).getNbTuples()))
+					{
+						bestResult = curResult;
+					}
+					break;
+				case CACHE_HYBRID:
+					// if the new entry has more tuples that can be taken from cache
+					if (bestResult.type != QueryTrimmingType.CACHE_HYBRID
+							||	(bestResult.type == QueryTrimmingType.CACHE_HYBRID
+							&& mSegments.get(curResult.probeQuery).getNbTuples()
+							> mSegments.get(bestResult.probeQuery).getNbTuples()))
 					{
 						bestResult = curResult;
 					}

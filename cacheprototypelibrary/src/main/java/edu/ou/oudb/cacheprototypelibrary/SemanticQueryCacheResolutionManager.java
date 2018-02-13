@@ -4,6 +4,7 @@ import java.net.ConnectException;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import android.util.Log;
 import android.util.Pair;
 
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheResolutionManager;
@@ -39,10 +40,9 @@ public class SemanticQueryCacheResolutionManager implements CacheResolutionManag
             curSegment = curP.second.run(curP.first);
             resultSegment.addAllTuples(curSegment);
         }
-
+        Log.d("TEST",resultSegment.toString());
         return resultSegment;
     }
-
     @Override
     public boolean addProcess(Query key, Process<Query, QuerySegment> process) {
         return mProcessQueue.add(new Pair<Query, Process<Query, QuerySegment>>(key, process));

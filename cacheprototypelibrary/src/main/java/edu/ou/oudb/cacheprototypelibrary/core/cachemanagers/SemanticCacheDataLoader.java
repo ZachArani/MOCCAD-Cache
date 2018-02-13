@@ -87,26 +87,42 @@ public class SemanticCacheDataLoader extends DataLoader<Query,QuerySegment> {
 				throw new IllegalArgumentException("CACHE_EXTENDED_HIT_INCLUDED: no probe query");
 			}
 			break;
-		case CACHE_PARTIAL_HIT:
-            //<editor-fold desc="LOG newQueryCachePartialHit">
-            StatisticsManager.newQueryCachePartialHit();
-            //</editor-fold>
-			if (qtResult.remainderQuery != null && qtResult.probeQuery != null && qtResult.entryQuery != null)
-			{
-				mQueryCache.addProcess(qtResult.probeQuery, new ExtendedHitInclusionMobileQueryProcess(qtResult.entryQuery,mQueryCache));
-				mQueryCache.addProcess(qtResult.remainderQuery, new CloudQueryProcess(mDataAccessProvider));
-			}
-			else
-			{
-				throw new IllegalArgumentException("CACHE_PARTIAL_HIT: no probe query and/or remainder query");
-			}
-			break;
+		case CACHE_HORIZONTAL:
+		case CACHE_VERTICAL:
+		//<editor-fold desc="LOG newQueryCachePartialHit">
+		StatisticsManager.newQueryCachePartialHit();
+		//</editor-fold>
+		if (qtResult.remainderQuery != null && qtResult.probeQuery != null && qtResult.entryQuery != null)
+		{
+			mQueryCache.addProcess(qtResult.probeQuery, new ExtendedHitInclusionMobileQueryProcess(qtResult.entryQuery,mQueryCache));
+			mQueryCache.addProcess(qtResult.remainderQuery, new CloudQueryProcess(mDataAccessProvider));
+		}
+		else
+		{
+			throw new IllegalArgumentException("CACHE_PARTIAL_HIT: no probe query and/or remainder query");
+		}
+		break;
+		case CACHE_HYBRID:
+		//<editor-fold desc="LOG newQueryCachePartialHit">
+		StatisticsManager.newQueryCachePartialHit();
+		//</editor-fold>
+		if (qtResult.remainderQuery != null && qtResult.probeQuery != null && qtResult.entryQuery != null && qtResult.remainderQuery2 != null)
+		{
+			mQueryCache.addProcess(qtResult.probeQuery, new ExtendedHitInclusionMobileQueryProcess(qtResult.entryQuery,mQueryCache));
+			mQueryCache.addProcess(qtResult.remainderQuery, new CloudQueryProcess(mDataAccessProvider));
+			mQueryCache.addProcess(qtResult.remainderQuery2, new CloudQueryProcess((mDataAccessProvider)));
+		}
+		else
+		{
+			throw new IllegalArgumentException("CACHE_PARTIAL_HIT: no probe query and/or remainder query");
+		}
+		break;
 		case CACHE_MISS:
-            //<editor-fold desc="LOG newQueryCacheMiss">
-            StatisticsManager.newQueryCacheMiss();
-            //</editor-fold>
-			mQueryCache.addProcess(query, new CloudQueryProcess(mDataAccessProvider));
-			break;
+		//<editor-fold desc="LOG newQueryCacheMiss">
+		StatisticsManager.newQueryCacheMiss();
+		//</editor-fold>
+		mQueryCache.addProcess(query, new CloudQueryProcess(mDataAccessProvider));
+		break;
 		default:
 			throw new IllegalArgumentException("Case not handled exception");
 		}
@@ -139,7 +155,9 @@ public class SemanticCacheDataLoader extends DataLoader<Query,QuerySegment> {
 				//if an entry in cache contains the result of the probe query
 				// we replace that entry with the most recent one
 				if (qtResult.entryQuery != null
-					&& qtResult.type == QueryTrimmingType.CACHE_PARTIAL_HIT)
+					&& (qtResult.type == QueryTrimmingType.CACHE_HORIZONTAL
+						|| qtResult.type == QueryTrimmingType.CACHE_VERTICAL
+						|| qtResult.type == QueryTrimmingType.CACHE_HYBRID))
 				{
 					queriesToBeRemoved.add(qtResult.entryQuery);
 				}

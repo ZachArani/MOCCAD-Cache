@@ -1,12 +1,16 @@
 package edu.ou.oudb.cacheprototypelibrary.querycache.query;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import edu.ou.oudb.cacheprototypelibrary.core.cache.Sizeable;
+import edu.ou.oudb.cacheprototypelibrary.metadata.Metadata;
 import edu.ou.oudb.cacheprototypelibrary.metadata.ObjectSizer;
+import edu.ou.oudb.cacheprototypelibrary.metadata.RelationMetadata;
 
 /**
  * @author Mikael Perrin
@@ -24,6 +28,9 @@ public class Query implements Sizeable {
 	
 	/** The relation on which the query is posed */
 	private String mRelation;
+
+	/** The hash set of attributes of the query */
+	private HashSet<String> mAttributes;
 	
 	/** The hash set of attribute allowing contained in the predicates */
 	private HashSet<String> mPredicateAttributes;
@@ -44,6 +51,7 @@ public class Query implements Sizeable {
 	public Query(String relation)
 	{
 		setRelation(relation);
+		mAttributes = new HashSet<String>();
 		mPredicates = new HashSet<Predicate>();
 		mPredicateAttributes = new HashSet<String>();
 		mExcludedPredicates = new HashSet<Predicate>();
@@ -133,6 +141,41 @@ public class Query implements Sizeable {
 		
 		return inserted;
 	}
+
+	/**
+	 * Method to add attributes to query
+	 * @param attribute the attribute to be added
+	 * @return true if added, false otherwise
+	 */
+	public boolean addAttribute(String attribute)
+	{
+		if (attribute != "*") {
+			mSize += ObjectSizer.getStringSize32bits(attribute.length());
+			return mAttributes.add(attribute);
+		} else { //if attribute is *, adds all attributes
+			String[] attributes = new String[]{"noteid", "patientfirstname", "patientlastname", "doctorfirstname", "doctorlastname", "description", "p_date_time", "heartrate"};
+			for(String a: attributes) {
+				addAttribute(a);
+			}
+		}
+		return false; //if *, do not add - not sure about implementation
+	}
+
+	/**
+	 * Method to add attributes to query
+	 * @param attributes the attributes to be added
+	 * @return true if added, false otherwise
+	 */
+	public boolean addAttributes(Collection<String> attributes)
+	{
+		for(String attribute: attributes)
+		{
+			if (!addAttribute(attribute))
+				return false;
+		}
+
+		return true;
+	}
 	
 	/**
 	 * Attribute to be added in order to make the analysis easier
@@ -201,6 +244,11 @@ public class Query implements Sizeable {
 	}
 
 	/**
+	 * @return the attributes
+	 */
+	public final HashSet<String> getAttributes() { return this.mAttributes; }
+
+	/**
 	 * @return the predicateAttributes
 	 */
 	public final HashSet<String> getPredicateAttributes() {
@@ -221,14 +269,40 @@ public class Query implements Sizeable {
 		return this.mExcludedPredicates;
 	}
 
-	public boolean containsAttribute(String attribute)
+	public boolean containsPredicateAttribute(String attribute)
 	{
 		return mPredicateAttributes.contains(attribute);
 	}
 	
-	public boolean containsAttributes(Collection<String> attributes)
+	public boolean containsPredicateAttributes(Collection<String> attributes)
 	{
 		return mPredicateAttributes.containsAll(attributes);
+	}
+
+	public boolean containsAttribute(String attribute)
+	{
+		return mAttributes.contains(attribute);
+	}
+
+	public boolean containsAttributes(Collection<String> attributes)
+	{
+		return mAttributes.containsAll(attributes);
+	}
+
+	public boolean respectsAttributes(String relation, List<String> tuple) throws NumberFormatException
+	{
+		RelationMetadata relationMetadata = Metadata.getInstance().getRelationMetadata(relation);
+		boolean isValidTuple = false;
+		Iterator<String> it = mAttributes.iterator();
+		while(it.hasNext() && isValidTuple)
+		{
+			Integer attIndex = relationMetadata.getAttributeIndex(it.next());
+			if (attIndex == null)
+			{
+				isValidTuple = false;
+			}
+		}
+		return isValidTuple;
 	}
 
 	@Override
@@ -307,7 +381,25 @@ public class Query implements Sizeable {
 
 	public String toSQLString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT * FROM ");
+		builder.append("SELECT ");
+
+		int sizeAttributes = mAttributes.size();
+
+		if (sizeAttributes == 0)
+		{
+			builder.append("*");
+		}
+
+		int k = 0;
+		for(String a: mAttributes) {
+			builder.append(a);
+			if (k < sizeAttributes-1) {
+				builder.append(", ");
+			}
+			++k;
+		}
+
+		builder.append(" FROM ");
 		builder.append(mRelation);
 		
 		
