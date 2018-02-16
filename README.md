@@ -15,11 +15,17 @@
 [Dr. Le Gruenwald](http://www.cs.ou.edu/~database/faculty.htm)
 
 Jonathan Mullen 
+
 Mikaël Perrin
+
 Florian Helff
+
 Chenxiao Wang
+
 Jason Arenson
+
 Zachary Arani
+
 Christoph Kinzel 
 ### Blaise Pascal University - LIMOS
 Richard Collet
