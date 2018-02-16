@@ -29,9 +29,11 @@ Zachary Arani
 Christoph Kinzel 
 ### Blaise Pascal University - LIMOS
 Richard Collet
+
 Farah Kouiss
 ### University of Rennes 1
 Dr Laurent d'Orazio
+
 Maxime P Merrien
 
 # Disclaimer
