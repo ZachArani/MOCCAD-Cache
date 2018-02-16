@@ -10,10 +10,10 @@
  - Multiple attribute selection
  
  
- # Members
- ### [The University of Oklahoma](http://cs.ou.edu/~database/) 
- [Dr. Le Gruenwald](http://www.cs.ou.edu/~database/faculty.htm)
- Jonathan Mullen 
+# Members
+### [The University of Oklahoma](http://cs.ou.edu/~database/) 
+[Dr. Le Gruenwald](http://www.cs.ou.edu/~database/faculty.htm)
+Jonathan Mullen 
 Mikaël Perrin
 Florian Helff
 Chenxiao Wang
