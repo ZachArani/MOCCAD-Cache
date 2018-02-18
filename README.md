@@ -32,7 +32,7 @@ Richard Collet
 
 Farah Kouiss
 ### University of Rennes 1
-Dr Laurent d'Orazio
+[Dr Laurent d'Orazio](https://perso.univ-rennes1.fr/laurent.dorazio)
 
 Maxime P Merrien
 
