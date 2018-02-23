@@ -29,6 +29,8 @@ public class ProcessedQueriesFragment extends ListFragment implements OnItemClic
 		public TextView predicates;
 		public TextView time;
 	}
+
+	public ProcessedQueriesFragment(){}
 	
     private QueryAdapter mProcessedQueryAdapter = null;
 	private List<Query> mQueries = null;
