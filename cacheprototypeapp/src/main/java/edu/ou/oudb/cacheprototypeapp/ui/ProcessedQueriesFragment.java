@@ -89,7 +89,9 @@ public class ProcessedQueriesFragment extends ListFragment implements OnItemClic
 	public static class RelaunchQueryDialogFragment extends DialogFragment {
 		
 		private Query mQuery = null;
-		
+
+		public RelaunchQueryDialogFragment(){}
+
 		public RelaunchQueryDialogFragment(Query query)
 		{
 			mQuery = query;
