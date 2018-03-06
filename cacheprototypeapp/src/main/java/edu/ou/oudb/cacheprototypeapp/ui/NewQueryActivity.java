@@ -333,6 +333,8 @@ public class NewQueryActivity extends Activity implements OnClickListener {
 
         PredicateHolder curPredicateHolder;
 
+        query.addAttribute("id");
+
         for (int i = 0; i < predicateArraySize && areValidPredicates; ++i) {
             curPredicateHolder = mViewIdPredicateHolderMap.valueAt(i);
             try {
