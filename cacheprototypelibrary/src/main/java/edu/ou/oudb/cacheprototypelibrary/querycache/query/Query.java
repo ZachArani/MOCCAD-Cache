@@ -24,6 +24,9 @@ public class Query implements Sizeable {
 	
 	/** The relation on which the query is posed */
 	private String mRelation;
+
+	/** The hash set of attributes being selected in the query */
+	private HashSet<String> mAttributes;
 	
 	/** The hash set of attribute allowing contained in the predicates */
 	private HashSet<String> mPredicateAttributes;
@@ -45,6 +48,7 @@ public class Query implements Sizeable {
 	{
 		setRelation(relation);
 		mPredicates = new HashSet<Predicate>();
+		mAttributes = new HashSet<String>();
 		mPredicateAttributes = new HashSet<String>();
 		mExcludedPredicates = new HashSet<Predicate>();
 		mSize += ObjectSizer.getStringSize32bits(relation.length());
@@ -160,6 +164,39 @@ public class Query implements Sizeable {
 		
 		return true;
 	}
+
+	/**
+	 * Selected attribute to be added
+	 * @param attribute the attribute to be added
+	 * @return true if added, false otherwise
+	 */
+	public boolean addAttribute(String attribute)
+	{
+		mSize += ObjectSizer.getStringSize32bits(attribute.length());
+		if (!attribute.equals("*"))
+		{
+			return !mAttributes.contains("*") && mAttributes.add(attribute);
+		} else
+        {
+            return mAttributes.size()==0 && mAttributes.add(attribute);
+        }
+	}
+
+	/**
+	 * Selected attributes to be added
+	 * @param attributes the attributes to be added
+	 * @return true if added, false otherwise
+	 */
+	public boolean addAttributes(Collection<String> attributes)
+	{
+		for(String attribute: attributes)
+		{
+			if (!addAttribute(attribute))
+				return false;
+		}
+
+		return true;
+	}
 	
 
 	/**
@@ -221,14 +258,24 @@ public class Query implements Sizeable {
 		return this.mExcludedPredicates;
 	}
 
-	public boolean containsAttribute(String attribute)
+	public boolean containsPredicateAttribute(String attribute)
 	{
 		return mPredicateAttributes.contains(attribute);
 	}
 	
-	public boolean containsAttributes(Collection<String> attributes)
+	public boolean containsPredicateAttributes(Collection<String> attributes)
 	{
 		return mPredicateAttributes.containsAll(attributes);
+	}
+
+	public boolean containsAttribute(String attribute)
+	{
+		return mAttributes.contains(attribute);
+	}
+
+	public boolean containsAttributes(Collection<String> attributes)
+	{
+		return mAttributes.containsAll(attributes);
 	}
 
 	@Override
@@ -252,6 +299,10 @@ public class Query implements Sizeable {
 				* result
 				+ ((mPredicateAttributes == null) ? 0 : mPredicateAttributes
 						.hashCode());
+		result = prime
+				* result
+				+ ((mAttributes == null) ? 0 : mAttributes
+				.hashCode());
 		result = prime * result
 				+ ((mPredicates == null) ? 0 : mPredicates.hashCode());
 		result = prime * result
@@ -288,6 +339,13 @@ public class Query implements Sizeable {
 		} else if (!mPredicateAttributes.equals(other.mPredicateAttributes)) {
 			return false;
 		}
+		if (mAttributes == null) {
+			if (other.mAttributes != null) {
+				return false;
+			}
+		} else if (!mAttributes.equals(other.mAttributes)) {
+			return false;
+		}
 		if (mPredicates == null) {
 			if (other.mPredicates != null) {
 				return false;
@@ -307,7 +365,20 @@ public class Query implements Sizeable {
 
 	public String toSQLString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT * FROM ");
+		builder.append("SELECT ");
+
+		int sizeAttributes = mAttributes.size();
+
+		int k = 0;
+		for(String a : mAttributes) {
+			builder.append(a);
+			if(k < sizeAttributes-1)
+			{
+				builder.append(", ");
+			}
+		}
+
+		builder.append(" FROM ");
 		builder.append(mRelation);
 		
 		

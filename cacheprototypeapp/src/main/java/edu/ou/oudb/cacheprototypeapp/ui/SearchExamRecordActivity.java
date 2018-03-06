@@ -232,7 +232,9 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
 
     public void launchQuery() {
         /*Base for the query*/
-        String query = "SELECT * FROM patients WHERE ";
+//        String query = "SELECT * FROM patients WHERE ";
+        String query = "SELECT id FROM patients WHERE ";
+
         int cpt = 0;
         /*Checks if the value is null (i.e. the user didn't enter anything)
         * Also checks if the value is empty (i.e. if the user entered something and erased it)
@@ -336,8 +338,11 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
         //FIXME: We do this because otherwise we can't do "SELECT * FROM patients;" after having done one query
         //FIXME: This is a quick fix
         if (cpt == 0) {
-            query = "SELECT * FROM patients WHERE noteid >= 1";
+//            query = "SELECT * FROM patients WHERE noteid >= 1";
+            query = "SELECT id FROM patients WHERE noteid >= 1";
+
         }
+
 
         query = query.concat(";");
         System.out.println("QUERY: " + query);
@@ -369,8 +374,11 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
 
         query = new Query(table);
 
+//        query.addAttribute("*")
+        query.addAttribute("id");
         /*Only takes requests having a WHERE statement*/
-        if (!line.equals("SELECT * FROM patients")) {
+//        if (!line.equals("SELECT * FROM patients")) {
+        if (!line.equals("SELECT id FROM patients")) {
 
             String predicateStr = rightFrom.split("WHERE")[1].trim();
 

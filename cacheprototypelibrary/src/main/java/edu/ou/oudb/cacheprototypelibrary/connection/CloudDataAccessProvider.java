@@ -39,7 +39,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 
     private static final int CLOUD_COEFF = 5;
 	
-	private String mURLBase = "http://10.42.0.1:8080/CloudWebService/rest/";
+	private String mURLBase = "http://10.204.69.210:8080/CloudWebService/rest/";
 	
 	private String mURLGetRelationMetadata = mURLBase + URL_DB_INFO;
 	
@@ -52,7 +52,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 	public CloudDataAccessProvider(Context context) throws DownloadDataException, JSONParserException
 	{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		String ipAddress = pref.getString(PREF_IP_ADDRESS,"10.42.0.1");
+		String ipAddress = pref.getString(PREF_IP_ADDRESS,"10.204.69.210");
 		String port = pref.getString(PREF_PORT,"8080");
 	
 		StringBuilder urlBaseBuilder = new StringBuilder("http://");

@@ -14,7 +14,7 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
         GuoEtAlPredicateAnalyzer geapanalyzer = new GuoEtAlPredicateAnalyzer();
 
         // if all the input query attributes are found in the segment query attributes
-        if (segmentQuery.containsAttributes(inputQuery.getPredicateAttributes())) {
+        if (segmentQuery.containsPredicateAttributes(inputQuery.getPredicateAttributes())) {
 
             Set<Predicate> allPredicates = new HashSet<Predicate>(inputQuery.getPredicates());
             allPredicates.addAll(segmentQuery.getPredicates());
@@ -41,8 +41,10 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
                 result.type = QueryTrimmingType.CACHE_PARTIAL_HIT;
                 result.entryQuery = segmentQuery;
                 result.probeQuery = new Query(segmentQuery.getRelation());
+                result.probeQuery.addAttribute("id");
                 result.probeQuery.addPredicates(inputQuery.getPredicates());
                 result.remainderQuery = new Query(inputQuery.getRelation());
+                result.remainderQuery.addAttribute("id");
                 result.remainderQuery.addPredicates(inputQuery.getPredicates());
                 result.remainderQuery.addExcludedPredicates(segmentQuery.getPredicates());
             } else {

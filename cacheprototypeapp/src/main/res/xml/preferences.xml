@@ -29,13 +29,13 @@
 	        android:positiveButtonText="@string/ok"
 	        android:title="@string/pref_data_access_provider"/>
 
-	    <EditTextPreference
-            android:defaultValue="10.42.0.1"
-            android:title="@string/pref_ip_address"
-            android:key="pref_ip_address"
-            android:summary="%s"
-            android:hint="@string/pref_ip_address"
-            android:inputType="phone"/>
+		<EditTextPreference
+			android:defaultValue="10.204.69.210"
+			android:hint="@string/pref_ip_address"
+			android:inputType="phone"
+			android:key="pref_ip_address"
+			android:summary="%s"
+			android:title="@string/pref_ip_address" />
 	    <EditTextPreference
             android:defaultValue="8080"
             android:title="@string/pref_port"

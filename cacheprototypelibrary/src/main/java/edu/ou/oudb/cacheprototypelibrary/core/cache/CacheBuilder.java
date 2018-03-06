@@ -8,7 +8,7 @@ import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheResolutionManag
 /**
  * @author Mikael Perrin
  * @since 1.0
- * Defines an abstract CacheBuilder
+ * Define an abstract CacheBuilder
  */
 public class CacheBuilder<K extends Sizeable,V extends Sizeable> {
 

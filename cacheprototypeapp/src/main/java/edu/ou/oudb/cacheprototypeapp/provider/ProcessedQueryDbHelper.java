@@ -226,7 +226,8 @@ public class ProcessedQueryDbHelper extends SQLiteOpenHelper{
     public List<Query> getAllProcessedQueries() throws IllegalArgumentException{
         List<Query> queries = new ArrayList<Query>();
 
-        String selectQuery = "SELECT * FROM " + TABLE_QUERIES;
+		String selectQuery = "SELECT id FROM " + TABLE_QUERIES;
+//		String selectQuery = "SELECT * FROM " + TABLE_QUERIES;
  
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
