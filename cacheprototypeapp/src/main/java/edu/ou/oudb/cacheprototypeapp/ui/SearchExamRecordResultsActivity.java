@@ -368,15 +368,19 @@ public class SearchExamRecordResultsActivity extends Activity {
     /*Puts all IDs into an Array, same for Patients First Names, and so on*/
     public void arraysValues() {
         for (int i = 0; i < sArray.length; i++) {
-            ID[i] = Integer.parseInt(sArray[i].split(", +")[0]);
-            PFN[i] = sArray[i].split(", +")[1];
-            PLN[i] = sArray[i].split(", +")[2];
-            DFN[i] = sArray[i].split(", +")[3];
-            DLN[i] = sArray[i].split(", +")[4];
-            Desc[i] = sArray[i].split(", +")[5];
-            Dates[i] = sArray[i].split(", +")[6].substring(0, 10);
-            Times[i] = sArray[i].split(", +")[6].substring(11, 16);
-            HR[i] = Integer.parseInt(sArray[i].split(", +")[7]);
+            String[] splitLine = sArray[i].split(", +");
+            ID[i] = Integer.parseInt(splitLine[0]);
+            //Temporary measure - will need a better fix!!!
+            if(splitLine.length>1) {
+                PFN[i] = splitLine[1];
+                PLN[i] = splitLine[2];
+                DFN[i] = splitLine[3];
+                DLN[i] = splitLine[4];
+                Desc[i] = splitLine[5];
+                Dates[i] = splitLine[6].substring(0, 10);
+                Times[i] = splitLine[6].substring(11, 16);
+                HR[i] = Integer.parseInt(splitLine[7]);
+            }
         }
     }
 

@@ -332,8 +332,15 @@ public class NewQueryActivity extends Activity implements OnClickListener {
         Query query = new Query(mSelectedRelation);
 
         PredicateHolder curPredicateHolder;
-
-        query.addAttribute("id");
+        //TODO: somehow take in attributes dynamically?
+        query.addAttribute("noteid");
+        query.addAttribute("patientfirstname");
+        query.addAttribute("patientlastname");
+        query.addAttribute("doctorfirstname");
+        query.addAttribute("doctorlastname");
+        query.addAttribute("description");
+        query.addAttribute("p_date_time");
+        query.addAttribute("heartrate");
 
         for (int i = 0; i < predicateArraySize && areValidPredicates; ++i) {
             curPredicateHolder = mViewIdPredicateHolderMap.valueAt(i);

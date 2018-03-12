@@ -233,7 +233,7 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
     public void launchQuery() {
         /*Base for the query*/
 //        String query = "SELECT * FROM patients WHERE ";
-        String query = "SELECT id FROM patients WHERE ";
+        String query = "SELECT noteid, patientfirstname, patientlastname, doctorfirstname, doctorlastname, description, p_date_time, heartrate FROM patients WHERE ";
 
         int cpt = 0;
         /*Checks if the value is null (i.e. the user didn't enter anything)
@@ -339,7 +339,7 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
         //FIXME: This is a quick fix
         if (cpt == 0) {
 //            query = "SELECT * FROM patients WHERE noteid >= 1";
-            query = "SELECT id FROM patients WHERE noteid >= 1";
+            query = "SELECT noteid, patientfirstname, patientlastname, doctorfirstname, doctorlastname, description, p_date_time, heartrate FROM patients WHERE noteid >= 1";
 
         }
 
@@ -368,6 +368,12 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
         Query query = null;
         Set<Predicate> predicates = new HashSet<Predicate>();
 
+        String rightFromSelect = line.split("SELECT")[0].trim();
+
+        String attributes = rightFromSelect.split("FROM")[0].trim();
+
+        String[] attributeList = attributes.split(",");
+
         String rightFrom = line.split("FROM")[1].trim();
 
         String table = rightFrom.split(" ")[0];
@@ -375,10 +381,14 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
         query = new Query(table);
 
 //        query.addAttribute("*")
-        query.addAttribute("id");
+        for(String a : attributeList) {
+            query.addAttribute(a.trim());
+        }
+
+
         /*Only takes requests having a WHERE statement*/
 //        if (!line.equals("SELECT * FROM patients")) {
-        if (!line.equals("SELECT id FROM patients")) {
+        if (!line.equals("SELECT" + attributes + "FROM patients")) {
 
             String predicateStr = rightFrom.split("WHERE")[1].trim();
 

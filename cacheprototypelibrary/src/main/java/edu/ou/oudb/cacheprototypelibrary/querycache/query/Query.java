@@ -3,6 +3,7 @@ package edu.ou.oudb.cacheprototypelibrary.querycache.query;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import edu.ou.oudb.cacheprototypelibrary.core.cache.Sizeable;
@@ -25,8 +26,8 @@ public class Query implements Sizeable {
 	/** The relation on which the query is posed */
 	private String mRelation;
 
-	/** The hash set of attributes being selected in the query */
-	private HashSet<String> mAttributes;
+	/** The linked hash set of attributes being selected in the query */
+	private LinkedHashSet<String> mAttributes;
 	
 	/** The hash set of attribute allowing contained in the predicates */
 	private HashSet<String> mPredicateAttributes;
@@ -48,7 +49,7 @@ public class Query implements Sizeable {
 	{
 		setRelation(relation);
 		mPredicates = new HashSet<Predicate>();
-		mAttributes = new HashSet<String>();
+		mAttributes = new LinkedHashSet<String>();
 		mPredicateAttributes = new HashSet<String>();
 		mExcludedPredicates = new HashSet<Predicate>();
 		mSize += ObjectSizer.getStringSize32bits(relation.length());
@@ -372,10 +373,11 @@ public class Query implements Sizeable {
 		int k = 0;
 		for(String a : mAttributes) {
 			builder.append(a);
-			if(k < sizeAttributes-1)
+			if(k < sizeAttributes - 1)
 			{
 				builder.append(", ");
 			}
+			k++;
 		}
 
 		builder.append(" FROM ");
