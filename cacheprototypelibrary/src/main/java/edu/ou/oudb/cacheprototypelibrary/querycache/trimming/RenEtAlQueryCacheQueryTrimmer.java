@@ -40,7 +40,7 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
             {
                 result.type = QueryTrimmingType.CACHE_PARTIAL_HIT;
                 result.entryQuery = segmentQuery;
-                result.probeQuery = new Query(segmentQuery.getRelation());
+                result.probeQuery = new Query(inputQuery.getRelation());
                 result.probeQuery.addAttribute("noteid");
                 result.probeQuery.addAttribute("patientfirstname");
                 result.probeQuery.addAttribute("patientlastname");

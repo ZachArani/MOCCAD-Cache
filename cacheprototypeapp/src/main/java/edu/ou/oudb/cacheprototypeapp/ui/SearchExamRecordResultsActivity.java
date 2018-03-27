@@ -38,6 +38,9 @@ public class SearchExamRecordResultsActivity extends Activity {
     /*Array containing all the result*/
     String[] sArray = null;
 
+    /*Array holding the attributes of the query*/
+    String[] attributes = null;
+
     /*Arrays containing each attribute*/
     Integer[] ID = null;
     String[] PFN = null; // Patient First Name
@@ -367,19 +370,47 @@ public class SearchExamRecordResultsActivity extends Activity {
 
     /*Puts all IDs into an Array, same for Patients First Names, and so on*/
     public void arraysValues() {
-        for (int i = 0; i < sArray.length; i++) {
+        attributes = sArray[0].split(", +");
+        for (int i = 1; i < sArray.length; i++) {
             String[] splitLine = sArray[i].split(", +");
-            ID[i] = Integer.parseInt(splitLine[0]);
-            //Temporary measure - will need a better fix!!!
-            if(splitLine.length>1) {
-                PFN[i] = splitLine[1];
-                PLN[i] = splitLine[2];
-                DFN[i] = splitLine[3];
-                DLN[i] = splitLine[4];
-                Desc[i] = splitLine[5];
-                Dates[i] = splitLine[6].substring(0, 10);
-                Times[i] = splitLine[6].substring(11, 16);
-                HR[i] = Integer.parseInt(splitLine[7]);
+            int current = 0;
+            for(String a : attributes) {
+                /*noteid, patientfirstname, patientlastname, doctorfirstname, doctorlastname, description, p_date_time, heartrate*/
+                switch (a) {
+                    case "noteid":
+                        ID[i] = Integer.parseInt(splitLine[current]);
+                        break;
+
+                    case "patientfirstname":
+                        PFN[i] = splitLine[current];
+                        break;
+
+                    case "patientlastname":
+                        PLN[i] = splitLine[current];
+                        break;
+
+                    case "doctorfirstname":
+                        DFN[i] = splitLine[current];
+                        break;
+
+                    case "doctorlastname":
+                        DLN[i] = splitLine[current];
+                        break;
+
+                    case "description":
+                        Desc[i] = splitLine[current];
+                        break;
+
+                    case "p_date_time":
+                        Dates[i] = splitLine[current].substring(0, 10);
+                        Times[i] = splitLine[current].substring(11, 16);
+                        break;
+
+                    case "heartrate":
+                        HR[i] = Integer.parseInt(splitLine[current]);
+                        break;
+                }
+                current++;
             }
         }
     }

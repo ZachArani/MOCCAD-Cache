@@ -251,6 +251,12 @@ public class Query implements Sizeable {
 	public final Set<Predicate> getPredicates() {
 		return this.mPredicates;
 	}
+
+	/**
+	 *
+	 * @return the attributes
+	 */
+	public final LinkedHashSet<String> getAttributes() { return this.mAttributes; }
 	
 	/**
 	 * @return the excludedPredicates

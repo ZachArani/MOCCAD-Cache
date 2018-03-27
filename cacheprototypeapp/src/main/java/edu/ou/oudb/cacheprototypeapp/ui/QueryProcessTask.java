@@ -1,6 +1,7 @@
 package edu.ou.oudb.cacheprototypeapp.ui;
 
 import java.net.ConnectException;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -105,6 +106,7 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         } else {
+            result.add(0,new ArrayList<String>(mQuery.getAttributes()));
             launchQueryResultsActivity(result);
 //			lauchResultActivity(mQuery.getRelation(),result);
         }
@@ -128,7 +130,7 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
     private void launchQueryResultsActivity(List<List<String>> result) {
         Intent intent = new Intent(mContext, SearchExamRecordResultsActivity.class);
         intent.putExtra(SearchExamRecordResultsActivity.RESULT, result.toString());
-
+        System.out.println(result.toString());
         mContext.startActivity(intent);
     }
 
