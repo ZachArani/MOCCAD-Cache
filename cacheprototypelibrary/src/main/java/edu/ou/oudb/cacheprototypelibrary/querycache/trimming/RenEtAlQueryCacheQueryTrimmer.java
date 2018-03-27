@@ -40,25 +40,11 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
             {
                 result.type = QueryTrimmingType.CACHE_PARTIAL_HIT;
                 result.entryQuery = segmentQuery;
-                result.probeQuery = new Query(inputQuery.getRelation());
-                result.probeQuery.addAttribute("noteid");
-                result.probeQuery.addAttribute("patientfirstname");
-                result.probeQuery.addAttribute("patientlastname");
-                result.probeQuery.addAttribute("doctorfirstname");
-                result.probeQuery.addAttribute("doctorlastname");
-                result.probeQuery.addAttribute("description");
-                result.probeQuery.addAttribute("p_date_time");
-                result.probeQuery.addAttribute("heartrate");
+                result.probeQuery = new Query(segmentQuery.getRelation());
+                result.probeQuery.addAttributes(inputQuery.getAttributes());
                 result.probeQuery.addPredicates(inputQuery.getPredicates());
                 result.remainderQuery = new Query(inputQuery.getRelation());
-                result.remainderQuery.addAttribute("noteid");
-                result.remainderQuery.addAttribute("patientfirstname");
-                result.remainderQuery.addAttribute("patientlastname");
-                result.remainderQuery.addAttribute("doctorfirstname");
-                result.remainderQuery.addAttribute("doctorlastname");
-                result.remainderQuery.addAttribute("description");
-                result.remainderQuery.addAttribute("p_date_time");
-                result.remainderQuery.addAttribute("heartrate");
+                result.remainderQuery.addAttributes(inputQuery.getAttributes());
                 result.remainderQuery.addPredicates(inputQuery.getPredicates());
                 result.remainderQuery.addExcludedPredicates(segmentQuery.getPredicates());
             } else {
