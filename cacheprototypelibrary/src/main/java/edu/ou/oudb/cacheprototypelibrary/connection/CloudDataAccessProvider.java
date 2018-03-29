@@ -72,8 +72,9 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 		InputStream jsonStream;
 		// save the string result into preferences
 		
-		String cloudMetadata = pref.getString(PREF_METADATA, "");
-		if(cloudMetadata.isEmpty())
+//		String cloudMetadata = pref.getString(PREF_METADATA, "");
+		String cloudMetadata = "";
+		if (cloudMetadata.isEmpty())
 		{
 			jsonStream = JSONLoader.getJSONInputStreamFromUrl(mURLGetRelationMetadata);
 			BufferedReader r = new BufferedReader(new InputStreamReader(jsonStream));
