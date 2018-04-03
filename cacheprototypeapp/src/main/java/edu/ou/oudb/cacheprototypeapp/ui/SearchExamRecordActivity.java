@@ -233,7 +233,7 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
     public void launchQuery() {
         /*Base for the query*/
 //        String query = "SELECT * FROM patients WHERE ";
-        String query = "SELECT noteid, patientfirstname, patientlastname, doctorfirstname, doctorlastname, description, p_date_time, heartrate FROM patients WHERE ";
+        String query = "SELECT noteid, patientfirstname, doctorfirstname, doctorlastname, description, p_date_time, heartrate FROM patients WHERE ";
 
         int cpt = 0;
         /*Checks if the value is null (i.e. the user didn't enter anything)
@@ -339,7 +339,7 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
         //FIXME: This is a quick fix
         if (cpt == 0) {
 //            query = "SELECT * FROM patients WHERE noteid >= 1";
-            query = "SELECT noteid, patientfirstname, patientlastname, doctorfirstname, doctorlastname, description, p_date_time, heartrate FROM patients WHERE noteid >= 1";
+            query = "SELECT noteid, patientfirstname, doctorfirstname, doctorlastname, description, p_date_time, heartrate FROM patients WHERE noteid >= 1";
 
         }
 
@@ -368,7 +368,7 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
         Query query = null;
         Set<Predicate> predicates = new HashSet<Predicate>();
 
-        String rightFromSelect = line.split("SELECT")[0].trim();
+        String rightFromSelect = line.split("SELECT")[1].trim();
 
         String attributes = rightFromSelect.split("FROM")[0].trim();
 

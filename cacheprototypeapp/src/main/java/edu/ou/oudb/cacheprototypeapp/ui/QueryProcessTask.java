@@ -106,8 +106,8 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         } else {
-            result.add(0,new ArrayList<String>(mQuery.getAttributes()));
-            launchQueryResultsActivity(result);
+            String[] attributes = mQuery.getAttributes().toArray(new String[0]);
+            launchQueryResultsActivity(result,attributes);
 //			lauchResultActivity(mQuery.getRelation(),result);
         }
         super.onPostExecute(result);
@@ -127,9 +127,10 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
 //        mContext.startActivity(intent);
 //    }
 
-    private void launchQueryResultsActivity(List<List<String>> result) {
+    private void launchQueryResultsActivity(List<List<String>> result, String[] att) {
         Intent intent = new Intent(mContext, SearchExamRecordResultsActivity.class);
         intent.putExtra(SearchExamRecordResultsActivity.RESULT, result.toString());
+        intent.putExtra(SearchExamRecordResultsActivity.ATTRIBUTES, att);
         System.out.println(result.toString());
         mContext.startActivity(intent);
     }

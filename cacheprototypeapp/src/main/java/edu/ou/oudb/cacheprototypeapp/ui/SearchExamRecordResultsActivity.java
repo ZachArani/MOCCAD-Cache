@@ -32,6 +32,7 @@ import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.DecisionalSemanticCa
 * Class used instead of ResultListActivity*/
 public class SearchExamRecordResultsActivity extends Activity {
     public static final String RESULT = "result";
+    public static final String ATTRIBUTES = "attributes";
 
     /*ListView*/
     private ListView listView = null;
@@ -102,6 +103,7 @@ public class SearchExamRecordResultsActivity extends Activity {
         /*Splitting to get each row
         * (e.g. 1, Juan Coleman, Joseph Payne, etc... then 2, Pamela Daniels, etc...)*/
         sArray = res.split("\n+");
+        attributes = getIntent().getStringArrayExtra(ATTRIBUTES);
 
         /*Defining the Arrays*/
         initializeArrays();
@@ -370,12 +372,10 @@ public class SearchExamRecordResultsActivity extends Activity {
 
     /*Puts all IDs into an Array, same for Patients First Names, and so on*/
     public void arraysValues() {
-        attributes = sArray[0].split(", +");
-        for (int i = 1; i < sArray.length; i++) {
+        for (int i = 0; i < sArray.length; i++) {
             String[] splitLine = sArray[i].split(", +");
             int current = 0;
             for(String a : attributes) {
-                /*noteid, patientfirstname, patientlastname, doctorfirstname, doctorlastname, description, p_date_time, heartrate*/
                 switch (a) {
                     case "noteid":
                         ID[i] = Integer.parseInt(splitLine[current]);
