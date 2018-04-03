@@ -5,8 +5,9 @@ import android.support.annotation.Nullable;
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheReplacementManager;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.PriorityQueue;
+
+
 
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
 
@@ -18,12 +19,12 @@ import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
  */
 public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Query>{
 
-    private Map<Query, LFUSQEPCacheEntry> mEntriesHashMap = null;
+    private PriorityQueue<LFUSQEPCacheEntry> mEntriesPriorityQueue = null;
 
     private LFUSQEPCacheEntry begin;
     private LFUSQEPCacheEntry end;
 
-    public LFUSQEPCacheReplacementManager() { mEntriesHashMap = new HashMap<Query, LFUSQEPCacheEntry>(); }
+    public LFUSQEPCacheReplacementManager() { mEntriesPriorityQueue = new PriorityQueue<LFUSQEPCacheEntry>(); }
 
 
     @Override
@@ -31,9 +32,9 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     {
         boolean ret = false;
 
-        if (mEntriesHashMap.containsKey(q))
+        if (mEntriesPriorityQueue.contains(q))
         {
-            LFUSQEPCacheEntry curCacheEntry = mEntriesHashMap.get(q);
+            LFUSQEPCacheEntry curCacheEntry = mEntriesPriorityQueue.get(q);
 
             if(end != curCacheEntry)
             {
@@ -66,7 +67,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     {
         boolean ret;
 
-        if (mEntriesHashMap.containsKey(q))
+        if (mEntriesPriorityQueue.containsKey(q))
         {
             update(q);
             ret = false;
@@ -91,7 +92,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
                 end = cacheEntry;
             }
 
-            mEntriesHashMap.put(q, cacheEntry);
+            mEntriesPriorityQueue.put(q, cacheEntry);
 
             ret = true;
         }
@@ -111,13 +112,13 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
 
         boolean ret;
 
-        if (!mEntriesHashMap.containsKey(q))
+        if (!mEntriesPriorityQueue.containsKey(q))
         {
             ret = false;
         }
         else // cannot be empty
         {
-            LFUSQEPCacheEntry entryToRemove = mEntriesHashMap.get(q);
+            LFUSQEPCacheEntry entryToRemove = mEntriesPriorityQueue.get(q);
 
             if (entryToRemove == begin && entryToRemove == end)
             {
@@ -146,7 +147,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
             }
 
 
-            mEntriesHashMap.remove(q);
+            mEntriesPriorityQueue.remove(q);
 
             ret = true;
         }
@@ -172,7 +173,6 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         public LFUSQEPCacheEntry prev;
         public LFUSQEPCacheEntry next;
         private double score = 0; //QEP Score
-        private double size = 0; //In Xbs
         private double frequency = 0; //Frequency using LFUPP (Least Frequently used with respect to periodicity and priority)
 
 
@@ -212,23 +212,6 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
             score = qep;
         }
 
-        /**
-         *
-         * @return the size of the query (in Xbytes)
-         */
-        public final double getSize()
-        {
-            return size;
-        }
-
-        /**
-         *
-         * @param the size of the query to set (in Xbytes)
-         */
-        public final void setSize(double s)
-        {
-            size = s;
-        }
 
         /**
          *
@@ -246,6 +229,17 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         public final void setFrequency(double f)
         {
             frequency = f;
+        }
+
+        /**
+         *
+         * @param first cache entry
+         * @param second cache entry
+         * @return the difference between the first and second cache entry's QEP score
+         */
+        public int compare(LFUSQEPCacheEntry first, LFUSQEPCacheEntry second)
+        {
+            return (int)(first.getScore()-second.getScore());
         }
     }
 
