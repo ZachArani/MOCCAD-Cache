@@ -15,14 +15,13 @@ import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
 /**
  * @author Zachary Arani
  * @since 2.0
- * CacheReplacementManager that used the created Least Frequently Used with respect to Size and QEP score (LFUSQEP)
+ * CacheReplacementManager that used the created Least Frequently Used with respect to Size and QEP QEPScore (LFUSQEP)
  */
 public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Query>{
 
     private PriorityQueue<LFUSQEPCacheEntry> mEntriesPriorityQueue = null;
 
-    private LFUSQEPCacheEntry begin;
-    private LFUSQEPCacheEntry end;
+    private int lastReset = 0; //How many hits since the last Frequency Reset
 
     public LFUSQEPCacheReplacementManager() { mEntriesPriorityQueue = new PriorityQueue<LFUSQEPCacheEntry>(); }
 
@@ -34,28 +33,11 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
 
         if (mEntriesPriorityQueue.contains(q))
         {
-            LFUSQEPCacheEntry curCacheEntry = mEntriesPriorityQueue.get(q);
-
-            if(end != curCacheEntry)
-            {
-                // if the entry is not the first one
-                if (curCacheEntry.prev != null)
-                {
-                    curCacheEntry.prev.next = curCacheEntry.next;
-                }
-                else
-                {
-                    begin = curCacheEntry.next;
-                }
-
-
-                curCacheEntry.next.prev = curCacheEntry.prev;
-
-                curCacheEntry.prev = end;
-                end.next = curCacheEntry;
-                end = curCacheEntry;
-            }
-
+            LFUSQEPCacheEntry curCacheEntry = getEntry(q);
+            curCacheEntry.incUseInPeriod(); //Increments UseInPeriod
+            curCacheEntry.setFrequency(curCacheEntry.getUseInPeriod()/lastReset); //Sets frequency to how many times it's been used in last period
+            curCacheEntry.setScore();
+            mEntriesPriorityQueue.add(curCacheEntry);
             ret = true;
         }
 
@@ -167,15 +149,30 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         return removed;
     }
 
+    /**
+     * Removes and returns the desired entry from the Priority Queue or null otherwise.
+     * @param q The Query to search by
+     * @return CacheEntry which is passed
+     */
+    private LFUSQEPCacheEntry getEntry(Query q){
+        for(int k = 0; k<mEntriesPriorityQueue.size(); k++){
+            LFUSQEPCacheEntry temp = mEntriesPriorityQueue.poll();
+            if(temp.getQuery().equals(q))
+                return temp;
+            mEntriesPriorityQueue.add(temp);
+        }
+        return null; //Not found
+    }
+
     class LFUSQEPCacheEntry
     {
         private Query mQuery;
         public LFUSQEPCacheEntry prev;
         public LFUSQEPCacheEntry next;
-        private double score = 0; //QEP Score
-        private double frequency = 0; //Frequency using LFUPP (Least Frequently used with respect to periodicity and priority)
-
-
+        private double QEPScore = 0; //QEP Score
+        private double frequency = 0; //Frequency using LFUPP (Least Frequently used with respect to periodicity and priority
+        private int useInPeriod = 0; //How many times this query has been hit in this frequency temporality
+        private double score = 0; //The actual score we use for cache Management. Formulated as (Frequency * QEP Score)/Size
         /**
          * @return the query
          */
@@ -196,20 +193,20 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
 
         /**
          *
-         * @return the QEP score
+         * @return the QEP QEPScore
          */
-        public final double getScore()
+        public final double getQEPScore()
         {
-            return score;
+            return QEPScore;
         }
 
         /**
          *
-         * @param the QEP score to set
+         * @param the QEP QEPScore to set
          */
-        public final void setScore(double qep)
+        public final void setQEPScore(double qep)
         {
-            score = qep;
+            QEPScore = qep;
         }
 
 
@@ -233,13 +230,54 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
 
         /**
          *
+         * @return how many times this query has been used in the current period
+         */
+        public final int getUseInPeriod()
+        {
+            return useInPeriod;
+        }
+
+        /**
+         * Increments the useInPeriod variable by one
+         */
+        public final void incUseInPeriod()
+        {
+            useInPeriod++;
+        }
+
+        /**
+         * Clears the useInPeriod variable
+         */
+        public final void clearUseInPeriod()
+        {
+            useInPeriod = 0;
+        }
+
+        /**
+         *
+         * @return the algorithim's score. Formulated as (Frequency * QEP)/Size
+         */
+        public final double getScore()
+        {
+            return score;
+        }
+
+        /**
+         * Sets the score based on currently existing frequency, size, and QEP Score as formulate (Frequency * QEP Score)/Size
+         */
+        public final void setScore()
+        {
+            score = (frequency * QEPScore)/mQuery.size();
+        }
+        /**
+         *
          * @param first cache entry
          * @param second cache entry
-         * @return the difference between the first and second cache entry's QEP score
+         * @return the difference between the first and second cache entry's QEP QEPScore
          */
         public int compare(LFUSQEPCacheEntry first, LFUSQEPCacheEntry second)
         {
-            return (int)(first.getScore()-second.getScore());
+            return (int)(first.getQEPScore()-second.getQEPScore());
         }
     }
 
