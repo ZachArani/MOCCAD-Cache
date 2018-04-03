@@ -24,25 +24,25 @@ public class Query implements Sizeable {
 	 */
 	
 	/** The queryID */
-	private long mId = -1;
+	protected long mId = -1;
 	
 	/** The relation on which the query is posed */
-	private String mRelation;
+	protected String mRelation;
 
 	/** The hash set of attributes of the query */
-	private HashSet<String> mAttributes;
+	protected HashSet<String> mAttributes;
 	
 	/** The hash set of attribute allowing contained in the predicates */
-	private HashSet<String> mPredicateAttributes;
+	protected HashSet<String> mPredicateAttributes;
 	
 	/** Collection of predicates (conjunction)*/
-	private Set<Predicate> mPredicates;
+	protected Set<Predicate> mPredicates;
 	
 	/** Excluded Predicates: !(ExcludedPredicates)*/
-	private Set<Predicate> mExcludedPredicates;
+	protected Set<Predicate> mExcludedPredicates;
 
 	/** Memory Size of a query */
-	private long mSize = 0;
+	protected long mSize = 0;
 	
 	/**
 	 * The query constructor
