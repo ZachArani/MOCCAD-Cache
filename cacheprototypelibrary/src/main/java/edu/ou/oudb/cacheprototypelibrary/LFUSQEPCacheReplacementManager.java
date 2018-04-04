@@ -26,6 +26,11 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     public LFUSQEPCacheReplacementManager() { mEntriesPriorityQueue = new PriorityQueue<LFUSQEPCacheEntry>(); }
 
 
+    /**
+     * Updates frequency of cache entry if query is in cache.
+     * @param q Query to be updated
+     * @return If the update was successful
+     */
     @Override
     public boolean update(Query q) //Update Frequency
     {
@@ -37,19 +42,24 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
             curCacheEntry.incUseInPeriod(); //Increments UseInPeriod
             curCacheEntry.setFrequency(curCacheEntry.getUseInPeriod()/lastReset); //Sets frequency to how many times it's been used in last period
             curCacheEntry.setScore();
-            mEntriesPriorityQueue.add(curCacheEntry);
+            mEntriesPriorityQueue.add(curCacheEntry); //Put back into the queue
             ret = true;
         }
 
         return ret;
     }
 
+    /**
+     * Adds Query along with QEP score to the cache
+     * @param q Query to be added
+     * @return If the addition was successful
+     */
     @Override
     public boolean add(Query q)
     {
         boolean ret;
 
-        if (mEntriesPriorityQueue.containsKey(q))
+        if (mEntriesPriorityQueue.contains(q))
         {
             update(q);
             ret = false;
@@ -57,22 +67,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         else
         {
             LFUSQEPCacheEntry cacheEntry = new LFUSQEPCacheEntry();
-            cacheEntry.mQuery = q;
-
-            if (end != null)
-            {
-                end.next = cacheEntry;
-                cacheEntry.prev = end;
-                cacheEntry.next = null;
-                end = cacheEntry;
-            }
-            else
-            {
-                cacheEntry.next = null;
-                cacheEntry.prev = null;
-                begin = cacheEntry;
-                end = cacheEntry;
-            }
+            cacheEntry.setQuery(q);
 
             mEntriesPriorityQueue.put(q, cacheEntry);
 
