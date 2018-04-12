@@ -49,6 +49,27 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         return ret;
     }
 
+    public boolean add(Query q, double score)
+    {
+        boolean ret;
+
+        if (mEntriesPriorityQueue.contains(q))
+        {
+            update(q);
+            ret = false;
+        }
+
+        LFUSQEPCacheEntry cacheEntry = new LFUSQEPCacheEntry();
+        cacheEntry.setQuery(q);
+        cacheEntry.setQEPScore(score);
+        cacheEntry.incUseInPeriod();
+        cacheEntry.setScore();
+        mEntriesPriorityQueue.add(cacheEntry);
+        ret = true;
+
+        return ret;
+    }
+
     /**
      * Adds Query along with QEP score to the cache
      * @param q Query to be added
@@ -68,8 +89,8 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         {
             LFUSQEPCacheEntry cacheEntry = new LFUSQEPCacheEntry();
             cacheEntry.setQuery(q);
+            cacheEntry.setQEPScore();
 
-            mEntriesPriorityQueue.put(q, cacheEntry);
 
             ret = true;
         }
@@ -162,8 +183,6 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     class LFUSQEPCacheEntry
     {
         private Query mQuery;
-        public LFUSQEPCacheEntry prev;
-        public LFUSQEPCacheEntry next;
         private double QEPScore = 0; //QEP Score
         private double frequency = 0; //Frequency using LFUPP (Least Frequently used with respect to periodicity and priority
         private int useInPeriod = 0; //How many times this query has been hit in this frequency temporality

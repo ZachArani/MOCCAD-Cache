@@ -81,6 +81,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 	// Scores
 	private double scoreM = 0;
 	private double scoreC = 0;
+	private double scoreF = 0; //Whatever we decide to execute on (Mobile or Cloud)
 
 	public DecisionalSemanticCacheDataLoader(Context context, 
 											DataAccessProvider dataAccessProvider, 
@@ -322,6 +323,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 			resultEnergyM = costEnergyM;
 			cacheHitType = "Cache Hit";
 			executedOn = "Mobile";
+			scoreF = scoreM;
 			mQueryCache.addProcess(query, new HitMobileQueryProcess(mQueryCache));
 						
 			break;
@@ -333,6 +335,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultEnergyM = costEnergyM;
 				cacheHitType = "Cache Extended Hit Equivalent";
 				executedOn = "Mobile";
+				scoreF = scoreM;
 				mQueryCache.addProcess(queryTrimmingResult.entryQuery, new HitMobileQueryProcess(mQueryCache));
 			}
 			else
@@ -348,6 +351,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultEnergyM = costEnergyM;
 				cacheHitType = "Cache Extended Hit Included";
 				executedOn = "Mobile";
+				scoreF = scoreM;
 				//if it respects the constraints
 				if(probeQueryMobileEstimation.respectsConstraints(mOptimizationParameters))
 				{
@@ -377,6 +381,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultEnergyC = costEnergyC;
 				cacheHitType = "Cache Extended Hit Included";
 				executedOn = "Cloud";
+				scoreF = scoreC;
 				//if it respects the constraints
 				if(probeQueryCloudEstimation.respectsConstraints(mOptimizationParameters))
 				{
@@ -421,6 +426,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				}
 
 				executedOn = "Mobile";
+				scoreF = scoreM;
 				totalEstimation = Estimation.add(probeQueryMobileEstimation, remainderQueryCloudEstimation);
 				//if it respect the constraints
 				if (totalEstimation.respectsConstraints(mOptimizationParameters))
@@ -455,6 +461,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultEnergyC = costEnergyC;
 				cacheHitType = "Cache Partial Hit";
 				executedOn = "Cloud";
+				scoreF = scoreC;
 				//Corresponds the time to process the input query on the cloud
 				//(probeQuery and InputQuery are equals in the case of a PARTIAL HIT
 				if(probeQueryCloudEstimation.respectsConstraints(mOptimizationParameters))
@@ -487,6 +494,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultEnergyC = costEnergyC;
 				cacheHitType = "Cache Miss";
 				executedOn = "Cloud";
+				scoreF = scoreC;
 				mQueryCache.addProcess(query, new CloudQueryProcess(mDataAccessProvider));
 			}
 			else
@@ -859,4 +867,12 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 
 		return res;
 	}
+
+    /**
+     * @return QEP score for query
+     */
+    public double getScore()
+    {
+        return scoreF;
+    }
 }
