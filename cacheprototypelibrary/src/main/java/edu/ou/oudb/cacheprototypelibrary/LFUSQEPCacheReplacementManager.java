@@ -27,9 +27,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
 
 
     /**
-     * Updates frequency of cache entry if query is in cache.
-     * @param q Query to be updated
-     * @return If the update was successful
+     * {@inheritDoc}
      */
     @Override
     public boolean update(Query q) //Update Frequency
@@ -49,6 +47,10 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         return ret;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean add(Query q, double score)
     {
         boolean ret;
@@ -57,6 +59,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         {
             update(q);
             ret = false;
+            return ret;
         }
 
         LFUSQEPCacheEntry cacheEntry = new LFUSQEPCacheEntry();
@@ -71,88 +74,49 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     }
 
     /**
-     * Adds Query along with QEP score to the cache
-     * @param q Query to be added
-     * @return If the addition was successful
+     * {@inheritDoc}
      */
     @Override
     public boolean add(Query q)
     {
-        boolean ret;
-
-        if (mEntriesPriorityQueue.contains(q))
-        {
-            update(q);
-            ret = false;
-        }
-        else
-        {
-            LFUSQEPCacheEntry cacheEntry = new LFUSQEPCacheEntry();
-            cacheEntry.setQuery(q);
-            cacheEntry.setQEPScore();
-
-
-            ret = true;
-        }
-
+        boolean ret = false;
         return ret;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Nullable
     @Override
     public Query replace() {
-        return begin.getQuery();
+        return mEntriesPriorityQueue.peek().getQuery();
     }
 
-
+    /**
+     * @param q Kind of a misnomer. By the nature of the LFUSQEP, we only care to dequeue the front of the priority queue for each remove, irrespective of query requested.
+     */
     @Override
     public boolean remove(Query q) {
 
         boolean ret;
 
-        if (!mEntriesPriorityQueue.containsKey(q))
+        if (!mEntriesPriorityQueue.contains(q))
         {
             ret = false;
+            return ret;
         }
         else // cannot be empty
         {
-            LFUSQEPCacheEntry entryToRemove = mEntriesPriorityQueue.get(q);
-
-            if (entryToRemove == begin && entryToRemove == end)
-            {
-                begin = null;
-                end = null;
-            }
-            else
-            {
-                if (entryToRemove != end)
-                {
-                    entryToRemove.next.prev = entryToRemove.prev;
-                }
-                else
-                {
-                    end = entryToRemove.prev;
-                }
-
-                if (entryToRemove != begin)
-                {
-                    entryToRemove.prev.next = entryToRemove.next;
-                }
-                else
-                {
-                    begin = entryToRemove.next;
-                }
-            }
-
-
-            mEntriesPriorityQueue.remove(q);
-
+            mEntriesPriorityQueue.poll();
             ret = true;
         }
 
         return ret;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean removeAll(Collection<Query> queries) {
         boolean removed = true;
@@ -195,7 +159,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         }
 
         /**
-         * @param mQuery the query to set
+         * @param q the query to set
          */
         public final void setQuery(Query q)
         {
@@ -216,7 +180,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
 
         /**
          *
-         * @param the QEP QEPScore to set
+         * @param qep the QEP QEPScore to set
          */
         public final void setQEPScore(double qep)
         {
@@ -235,7 +199,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
 
         /**
          *
-         * @param set the frequency of the query using LFUPP (Least Frequently used with respect to Periodicity and Priority)
+         * @param f set the frequency of the query using LFUPP (Least Frequently used with respect to Periodicity and Priority)
          */
         public final void setFrequency(double f)
         {

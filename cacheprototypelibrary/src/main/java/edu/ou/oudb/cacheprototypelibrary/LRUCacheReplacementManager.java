@@ -25,7 +25,10 @@ public class LRUCacheReplacementManager implements CacheReplacementManager<Query
 	{
 		mEntriesHashMap = new HashMap<Query, LRUCacheEntry>();
 	}
-	
+
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public boolean update(Query q) {
 		
@@ -60,7 +63,11 @@ public class LRUCacheReplacementManager implements CacheReplacementManager<Query
 		
 		return ret;
 	}
-	
+
+    /**
+     * {@inheritDoc}
+     */
+	@Override
 	public boolean add(Query q)
 	{
 		boolean ret;
@@ -98,12 +105,27 @@ public class LRUCacheReplacementManager implements CacheReplacementManager<Query
 		return ret;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+    public boolean add(Query key, double score){
+	    return add(key);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
 	@Nullable
 	@Override
 	public Query replace() {	
 		return begin.getQuery();
 	}
-		
+
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public boolean remove(Query q) {
 		
@@ -152,6 +174,9 @@ public class LRUCacheReplacementManager implements CacheReplacementManager<Query
 		return ret;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public boolean removeAll(Collection<Query> queries) {
 		boolean removed = true;
@@ -179,7 +204,7 @@ public class LRUCacheReplacementManager implements CacheReplacementManager<Query
 		}
 		
 		/**
-		 * @param mQuery the query to set
+		 * @param q the query to set
 		 */
 		public final void setQuery(Query q) 
 		{
