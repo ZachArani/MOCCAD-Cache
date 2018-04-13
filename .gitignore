@@ -6,4 +6,5 @@
 .DS_Store
 /build
 /MOCCAD-Cache.iml
-/PrototypeCacheAndroid.iml
+cacheprototypeapp.iml
+cacheprototypelibrary.iml
