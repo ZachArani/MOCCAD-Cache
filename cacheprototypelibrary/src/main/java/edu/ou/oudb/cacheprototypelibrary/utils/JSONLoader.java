@@ -44,12 +44,11 @@ public class JSONLoader {
         try {
             httpClient = new DefaultHttpClient();
             httpGet = new HttpGet(url);
-
             HttpResponse httpResponse = httpClient.execute(httpGet);
-            HttpEntity httpEntity = httpResponse.getEntity();
-            json = httpEntity.getContent();
+			HttpEntity httpEntity = httpResponse.getEntity();
+			json = httpEntity.getContent();
 
-        } catch (UnsupportedEncodingException e) {
+		} catch (UnsupportedEncodingException e) {
             throw new DownloadDataException();
         } catch (ClientProtocolException e) {
         	throw new DownloadDataException();

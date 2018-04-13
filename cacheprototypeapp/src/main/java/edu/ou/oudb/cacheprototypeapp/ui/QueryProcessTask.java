@@ -85,7 +85,6 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
 
         if (result == null) {
             if (exception != null) {
-
                 if (exception instanceof ConstraintsNotRespectedException) {
                     launchErrorDialog(mContext.getString(R.string.query_processing_error), ((ConstraintsNotRespectedException) exception).getMessage());
                 } else if (exception instanceof ConnectException) {
