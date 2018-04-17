@@ -40,7 +40,11 @@ public class CloudDataAccessProvider implements DataAccessProvider{
     private static final int CLOUD_COEFF = 5;
 	
 	private String mURLBase = "http://10.204.69.210:8080/CloudWebService/rest/";
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> f98577170b719b61bdf3511503b94b0989bec799
 	private String mURLGetRelationMetadata = mURLBase + URL_DB_INFO;
 	
 	private String mURLProcessQueryBase = mURLBase + URL_EXTRA_QUERY;
@@ -52,7 +56,9 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 	public CloudDataAccessProvider(Context context) throws DownloadDataException, JSONParserException
 	{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+
 		String ipAddress = pref.getString(PREF_IP_ADDRESS,"10.204.69.210"); //school is 10.204.69.210, Jason home is 192.168.0.132 - change in two places here, and in preferences.xml in cacheprototypeapp
+
 		String port = pref.getString(PREF_PORT,"8080");
 	
 		StringBuilder urlBaseBuilder = new StringBuilder("http://");
@@ -72,8 +78,11 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 		InputStream jsonStream;
 		// save the string result into preferences
 		
-		String cloudMetadata = pref.getString(PREF_METADATA, "");
-		if(cloudMetadata.isEmpty())
+    	String cloudMetadata = pref.getString(PREF_METADATA, "");
+    	//Below used because empty metadata seems to give a string with brackets in it
+		String cloudMetadata2 =cloudMetadata.replaceAll("\\[","");
+		cloudMetadata2 =cloudMetadata2.replaceAll("\\]","");
+		if(cloudMetadata2.isEmpty())
 		{
 			jsonStream = JSONLoader.getJSONInputStreamFromUrl(mURLGetRelationMetadata);
 			BufferedReader r = new BufferedReader(new InputStreamReader(jsonStream));
