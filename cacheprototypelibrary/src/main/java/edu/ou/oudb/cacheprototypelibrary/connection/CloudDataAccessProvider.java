@@ -52,7 +52,9 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 	public CloudDataAccessProvider(Context context) throws DownloadDataException, JSONParserException
 	{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+
 		String ipAddress = pref.getString(PREF_IP_ADDRESS,"10.204.69.210"); //school is 10.204.69.210, Jason home is 192.168.0.132 - change in two places here, and in preferences.xml in cacheprototypeapp
+
 		String port = pref.getString(PREF_PORT,"8080");
 	
 		StringBuilder urlBaseBuilder = new StringBuilder("http://");
@@ -71,7 +73,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 		String dbInfo = null;
 		InputStream jsonStream;
 		// save the string result into preferences
-
+		
 		String cloudMetadata = pref.getString(PREF_METADATA, "");
 		//Below used because empty metadata seems to give a string with brackets in it
 		String cloudMetadata2 =cloudMetadata.replaceAll("\\[","");
