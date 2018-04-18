@@ -52,7 +52,13 @@ public class QuerySegment implements Sizeable,Serializable{
 		for(List<String> tuple: mTuples)
 		{
 			isValidTuple = true;
-			
+
+			//check included attributes
+			if(!query.respectsAttributes(relation,tuple))
+			{
+				isValidTuple = false;
+			}
+
 			// check included predicates
 			Iterator<Predicate> it = query.getPredicates().iterator();
 			while(it.hasNext() && isValidTuple)
@@ -173,4 +179,16 @@ public class QuerySegment implements Sizeable,Serializable{
         result = 31 * result + (int) (mSize ^ (mSize >>> 32));
         return result;
     }
+
+    @Override
+	public String toString() {
+		StringBuilder out = new StringBuilder("");
+		for(List<String> mTuple : mTuples) {
+			for(String tuple : mTuple) {
+				out.append(tuple+"; ");
+			}
+			out.append(" :::: ");
+		}
+		return out.toString();
+	}
 }

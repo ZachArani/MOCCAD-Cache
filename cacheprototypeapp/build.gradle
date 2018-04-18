@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
     defaultConfig {
         applicationId "edu.ou.oudb.prototypecacheandroid"
         minSdkVersion 17
@@ -26,10 +25,11 @@ android {
     }
     productFlavors {
     }
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':cacheprototypelibrary')
-    compile 'com.android.support:support-v13:+'
+    implementation project(':cacheprototypelibrary')
+    implementation 'com.android.support:support-v4:26.0.0-alpha1'
+    implementation 'com.android.support:support-v13:26.0.0-alpha1'
 }

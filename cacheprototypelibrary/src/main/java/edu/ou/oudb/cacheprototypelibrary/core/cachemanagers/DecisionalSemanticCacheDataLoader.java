@@ -81,6 +81,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 	// Scores
 	private double scoreM = 0;
 	private double scoreC = 0;
+	private double scoreF = 0; //Whatever we decide to execute on (Mobile or Cloud)
 
 	public DecisionalSemanticCacheDataLoader(Context context, 
 											DataAccessProvider dataAccessProvider, 
@@ -237,7 +238,10 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
                 //if an entry in cache contains the result of the probe query
                 // we replace that entry with the most recent one
                 if (queryTrimmingResult.entryQuery != null
-                        && queryTrimmingResult.type == QueryTrimmingType.CACHE_PARTIAL_HIT)
+                        &&
+						(queryTrimmingResult.type == QueryTrimmingType.CACHE_HORIZONTAL
+								|| queryTrimmingResult.type == QueryTrimmingType.CACHE_VERTICAL
+								|| queryTrimmingResult.type == QueryTrimmingType.CACHE_HYBRID))
                 {
                     queriesToBeRemoved.add(queryTrimmingResult.entryQuery);
                 }
@@ -319,6 +323,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 			resultEnergyM = costEnergyM;
 			cacheHitType = "Cache Hit";
 			executedOn = "Mobile";
+			scoreF = scoreM;
 			mQueryCache.addProcess(query, new HitMobileQueryProcess(mQueryCache));
 						
 			break;
@@ -330,6 +335,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultEnergyM = costEnergyM;
 				cacheHitType = "Cache Extended Hit Equivalent";
 				executedOn = "Mobile";
+				scoreF = scoreM;
 				mQueryCache.addProcess(queryTrimmingResult.entryQuery, new HitMobileQueryProcess(mQueryCache));
 			}
 			else
@@ -345,6 +351,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultEnergyM = costEnergyM;
 				cacheHitType = "Cache Extended Hit Included";
 				executedOn = "Mobile";
+				scoreF = scoreM;
 				//if it respects the constraints
 				if(probeQueryMobileEstimation.respectsConstraints(mOptimizationParameters))
 				{
@@ -374,6 +381,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultEnergyC = costEnergyC;
 				cacheHitType = "Cache Extended Hit Included";
 				executedOn = "Cloud";
+				scoreF = scoreC;
 				//if it respects the constraints
 				if(probeQueryCloudEstimation.respectsConstraints(mOptimizationParameters))
 				{
@@ -396,7 +404,9 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 			}
 			break;
 		
-		case CACHE_PARTIAL_HIT:
+			case CACHE_HORIZONTAL:
+			case CACHE_VERTICAL:
+			case CACHE_HYBRID:
 			
 			boolean probeQueryMobileEstimationIsBetter = probeQueryMobileEstimation.isBetterThan(scoreM, scoreC);
 			Estimation totalEstimation;
@@ -407,16 +417,29 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultMoneyM = costMoneyM;
 				resultEnergyM = costEnergyM;
 				cacheHitType = "Cache Partial Hit";
+				if(queryTrimmingResult.type==QueryTrimmingType.CACHE_HORIZONTAL) {
+					cacheHitType = cacheHitType + ": Horizontal";
+				} else if(queryTrimmingResult.type==QueryTrimmingType.CACHE_VERTICAL) {
+					cacheHitType = cacheHitType + ": Vertical";
+				} else {
+					cacheHitType = cacheHitType + ": Hybrid";
+				}
+
 				executedOn = "Mobile";
+				scoreF = scoreM;
 				totalEstimation = Estimation.add(probeQueryMobileEstimation, remainderQueryCloudEstimation);
 				//if it respect the constraints
 				if (totalEstimation.respectsConstraints(mOptimizationParameters))
 				{
+					boolean resultExists = queryTrimmingResult.probeQuery != null && queryTrimmingResult.entryQuery != null && queryTrimmingResult.remainderQuery != null;
+					if(queryTrimmingResult.type==QueryTrimmingType.CACHE_HYBRID) { resultExists = resultExists && queryTrimmingResult.remainderQuery2!=null; }
 					// we add the process to retrieve the result from the mobile device
-					if (queryTrimmingResult.probeQuery != null && queryTrimmingResult.entryQuery != null && queryTrimmingResult.remainderQuery != null)
+					if (resultExists)
 					{
 						mQueryCache.addProcess(queryTrimmingResult.probeQuery, new ExtendedHitInclusionMobileQueryProcess(queryTrimmingResult.entryQuery,mQueryCache));
 						mQueryCache.addProcess(queryTrimmingResult.remainderQuery, new CloudQueryProcess(mDataAccessProvider));
+						if(queryTrimmingResult.type==QueryTrimmingType.CACHE_HYBRID) { mQueryCache.addProcess(queryTrimmingResult.remainderQuery2, new CloudQueryProcess(mDataAccessProvider)); }
+
 					}
 					else
 					{
@@ -438,6 +461,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultEnergyC = costEnergyC;
 				cacheHitType = "Cache Partial Hit";
 				executedOn = "Cloud";
+				scoreF = scoreC;
 				//Corresponds the time to process the input query on the cloud
 				//(probeQuery and InputQuery are equals in the case of a PARTIAL HIT
 				if(probeQueryCloudEstimation.respectsConstraints(mOptimizationParameters))
@@ -470,6 +494,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultEnergyC = costEnergyC;
 				cacheHitType = "Cache Miss";
 				executedOn = "Cloud";
+				scoreF = scoreC;
 				mQueryCache.addProcess(query, new CloudQueryProcess(mDataAccessProvider));
 			}
 			else
@@ -547,8 +572,17 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 			costMoneyC = outProbeQueryCloudEstimation.getMonetaryCost();
 			costEnergyC = outProbeQueryCloudEstimation.getEnergy();
 			break;
-		case CACHE_PARTIAL_HIT:
-			System.out.println("CACHE_PARTIAL_HIT");
+		case CACHE_HORIZONTAL:
+		case CACHE_VERTICAL:
+		case CACHE_HYBRID:
+			System.out.print("CACHE_PARTIAL_HIT ");
+			if(queryTrimmingResult.type==QueryTrimmingType.CACHE_HORIZONTAL) {
+				System.out.println("HORIZONTAL");
+			} else if(queryTrimmingResult.type==QueryTrimmingType.CACHE_VERTICAL) {
+				System.out.println("VERTICAL");
+			} else {
+				System.out.println("HYBRID");
+			}
             //<editor-fold desc="LOG newQueryCachePartialHit">
             StatisticsManager.newQueryCachePartialHit();
             //</editor-fold>
@@ -560,6 +594,16 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
                             new EstimationCacheRetrievalProcess(mCloudEstimationCache),
                             new CloudEstimationComputationProcess(mCloudEstimationComputationManager))
             );
+			if(queryTrimmingResult.type==QueryTrimmingType.CACHE_HYBRID) {
+				Estimation temp = new Estimation();
+				temp.init(getCloudEstimation(
+						mCloudEstimationCache,
+						queryTrimmingResult.remainderQuery2,
+						new EstimationCacheRetrievalProcess(mCloudEstimationCache),
+						new CloudEstimationComputationProcess(mCloudEstimationComputationManager))
+				);
+				outRemainderQueryCloudEstimation.add(outRemainderQueryCloudEstimation,temp);
+			}
 			
 			// getMobileEstimation to process probe query on the mobile device
 			outProbeQueryMobileEstimation.init(getMobileEstimation(
@@ -578,7 +622,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 			// we get the estimation to process the same query on the cloud
 			outProbeQueryCloudEstimation.init(getCloudEstimation(
                             mCloudEstimationCache,
-                            queryTrimmingResult.probeQuery,  // = inputQuery
+                            queryTrimmingResult.probeQuery, // NOT always input query
                             new EstimationCacheRetrievalProcess(mCloudEstimationCache),
                             new CloudEstimationComputationProcess(mCloudEstimationComputationManager))
 				);
@@ -823,4 +867,12 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 
 		return res;
 	}
+
+    /**
+     * @return QEP score for query
+     */
+    public double getScore()
+    {
+        return scoreF;
+    }
 }

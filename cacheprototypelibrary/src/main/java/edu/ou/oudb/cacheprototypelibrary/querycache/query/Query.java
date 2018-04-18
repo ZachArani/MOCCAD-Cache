@@ -1,13 +1,16 @@
 package edu.ou.oudb.cacheprototypelibrary.querycache.query;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import edu.ou.oudb.cacheprototypelibrary.core.cache.Sizeable;
+import edu.ou.oudb.cacheprototypelibrary.metadata.Metadata;
 import edu.ou.oudb.cacheprototypelibrary.metadata.ObjectSizer;
+import edu.ou.oudb.cacheprototypelibrary.metadata.RelationMetadata;
 
 /**
  * @author Mikael Perrin
@@ -26,8 +29,8 @@ public class Query implements Sizeable {
 	/** The relation on which the query is posed */
 	private String mRelation;
 
-	/** The linked hash set of attributes being selected in the query */
-	private LinkedHashSet<String> mAttributes;
+	/** The hash set of attributes of the query */
+	private HashSet<String> mAttributes;
 	
 	/** The hash set of attribute allowing contained in the predicates */
 	private HashSet<String> mPredicateAttributes;
@@ -48,8 +51,8 @@ public class Query implements Sizeable {
 	public Query(String relation)
 	{
 		setRelation(relation);
+		mAttributes = new HashSet<String>();
 		mPredicates = new HashSet<Predicate>();
-		mAttributes = new LinkedHashSet<String>();
 		mPredicateAttributes = new HashSet<String>();
 		mExcludedPredicates = new HashSet<Predicate>();
 		mSize += ObjectSizer.getStringSize32bits(relation.length());
@@ -138,6 +141,41 @@ public class Query implements Sizeable {
 		
 		return inserted;
 	}
+
+	/**
+	 * Method to add attributes to query
+	 * @param attribute the attribute to be added
+	 * @return true if added, false otherwise
+	 */
+	public boolean addAttribute(String attribute)
+	{
+		if (attribute != "*") {
+			mSize += ObjectSizer.getStringSize32bits(attribute.length());
+			return mAttributes.add(attribute);
+		} else { //if attribute is *, adds all attributes
+			String[] attributes = new String[]{"noteid", "patientfirstname", "patientlastname", "doctorfirstname", "doctorlastname", "description", "p_date_time", "heartrate"};
+			for(String a: attributes) {
+				addAttribute(a);
+			}
+		}
+		return false; //if *, do not add - not sure about implementation
+	}
+
+	/**
+	 * Method to add attributes to query
+	 * @param attributes the attributes to be added
+	 * @return true if added, false otherwise
+	 */
+	public boolean addAttributes(Collection<String> attributes)
+	{
+		for(String attribute: attributes)
+		{
+			if (!addAttribute(attribute))
+				return false;
+		}
+
+		return true;
+	}
 	
 	/**
 	 * Attribute to be added in order to make the analysis easier
@@ -163,39 +201,6 @@ public class Query implements Sizeable {
 				return false;
 		}
 		
-		return true;
-	}
-
-	/**
-	 * Selected attribute to be added
-	 * @param attribute the attribute to be added
-	 * @return true if added, false otherwise
-	 */
-	public boolean addAttribute(String attribute)
-	{
-		mSize += ObjectSizer.getStringSize32bits(attribute.length());
-		if (!attribute.equals("*"))
-		{
-			return !mAttributes.contains("*") && mAttributes.add(attribute);
-		} else
-        {
-            return mAttributes.size()==0 && mAttributes.add(attribute);
-        }
-	}
-
-	/**
-	 * Selected attributes to be added
-	 * @param attributes the attributes to be added
-	 * @return true if added, false otherwise
-	 */
-	public boolean addAttributes(Collection<String> attributes)
-	{
-		for(String attribute: attributes)
-		{
-			if (!addAttribute(attribute))
-				return false;
-		}
-
 		return true;
 	}
 	
@@ -239,6 +244,11 @@ public class Query implements Sizeable {
 	}
 
 	/**
+	 * @return the attributes
+	 */
+	public final HashSet<String> getAttributes() { return this.mAttributes; }
+
+	/**
 	 * @return the predicateAttributes
 	 */
 	public final HashSet<String> getPredicateAttributes() {
@@ -279,6 +289,22 @@ public class Query implements Sizeable {
 		return mAttributes.containsAll(attributes);
 	}
 
+	public boolean respectsAttributes(String relation, List<String> tuple) throws NumberFormatException
+	{
+		RelationMetadata relationMetadata = Metadata.getInstance().getRelationMetadata(relation);
+		boolean isValidTuple = false;
+		Iterator<String> it = mAttributes.iterator();
+		while(it.hasNext() && isValidTuple)
+		{
+			Integer attIndex = relationMetadata.getAttributeIndex(it.next());
+			if (attIndex == null)
+			{
+				isValidTuple = false;
+			}
+		}
+		return isValidTuple;
+	}
+
 	@Override
 	public long size() {
 		return mSize;
@@ -300,10 +326,6 @@ public class Query implements Sizeable {
 				* result
 				+ ((mPredicateAttributes == null) ? 0 : mPredicateAttributes
 						.hashCode());
-		result = prime
-				* result
-				+ ((mAttributes == null) ? 0 : mAttributes
-				.hashCode());
 		result = prime * result
 				+ ((mPredicates == null) ? 0 : mPredicates.hashCode());
 		result = prime * result
@@ -340,13 +362,6 @@ public class Query implements Sizeable {
 		} else if (!mPredicateAttributes.equals(other.mPredicateAttributes)) {
 			return false;
 		}
-		if (mAttributes == null) {
-			if (other.mAttributes != null) {
-				return false;
-			}
-		} else if (!mAttributes.equals(other.mAttributes)) {
-			return false;
-		}
 		if (mPredicates == null) {
 			if (other.mPredicates != null) {
 				return false;
@@ -370,14 +385,18 @@ public class Query implements Sizeable {
 
 		int sizeAttributes = mAttributes.size();
 
+		if (sizeAttributes == 0)
+		{
+			builder.append("*");
+		}
+
 		int k = 0;
-		for(String a : mAttributes) {
+		for(String a: mAttributes) {
 			builder.append(a);
-			if(k < sizeAttributes - 1)
-			{
+			if (k < sizeAttributes-1) {
 				builder.append(", ");
 			}
-			k++;
+			++k;
 		}
 
 		builder.append(" FROM ");

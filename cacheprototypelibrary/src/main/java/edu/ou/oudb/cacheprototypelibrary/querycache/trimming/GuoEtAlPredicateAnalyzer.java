@@ -2,7 +2,6 @@ package edu.ou.oudb.cacheprototypelibrary.querycache.trimming;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.AbstractMap;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -172,7 +171,7 @@ public class GuoEtAlPredicateAnalyzer implements PredicatesAnalyzer {
         return newPredicates;
     }
 
-    public boolean respectsSatifiabilityIntegerDomain(Set<Predicate> predicates) {
+    public boolean respectsSatisfiabilityIntegerDomain(Set<Predicate> predicates) {
         XopCPredicate curXopCPredicate = null;
         /*Current Node with Numbers*/
         AttributeNode curNode = null;
@@ -486,7 +485,7 @@ public class GuoEtAlPredicateAnalyzer implements PredicatesAnalyzer {
         mNodeMap.clear();
         mNodeGraph.clear();
 
-        if (respectsSatifiabilityIntegerDomain(queryPredicates)) {
+        if (respectsSatisfiabilityIntegerDomain(queryPredicates)) {
             try {
                 cleanCachePredicates = initPrerequisitesIntegerDomain(cachePredicates);
             } catch (InvalidPredicateException | TrivialPredicateException e1) {

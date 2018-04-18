@@ -18,7 +18,9 @@ public interface QueryCacheQueryTrimmer {
 		public QueryTrimmingType type = null;
 		public Query probeQuery = null;
 		public Query entryQuery = null;
+		public Query inputQuery = null;
 		public Query remainderQuery = null;
+		public Query remainderQuery2 = null;
 		/* (non-Javadoc)
 		 * @see java.lang.Object#hashCode()
 		 */
@@ -30,9 +32,14 @@ public interface QueryCacheQueryTrimmer {
 					+ ((entryQuery == null) ? 0 : entryQuery.hashCode());
 			result = prime * result
 					+ ((probeQuery == null) ? 0 : probeQuery.hashCode());
+			result = prime * result
+					+ ((inputQuery == null) ? 0 : inputQuery.hashCode());
 			result = prime
 					* result
 					+ ((remainderQuery == null) ? 0 : remainderQuery.hashCode());
+			result = prime
+					* result
+					+ ((remainderQuery2 == null) ? 0 : remainderQuery2.hashCode());
 			result = prime * result + ((type == null) ? 0 : type.hashCode());
 			return result;
 		}
@@ -65,11 +72,25 @@ public interface QueryCacheQueryTrimmer {
 			} else if (!probeQuery.equals(other.probeQuery)) {
 				return false;
 			}
+			if (inputQuery == null) {
+				if (other.inputQuery != null) {
+					return false;
+				}
+			} else if (!inputQuery.equals(other.inputQuery)) {
+				return false;
+			}
 			if (remainderQuery == null) {
 				if (other.remainderQuery != null) {
 					return false;
 				}
 			} else if (!remainderQuery.equals(other.remainderQuery)) {
+				return false;
+			}
+			if (remainderQuery2 == null) {
+				if (other.remainderQuery2 != null) {
+					return false;
+				}
+			} else if (!remainderQuery2.equals(other.remainderQuery2)) {
 				return false;
 			}
 			if (type != other.type) {

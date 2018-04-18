@@ -11,11 +11,13 @@
           android:icon="@android:drawable/ic_menu_info_details"
           android:title="@string/action_stats"
           android:showAsAction="ifRoom" />
-    
-    <item android:id="@+id/action_settings"
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@android:drawable/ic_menu_info_details"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:showAsAction="always"
+        android:title="@string/action_settings" />
     
     <item android:id="@+id/action_experimentation"
         android:orderInCategory="0"

@@ -29,6 +29,8 @@ public class ProcessedQueriesFragment extends ListFragment implements OnItemClic
 		public TextView predicates;
 		public TextView time;
 	}
+
+	public ProcessedQueriesFragment(){}
 	
     private QueryAdapter mProcessedQueryAdapter = null;
 	private List<Query> mQueries = null;
@@ -87,7 +89,9 @@ public class ProcessedQueriesFragment extends ListFragment implements OnItemClic
 	public static class RelaunchQueryDialogFragment extends DialogFragment {
 		
 		private Query mQuery = null;
-		
+
+		public RelaunchQueryDialogFragment(){}
+
 		public RelaunchQueryDialogFragment(Query query)
 		{
 			mQuery = query;

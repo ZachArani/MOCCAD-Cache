@@ -1,6 +1,7 @@
 package edu.ou.oudb.cacheprototypeapp.ui;
 
 import java.net.ConnectException;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
@@ -64,14 +65,16 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
     protected List<List<String>> doInBackground(Query... query) {
         mQuery = query[0];
         System.out.println("mQuery: " + mQuery.toSQLString());
+        List<List<String>> ret = null;
         try {
-            return ((AndroidCachePrototypeApplication) mContext.getApplicationContext()).getDataLoader().load(mQuery);
+            ret = ((AndroidCachePrototypeApplication) mContext.getApplicationContext()).getDataLoader().load(mQuery);
+            return ret;
         } catch (ConnectException | ConstraintsNotRespectedException
                 | DownloadDataException | JSONParserException e) {
             exception = e;
         }
 
-        return null;
+        return ret;
     }
 
     @Override
@@ -82,7 +85,6 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
 
         if (result == null) {
             if (exception != null) {
-
                 if (exception instanceof ConstraintsNotRespectedException) {
                     launchErrorDialog(mContext.getString(R.string.query_processing_error), ((ConstraintsNotRespectedException) exception).getMessage());
                 } else if (exception instanceof ConnectException) {

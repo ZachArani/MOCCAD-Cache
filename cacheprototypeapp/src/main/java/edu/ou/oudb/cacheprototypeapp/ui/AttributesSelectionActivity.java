@@ -34,7 +34,7 @@ import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
  */
 
 /*Class used instead of NewQueryActivity*/
-public class SearchExamRecordActivity extends FragmentActivity implements View.OnClickListener, DatePickerFragment.OnDateDataPass, TimePickerFragment.OnTimeDataPass {
+public class AttributesSelectionActivity extends FragmentActivity implements View.OnClickListener, DatePickerFragment.OnDateDataPass, TimePickerFragment.OnTimeDataPass {
     private ProcessedQueryDbHelper mDBHelper = null;
 
     /*Booleans to know if a field has been selected*/
@@ -55,7 +55,7 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
             heartrate_op;
 
     /*TextViews
-    * Put back to Spinners if using the cache with Strings*/
+     * Put back to Spinners if using the cache with Strings*/
     private TextView patient_op,
             patient_second_op,
             doctor_op,
@@ -141,8 +141,8 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
             attributeDe = null,
             attributeDaTi = null, // Attribute used for both date and time
             attributeHe = null,
-            /*Operators*/
-            operatorId = null,
+    /*Operators*/
+    operatorId = null,
             operatorPa = null,
             operatorPa2 = null,
             operatorDo = null,
@@ -151,8 +151,8 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
             operatorDa = null,
             operatorTi = null,
             operatorHe = null,
-            /*Values*/
-            valueId = null,
+    /*Values*/
+    valueId = null,
             valuePa = null,
             valuePa2 = null,
             valueDo = null,
@@ -178,7 +178,7 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         /*Associating it to the spinners
-        * We now have spinners with all operators*/
+         * We now have spinners with all operators*/
         id_op.setAdapter(adapter);
         patient_op.setText("=");
         patient_second_op.setText("=");
@@ -210,7 +210,7 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
         ArrayAdapter<String> adapterDesc = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, DESCRIPTIONS);
 
         /*Sets adapters
-        * Now the AutoCompleteTextViews have the values to retrieve from when the user enters smthg (At least 2 letters)*/
+         * Now the AutoCompleteTextViews have the values to retrieve from when the user enters smthg (At least 2 letters)*/
         patient_first_value.setAdapter(adapterPF);
         patient_second_value.setAdapter(adapterPL);
         doctor_first_value.setAdapter(adapterDF);
@@ -238,8 +238,8 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
         String query = "SELECT * FROM patients WHERE ";
         int cpt = 0;
         /*Checks if the value is null (i.e. the user didn't enter anything)
-        * Also checks if the value is empty (i.e. if the user entered something and erased it)
-        * The null test needs to be the first, or an exception is thrown*/
+         * Also checks if the value is empty (i.e. if the user entered something and erased it)
+         * The null test needs to be the first, or an exception is thrown*/
         if (valueId == null || valueId.isEmpty()) {
             isIdSelected = false;
         }
@@ -262,7 +262,7 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
             isHeartrateSelected = false;
         }
         /*In case the user cancels the DatePicker / TimePicker selection
-        * This needs to be done because otherwise the boolean are considered true*/
+         * This needs to be done because otherwise the boolean are considered true*/
         if (valueDa == null) {
             isDateSelected = false;
         }
@@ -270,8 +270,8 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
             isTimeSelected = false;
         }
         /*Looks if fields have been filled out or not
-        * If not, selects all, else we look how much have been filled,
-        * and construct the request based on that*/
+         * If not, selects all, else we look how much have been filled,
+         * and construct the request based on that*/
         /*The replacements and %27 are used in the URL when the request is launched*/
         if (isIdSelected) {
             query = query.concat(attributeId + " " + operatorId + " " + valueId);
@@ -317,7 +317,7 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
                 query = query.concat(" AND ");
             }
             /*For both Date and Time, we need to specify that we are taking a substring of the attribute
-            * We do this to isolate the part we want, in order to run the query*/
+             * We do this to isolate the part we want, in order to run the query*/
             query = query.concat("substr(" + attributeDaTi + ",0,10) " + operatorDa + " %27" + valueDa + "%27");
             cpt++;
         }
@@ -352,11 +352,11 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
         mDBHelper.addQuery(getQuery(query)); // Add the query to the Processed Queries
 
         /*Processes the query
-        * Gets the result of the query and launches SearchExamRecordResultsActivity*/
+         * Gets the result of the query and launches SearchExamRecordResultsActivity*/
 //        if (cpt == 0) {
 //            (new QueryProcessTask(this)).execute(getQuery("SELECT * FROM patients"));
 //        } else {
-            (new QueryProcessTask(this)).execute(getQuery(query));
+        (new QueryProcessTask(this)).execute(getQuery(query));
 //        }
     }
 
@@ -441,7 +441,7 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
     }
 
     /*Tells us when the user has finished writing
-    * This way, we put values that will be used later on for the query*/
+     * This way, we put values that will be used later on for the query*/
     private void onFieldClicked() {
         id_value.addTextChangedListener(new TextWatcher() {
             @Override
@@ -697,7 +697,7 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
             int minutes = Integer.parseInt(data.split(":+")[1]);
             String minuteS = Integer.toString(minutes);
             /*Default format is 24h
-            * Displaying AM or PM according to the value of hours*/
+             * Displaying AM or PM according to the value of hours*/
             if (hours > 12) {
                 hours = hours % 12;
                 AM_PM = "PM";

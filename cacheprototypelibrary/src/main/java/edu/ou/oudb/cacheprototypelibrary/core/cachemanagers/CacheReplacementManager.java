@@ -21,12 +21,21 @@ public interface CacheReplacementManager<K extends Sizeable>{
 	 * @return true if added, false otherwise
 	 */
 	public boolean add(K key);
+
+	/**
+	 * add the metadata used for the replacement as well as a QEP score
+	 * @param key the key
+	 * @param score the QEP score to be attached
+	 * @return true if added, false otherwise
+	 */
+	public boolean add(K key, double score);
 	
 	/**
 	 * remove the metadata used for the replacement policy
 	 * @param key the key 
 	 * @return true if removed, false otherwise
 	 */
+
 	public boolean remove(K key);
 	
 	/**

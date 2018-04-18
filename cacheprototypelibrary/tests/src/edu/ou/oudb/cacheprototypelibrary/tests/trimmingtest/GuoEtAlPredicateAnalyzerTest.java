@@ -199,7 +199,7 @@ public class GuoEtAlPredicateAnalyzerTest extends TestCase {
 		}
 	
 		
-		assertTrue(analyzer.respectsSatifiabilityIntegerDomain(predicates));
+		assertTrue(analyzer.respectsSatisfiabilityIntegerDomain(predicates));
 	}
 	
 	public void testNotRespectSatisfiabilityIntegerDomain()
@@ -215,7 +215,7 @@ public class GuoEtAlPredicateAnalyzerTest extends TestCase {
 		}
 	
 		
-		assertFalse(analyzer.respectsSatifiabilityIntegerDomain(predicates));
+		assertFalse(analyzer.respectsSatisfiabilityIntegerDomain(predicates));
 	}
 	
 	
