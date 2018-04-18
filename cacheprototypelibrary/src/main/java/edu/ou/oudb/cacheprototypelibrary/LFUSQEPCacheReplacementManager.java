@@ -199,7 +199,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
 
         /**
          *
-         * @param f set the frequency of the query using LFUPP (Least Frequently used with respect to Periodicity and Priority)
+         * @param f set  the frequency of the query using LFUPP (Least Frequently used with respect to Periodicity and Priority)
          */
         public final void setFrequency(double f)
         {
