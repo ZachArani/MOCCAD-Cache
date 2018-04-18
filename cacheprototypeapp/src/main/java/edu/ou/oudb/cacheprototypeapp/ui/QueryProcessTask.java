@@ -1,7 +1,7 @@
 package edu.ou.oudb.cacheprototypeapp.ui;
 
 import java.net.ConnectException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -65,16 +65,14 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
     protected List<List<String>> doInBackground(Query... query) {
         mQuery = query[0];
         System.out.println("mQuery: " + mQuery.toSQLString());
-        List<List<String>> ret = null;
         try {
-            ret = ((AndroidCachePrototypeApplication) mContext.getApplicationContext()).getDataLoader().load(mQuery);
-            return ret;
+            return ((AndroidCachePrototypeApplication) mContext.getApplicationContext()).getDataLoader().load(mQuery);
         } catch (ConnectException | ConstraintsNotRespectedException
                 | DownloadDataException | JSONParserException e) {
             exception = e;
         }
 
-        return ret;
+        return null;
     }
 
     @Override
@@ -85,6 +83,7 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
 
         if (result == null) {
             if (exception != null) {
+
                 if (exception instanceof ConstraintsNotRespectedException) {
                     launchErrorDialog(mContext.getString(R.string.query_processing_error), ((ConstraintsNotRespectedException) exception).getMessage());
                 } else if (exception instanceof ConnectException) {
@@ -107,7 +106,8 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         } else {
-            launchQueryResultsActivity(result);
+            String[] attributes = mQuery.getAttributes().toArray(new String[0]);
+            launchQueryResultsActivity(result,attributes);
 //			lauchResultActivity(mQuery.getRelation(),result);
         }
         super.onPostExecute(result);
@@ -127,10 +127,11 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
 //        mContext.startActivity(intent);
 //    }
 
-    private void launchQueryResultsActivity(List<List<String>> result) {
+    private void launchQueryResultsActivity(List<List<String>> result, String[] att) {
         Intent intent = new Intent(mContext, SearchExamRecordResultsActivity.class);
         intent.putExtra(SearchExamRecordResultsActivity.RESULT, result.toString());
-
+        intent.putExtra(SearchExamRecordResultsActivity.ATTRIBUTES, att);
+        System.out.println(result.toString());
         mContext.startActivity(intent);
     }
 

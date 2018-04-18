@@ -241,6 +241,8 @@ public class ProcessedQueryDbHelper extends SQLiteOpenHelper{
             do {
             	
             	Query query = new Query(cursor.getString(1));
+
+            	query.addAttribute("*");
             	
             	predicates = getAllPredicates(cursor.getInt(0));
 
