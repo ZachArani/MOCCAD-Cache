@@ -73,7 +73,6 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
 
     public void initializeVariables() {
         /*Radio Buttons*/
-        attributeGroup = (RadioGroup) findViewById(R.id.attributeGroup);
         id_button = (RadioButton) findViewById(R.id.id);
         patientFirst_button = (RadioButton) findViewById(R.id.patientfirstname);
         patientLast_button = (RadioButton) findViewById(R.id.patientlastname);
@@ -83,9 +82,15 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         date_time_button = (RadioButton) findViewById(R.id.p_date_time);
         heartrate_button = (RadioButton) findViewById(R.id.heartrate);
 
+
         /*Confirm and cancel buttons*/
         confirm = (Button) findViewById(R.id.confirm_button);
         cancel = (Button) findViewById(R.id.cancel_button);
+    }
+
+
+    public void onRadioButtonClicked(View view) {
+
     }
 
     @Override
