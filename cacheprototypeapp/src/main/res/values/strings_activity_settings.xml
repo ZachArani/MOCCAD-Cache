@@ -16,11 +16,13 @@
         <item>No Cache</item>
         <item>Semantic Caching</item>
         <item>Decisional Semantic Caching</item>
+		<item>LFUSQEP Caching (Alpha)</item>
     </string-array>
     <string-array name="pref_cache_type_list_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+		<item>3</item>
     </string-array>
     
     <string name="pref_use_replacement">Use Replacement</string>

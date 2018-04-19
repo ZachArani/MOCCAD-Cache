@@ -39,6 +39,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.ou.oudb.cacheprototypeapp.ui.MainActivity" />
         </activity>
+        <activity android:name=".ui.AttributesSelectionActivity" />
         <activity
             android:name=".ui.SearchExamRecordActivity"
             android:label="@string/title_activity_query_selection"
