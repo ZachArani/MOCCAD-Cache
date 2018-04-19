@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.MenuItemCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -368,15 +369,16 @@ public class SearchExamRecordResultsActivity extends Activity {
     /*Puts all IDs into an Array, same for Patients First Names, and so on*/
     public void arraysValues() {
         for (int i = 0; i < sArray.length; i++) {
+            Log.i("String Array: ", sArray[i]);
             ID[i] = Integer.parseInt(sArray[i].split(", +")[0]);
             PFN[i] = sArray[i].split(", +")[1];
             PLN[i] = sArray[i].split(", +")[2];
-            DFN[i] = sArray[i].split(", +")[3];
-            DLN[i] = sArray[i].split(", +")[4];
-            Desc[i] = sArray[i].split(", +")[5];
-            Dates[i] = sArray[i].split(", +")[6].substring(0, 10);
-            Times[i] = sArray[i].split(", +")[6].substring(11, 16);
-            HR[i] = Integer.parseInt(sArray[i].split(", +")[7]);
+            Desc[i] = sArray[i].split(", +")[3];
+            HR[i] = Integer.parseInt(sArray[i].split(", +")[4]);
+            DFN[i] = sArray[i].split(", +")[5];
+            DLN[i] = sArray[i].split(", +")[6];
+            Dates[i] = sArray[i].split(", +")[7].substring(0, 10);
+            Times[i] = sArray[i].split(", +")[7].substring(11, 16);
         }
     }
 
