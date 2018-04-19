@@ -36,6 +36,7 @@ import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
 /*Class used instead of NewQueryActivity*/
 public class SearchExamRecordActivity extends FragmentActivity implements View.OnClickListener, DatePickerFragment.OnDateDataPass, TimePickerFragment.OnTimeDataPass {
     private ProcessedQueryDbHelper mDBHelper = null;
+    public static final String ATTRIBUTELIST = "attributeList";
 
     /*Booleans to know if a field has been selected*/
     private boolean isIdSelected = false,

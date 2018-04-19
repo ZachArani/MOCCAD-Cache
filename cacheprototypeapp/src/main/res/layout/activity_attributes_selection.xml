@@ -21,8 +21,13 @@
 
 
         <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/attributeGroup"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="365dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/project_name"
+            android:layout_marginTop="-29dp"
             android:baselineAligned="false"
             android:orientation="vertical">
 
@@ -47,7 +52,7 @@
                 android:onClick="onRadioButtonClicked"
                 android:text="Patient Last Name" />
 
-            <RadioButtona
+            <RadioButton
                 android:id="@+id/doctorfirstname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,18 +74,11 @@
                 android:text="Description" />
 
             <RadioButton
-                android:id="@+id/p_date"
+                android:id="@+id/p_date_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
-                android:text="Date" />
-
-            <RadioButton
-                android:id="@+id/p_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="Time" />
+                android:text="Date and Time" />
 
             <RadioButton
                 android:id="@+id/heartrate"
@@ -95,17 +93,17 @@
             android:id="@+id/confirm_button"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/heartrate"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_below="@id/attributeGroup"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
             android:text="@string/confirm" />
+
         <Button
             android:id="@+id/cancel_button"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/heartrate"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
             android:text="@string/cancel" />
 
     </RelativeLayout>
