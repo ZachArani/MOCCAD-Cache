@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RadioGroup
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:focusableInTouchMode="true"
@@ -28,22 +28,68 @@
             android:orientation="vertical">
 
             <RadioButton
-                android:id="@+id/radio_pirates"
+                android:id="@+id/id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
                 android:text="ID" />
 
             <RadioButton
-                android:id="@+id/radio_ninjas"
+                android:id="@+id/patientfirstname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
-                android:text="FirstName" />
+                android:text="Patient First Name" />
+
+            <RadioButton
+                android:id="@+id/patientlastname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Patient Last Name" />
+
+            <RadioButtona
+                android:id="@+id/doctorfirstname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Doctor First Name" />
+
+            <RadioButton
+                android:id="@+id/doctorlastname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Doctor Last Name" />
+
+            <RadioButton
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Description" />
+
+            <RadioButton
+                android:id="@+id/p_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Date" />
+
+            <RadioButton
+                android:id="@+id/p_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Time" />
+
+            <RadioButton
+                android:id="@+id/heartrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Heart Rate" />
         </RadioGroup>
-
-
-        <!-- Displaying the pickers and the value when chosen -->
 
         <!-- Launch Button-->
         <Button
