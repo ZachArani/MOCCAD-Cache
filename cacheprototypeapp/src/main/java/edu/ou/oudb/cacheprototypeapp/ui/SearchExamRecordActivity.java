@@ -22,7 +22,6 @@ import java.util.Set;
 
 import edu.ou.oudb.cacheprototypeapp.R;
 import edu.ou.oudb.cacheprototypeapp.provider.ProcessedQueryDbHelper;
-import edu.ou.oudb.cacheprototypelibrary.connection.CloudDataAccessProvider;
 import edu.ou.oudb.cacheprototypelibrary.querycache.exception.InvalidPredicateException;
 import edu.ou.oudb.cacheprototypelibrary.querycache.exception.TrivialPredicateException;
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.Predicate;
@@ -36,7 +35,6 @@ import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
 /*Class used instead of NewQueryActivity*/
 public class SearchExamRecordActivity extends FragmentActivity implements View.OnClickListener, DatePickerFragment.OnDateDataPass, TimePickerFragment.OnTimeDataPass {
     private ProcessedQueryDbHelper mDBHelper = null;
-    public static final String ATTRIBUTELIST = "attributeList";
 
     /*Booleans to know if a field has been selected*/
     private boolean isIdSelected = false,
@@ -235,8 +233,8 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
     public void launchQuery() {
         /*Base for the query*/
 //        String query = "SELECT * FROM patients WHERE ";
-        //String query = "SELECT noteid FROM patients WHERE ";
-        String query = "SELECT * FROM patients WHERE ";
+        String query = "SELECT noteid, patientfirstname, patientlastname, doctorfirstname, doctorlastname, description, p_date_time, heartrate FROM patients WHERE ";
+
         int cpt = 0;
         /*Checks if the value is null (i.e. the user didn't enter anything)
         * Also checks if the value is empty (i.e. if the user entered something and erased it)
@@ -340,8 +338,11 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
         //FIXME: We do this because otherwise we can't do "SELECT * FROM patients;" after having done one query
         //FIXME: This is a quick fix
         if (cpt == 0) {
-            query = "SELECT * FROM patients WHERE noteid >= 1";
+//            query = "SELECT * FROM patients WHERE noteid >= 1";
+            query = "SELECT noteid, patientfirstname, patientlastname, doctorfirstname, doctorlastname, description, p_date_time, heartrate FROM patients WHERE noteid >= 1";
+
         }
+
 
         query = query.concat(";");
         System.out.println("QUERY: " + query);
@@ -366,11 +367,12 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
 
         Query query = null;
         Set<Predicate> predicates = new HashSet<Predicate>();
-        Set<String> attributes = new HashSet<String>();
 
-        String leftFrom = line.split("FROM")[0].trim();
+        String rightFromSelect = line.split("SELECT")[1].trim();
 
-        String att = leftFrom.substring(7); //should be first non-space after SELECT
+        String attributes = rightFromSelect.split("FROM")[0].trim();
+
+        String[] attributeList = attributes.split(",");
 
         String rightFrom = line.split("FROM")[1].trim();
 
@@ -378,22 +380,15 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
 
         query = new Query(table);
 
-        String[] attributeList;
-        if (!att.equals("*"))
-        {
-            attributeList = att.split(", ");
-        } else {
-            attributeList = new String[]
-                    {"noteid", "patientfirstname", "patientlastname", "doctorfirstname", "doctorlastname", "description", "p_date_time", "heartrate"};
+//        query.addAttribute("*")
+        for(String a : attributeList) {
+            query.addAttribute(a.trim());
         }
-        for(String a: attributeList)
-        {
-            attributes.add(a);
-        }
-        query.addAttributes(attributes);
+
 
         /*Only takes requests having a WHERE statement*/
-        if (line.contains("WHERE")) {
+//        if (!line.equals("SELECT * FROM patients")) {
+        if (!line.equals("SELECT" + attributes + "FROM patients")) {
 
             String predicateStr = rightFrom.split("WHERE")[1].trim();
 

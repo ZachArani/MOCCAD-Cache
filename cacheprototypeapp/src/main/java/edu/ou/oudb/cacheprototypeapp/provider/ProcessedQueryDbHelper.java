@@ -39,7 +39,14 @@ public class ProcessedQueryDbHelper extends SQLiteOpenHelper{
     private static final String KEY_OPERAND_LEFT = "operand_left";
     private static final String KEY_OPERATOR = "operator";
     private static final String KEY_OPERAND_RIGHT = "operand_right";
-    private static final String KEY_FOREIGN_QUERY_ID = "fk_query_id";
+    private static final String KEY_P_FOREIGN_QUERY_ID = "fk_query_id";
+
+	// Table attributes
+	private static final String TABLE_ATTRIBUTES = "ATTRIBUTES";
+
+	// columns names
+	private static final String KEY_ATTRIBUTE = "attribute";
+	private static final String KEY_A_FOREIGN_QUERY_ID = "fk_query_id";
  
     public ProcessedQueryDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -57,13 +64,20 @@ public class ProcessedQueryDbHelper extends SQLiteOpenHelper{
     			+ KEY_OPERAND_LEFT + " TEXT NOT NULL,"
     			+ KEY_OPERATOR + " TEXT NOT NULL,"
     			+ KEY_OPERAND_RIGHT + " TEXT NOT NULL,"
-    			+ KEY_FOREIGN_QUERY_ID + " INTEGER,"
-    			+ " FOREIGN KEY(" + KEY_FOREIGN_QUERY_ID + ") REFERENCES " + TABLE_QUERIES + "(" + KEY_QUERY_ID + ") ON DELETE CASCADE ON UPDATE CASCADE"
+    			+ KEY_P_FOREIGN_QUERY_ID + " INTEGER,"
+    			+ " FOREIGN KEY(" + KEY_P_FOREIGN_QUERY_ID + ") REFERENCES " + TABLE_QUERIES + "(" + KEY_QUERY_ID + ") ON DELETE CASCADE ON UPDATE CASCADE"
     			+ ");";
+
+    	String CREATE_ATTRIBUTE_TABLE = "CREATE TABLE " + TABLE_ATTRIBUTES + "("
+				+ KEY_ATTRIBUTE + " TEXT NOT NULL,"
+				+ KEY_A_FOREIGN_QUERY_ID + " INTEGER,"
+				+ " FOREIGN KEY(" + KEY_A_FOREIGN_QUERY_ID + ") REFERENCES " + TABLE_QUERIES + "(" + KEY_QUERY_ID + ") ON DELETE CASCADE ON UPDATE CASCADE"
+				+ ");";
     	
 
     	db.execSQL(CREATE_QUERY_TABLE);
         db.execSQL(CREATE_PREDICATE_TABLE);
+        db.execSQL(CREATE_ATTRIBUTE_TABLE);
         
         Log.i("data_base path", db.getPath());
     }
@@ -73,6 +87,7 @@ public class ProcessedQueryDbHelper extends SQLiteOpenHelper{
     	// delete previous db
     	db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUERIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PREDICATES);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_ATTRIBUTES);
  
         // recreate the table
         onCreate(db);
@@ -114,7 +129,7 @@ public class ProcessedQueryDbHelper extends SQLiteOpenHelper{
 	            	predicateValues.put(KEY_OPERAND_LEFT, curPredicate.getSerializedLeftOperand());
 	            	predicateValues.put(KEY_OPERATOR, curPredicate.getOperator());
 	            	predicateValues.put(KEY_OPERAND_RIGHT, curPredicate.getSerializedRightOperand());
-	            	predicateValues.put(KEY_FOREIGN_QUERY_ID, insertedID);
+	            	predicateValues.put(KEY_P_FOREIGN_QUERY_ID, insertedID);
 	            	
 	            	if (db.insert(TABLE_PREDICATES, null, predicateValues) != -1)
 	    	        {
@@ -125,6 +140,23 @@ public class ProcessedQueryDbHelper extends SQLiteOpenHelper{
 	            		inserted = false;
 	            	}
 	            }
+				Iterator<String> itA = query.getAttributes().iterator();
+
+				String curAttribute = null;
+
+				while(itA.hasNext() && inserted) {
+					curAttribute = itA.next();
+
+					ContentValues attributeValues = new ContentValues();
+					attributeValues.put(KEY_ATTRIBUTE, curAttribute);
+					attributeValues.put(KEY_P_FOREIGN_QUERY_ID, insertedID);
+
+					if (db.insert(TABLE_ATTRIBUTES, null, attributeValues) != -1) {
+						Log.i("insert_database", "attribute inserted : " + curAttribute);
+					} else {
+						inserted = false;
+					}
+				}
 	            
 	            if (inserted)
 	            {
@@ -158,7 +190,7 @@ public class ProcessedQueryDbHelper extends SQLiteOpenHelper{
     	selectQuerySb.append(" FROM ");
     	selectQuerySb.append(TABLE_PREDICATES);
     	selectQuerySb.append(" WHERE ");
-    	selectQuerySb.append(KEY_FOREIGN_QUERY_ID + '=');
+    	selectQuerySb.append(KEY_P_FOREIGN_QUERY_ID + '=');
     	selectQuerySb.append(queryID);
     	
     	List<Predicate> predicates = new ArrayList<Predicate>();
@@ -185,6 +217,38 @@ public class ProcessedQueryDbHelper extends SQLiteOpenHelper{
         
         return predicates;
     }
+
+	public List<String> getAllAttributes( int queryID ) throws IllegalArgumentException
+	{
+		StringBuilder selectQuerySb = new StringBuilder();
+		selectQuerySb.append("SELECT ");
+		selectQuerySb.append(KEY_ATTRIBUTE);
+		selectQuerySb.append(" FROM ");
+		selectQuerySb.append(TABLE_ATTRIBUTES);
+		selectQuerySb.append(" WHERE ");
+		selectQuerySb.append(KEY_P_FOREIGN_QUERY_ID + '=');
+		selectQuerySb.append(queryID);
+
+		List<String> attributes = new ArrayList<String>();
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuerySb.toString(), null);
+
+		// loop on all the lines and making of all the predicate list
+		if (cursor.moveToFirst()) {
+			do {
+				String curAttribute = null;
+				curAttribute = cursor.getString(0);
+				// add the predicate for the cursor position on the list
+				attributes.add(curAttribute);
+			} while (attributes != null && cursor.moveToNext());
+		}
+
+		cursor.close();
+		db.close();
+
+		return attributes;
+	}
     
     
     
@@ -226,7 +290,7 @@ public class ProcessedQueryDbHelper extends SQLiteOpenHelper{
     public List<Query> getAllProcessedQueries() throws IllegalArgumentException{
         List<Query> queries = new ArrayList<Query>();
 
-        String selectQuery = "SELECT * FROM " + TABLE_QUERIES;
+		String selectQuery = "SELECT * FROM " + TABLE_QUERIES;
  
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -241,6 +305,8 @@ public class ProcessedQueryDbHelper extends SQLiteOpenHelper{
             do {
             	
             	Query query = new Query(cursor.getString(1));
+
+            	query.addAttributes(getAllAttributes(cursor.getInt(0)));
             	
             	predicates = getAllPredicates(cursor.getInt(0));
 
@@ -283,9 +349,9 @@ public class ProcessedQueryDbHelper extends SQLiteOpenHelper{
             	predicateValues.put(KEY_OPERAND_LEFT, curPredicate.getSerializedLeftOperand());
             	predicateValues.put(KEY_OPERATOR, curPredicate.getOperator());
             	predicateValues.put(KEY_OPERAND_RIGHT, curPredicate.getSerializedRightOperand());
-            	predicateValues.put(KEY_FOREIGN_QUERY_ID, query.getId());
+            	predicateValues.put(KEY_P_FOREIGN_QUERY_ID, query.getId());
         		
-            	ret = db.update(TABLE_PREDICATES, predicateValues, KEY_FOREIGN_QUERY_ID + " = ?",
+            	ret = db.update(TABLE_PREDICATES, predicateValues, KEY_P_FOREIGN_QUERY_ID + " = ?",
                         new String[] { String.valueOf(query.getId()) });
         		
         	}

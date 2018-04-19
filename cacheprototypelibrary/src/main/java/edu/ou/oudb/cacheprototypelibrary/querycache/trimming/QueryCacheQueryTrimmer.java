@@ -8,7 +8,7 @@ import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
  * Definition of the Query trimming tool for the query cache
  */
 public interface QueryCacheQueryTrimmer {
-	
+
 	/**
 	 * @author Mikael Perrin
 	 * @since 1.0
@@ -98,10 +98,10 @@ public interface QueryCacheQueryTrimmer {
 			}
 			return true;
 		}
-		
-		
+
+
 	}
-	
+
 	/**
 	 * Method used to evaluate the cache
 	 * @param q the query
@@ -109,5 +109,5 @@ public interface QueryCacheQueryTrimmer {
 	 * @return the query trimming result
 	 */
 	public QueryTrimmingResult evaluate(Query inputQuery, Query segmentQuery);
-	
+
 }

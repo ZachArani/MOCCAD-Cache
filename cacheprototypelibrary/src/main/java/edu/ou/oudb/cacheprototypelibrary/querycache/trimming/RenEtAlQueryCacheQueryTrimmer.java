@@ -2,6 +2,7 @@ package edu.ou.oudb.cacheprototypelibrary.querycache.trimming;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.Predicate;
@@ -24,6 +25,7 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
             {
                 result.type = QueryTrimmingType.CACHE_HIT;
                 result.probeQuery = inputQuery;
+                return result;
             /*Goes to GuoEtAlPredicateAnalyzer
             * Use Ctrl+B on the method*/
             } else if (geapanalyzer.respectsImplicationIntegerDomain(inputQuery.getPredicates(), segmentQuery.getPredicates()))
@@ -31,7 +33,8 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
                 if (verticalTrim==1) //extended hit
                 {
                     GuoEtAlPredicateAnalyzer eqGeapanalyzer = new GuoEtAlPredicateAnalyzer();
-                    if (eqGeapanalyzer.respectsImplicationIntegerDomain(segmentQuery.getPredicates(), inputQuery.getPredicates())) // equivalent
+                    if (eqGeapanalyzer.respectsImplicationIntegerDomain(segmentQuery.getPredicates(), inputQuery.getPredicates())
+                            && respectsAttributeVerticalSatisfiability(segmentQuery.getAttributes(),inputQuery.getAttributes())==1) // equivalent
                     {
                         result.type = QueryTrimmingType.CACHE_EXTENDED_HIT_EQUIVALENT;
                     } else {
@@ -44,14 +47,16 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
                 {
                     result.type = QueryTrimmingType.CACHE_VERTICAL;
 
-                    HashSet<String> attributeSet1 = new HashSet<String>();
+                    LinkedHashSet<String> attributeSet1 = new LinkedHashSet<String>();
+                    attributeSet1.add("noteid"); //vertical trimming requires union with key attribute set; key attribute should be noteid
                     attributeSet1.addAll(inputQuery.getAttributes());
                     attributeSet1.retainAll(segmentQuery.getAttributes());
-                    if(!attributeSet1.contains("noteid")) { attributeSet1.add("noteid"); } //vertical trimming requires union with key attribute set; key attribute should be noteid
-                    HashSet<String> attributeSet2 = new HashSet<String>();
+                    LinkedHashSet<String> attributeSet2 = new LinkedHashSet<String>();
+                    attributeSet2.add("noteid"); //vertical trimming requires union with key attribute set; key attribute should be noteid
                     attributeSet2.addAll(inputQuery.getAttributes());
-                    attributeSet2.removeAll(segmentQuery.getAttributes());
-                    if(!attributeSet2.contains("noteid")) { attributeSet2.add("noteid"); } //vertical trimming requires union with key attribute set; key attribute should be noteid
+                    for(String a : segmentQuery.getAttributes()) {
+                        if(!a.equals("noteid")) attributeSet2.remove(a);
+                    }
 
                     result.entryQuery = segmentQuery;
                     result.inputQuery = new Query(inputQuery.getRelation());
@@ -63,6 +68,7 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
                     result.remainderQuery = new Query(inputQuery.getRelation());
                     result.remainderQuery.addPredicates(inputQuery.getPredicates());
                     result.remainderQuery.addAttributes(attributeSet2);
+                    return result;
                 }
 
             /*Goes to GuoEtAlPredicateAnalyzer*/
@@ -81,19 +87,19 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
                 } else if(verticalTrim==2) {
                     result.type = QueryTrimmingType.CACHE_HYBRID;
 
-                    HashSet<String> attributeSet1 = new HashSet<String>();
+                    LinkedHashSet<String> attributeSet1 = new LinkedHashSet<String>();
+                    attributeSet1.add("noteid"); //vertical trimming requires union with key attribute set; key attribute should be noteid
                     attributeSet1.addAll(inputQuery.getAttributes());
                     attributeSet1.retainAll(segmentQuery.getAttributes());
-                    if(!attributeSet1.contains("noteid")) { attributeSet1.add("noteid"); } //vertical trimming requires union with key attribute set; key attribute should be noteid
-                    HashSet<String> attributeSet2 = new HashSet<String>();
+                    LinkedHashSet<String> attributeSet2 = new LinkedHashSet<String>();
+                    attributeSet2.add("noteid"); //vertical trimming requires union with key attribute set; key attribute should be noteid
                     attributeSet2.addAll(inputQuery.getAttributes());
-                    attributeSet2.removeAll(segmentQuery.getAttributes());
-                    if(!attributeSet2.contains("noteid")) { attributeSet2.add("noteid"); } //vertical trimming requires union with key attribute set; key attribute should be noteid
+                    for(String a : segmentQuery.getAttributes()) {
+                        if(!a.equals("noteid")) attributeSet2.remove(a);
+                    }
 
-                    HashSet<Predicate> qPsP = new HashSet<Predicate>();
-                    qPsP.addAll(inputQuery.getPredicates());
-                    qPsP.retainAll(segmentQuery.getPredicates()); //overlapping Predicates - required due to remainder query 1, not executed on segment query and so needs proper list of predicates
-
+                    //Change to Ren et Al: doing vertical trimming first, then horizontal trimming
+                    //However, vertical trim is remainder query 2 for coding reasons
                     result.entryQuery = segmentQuery;
                     result.inputQuery = new Query(inputQuery.getRelation());
                     result.inputQuery.addAttributes(inputQuery.getAttributes());
@@ -101,14 +107,18 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
                     result.probeQuery = new Query(inputQuery.getRelation());
                     result.probeQuery.addPredicates(inputQuery.getPredicates());
                     result.probeQuery.addAttributes(attributeSet1);
+                    //Horizontal trim: on probe query post vertical trim, so only uses attributeSet1
                     result.remainderQuery = new Query(inputQuery.getRelation());
-                    result.remainderQuery.addPredicates(qPsP);
-                    result.remainderQuery.addAttributes(attributeSet2);
+                    result.remainderQuery.addAttributes(attributeSet1);
+                    result.remainderQuery.addPredicates(inputQuery.getPredicates());
+                    result.remainderQuery.addExcludedPredicates(segmentQuery.getPredicates());
+                    //Vertical trim: same as vertical trim above
                     result.remainderQuery2 = new Query(inputQuery.getRelation());
-                    result.remainderQuery2.addAttributes(inputQuery.getAttributes());
+                    result.remainderQuery2.addAttributes(attributeSet2);
                     result.remainderQuery2.addPredicates(inputQuery.getPredicates());
-                    result.remainderQuery2.addExcludedPredicates(segmentQuery.getPredicates());
+
                 }
+                return result;
             }
         }
         //if no returns made above, then is a cache miss
