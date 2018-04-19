@@ -7,7 +7,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import edu.ou.oudb.cacheprototypelibrary.LFUSQEPCacheReplacementManager;
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheContentManager;
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheReplacementManager;
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheResolutionManager;
@@ -78,8 +77,6 @@ public class Cache<K extends Sizeable,V extends Sizeable>{
 
 	public V add(K key, V value, double score)
 	{
-		if(mCReplacementManager instanceof LFUSQEPCacheReplacementManager)
-			mCReplacementManager.add(key, score);
 		return mCContentManager.add(key, value);
 	}
 
