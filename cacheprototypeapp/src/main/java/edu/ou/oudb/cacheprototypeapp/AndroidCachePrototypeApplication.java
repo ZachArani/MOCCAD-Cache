@@ -31,6 +31,7 @@ import edu.ou.oudb.cacheprototypelibrary.querycache.exception.JSONParserExceptio
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.QuerySegment;
 import edu.ou.oudb.cacheprototypelibrary.utils.StatisticsManager;
+import edu.ou.oudb.cacheprototypelibrary.LFUSQEPCacheReplacementManager;
 
 public class AndroidCachePrototypeApplication extends Application {
 	
@@ -323,6 +324,76 @@ public class AndroidCachePrototypeApplication extends Application {
 		}
 		mCloudEstimationCache = cloudEstimationCacheBuilder.build();
 		
+		//build cache manager
+		mDataLoader = new DecisionalSemanticCacheDataLoader(this,mDataAccessProvider,mMobileEstimationCache,mCloudEstimationCache,mQueryCache,mOptimizationParameters,useReplacement);
+	}
+
+	private void setLFUSQEPCacheDataLoader()
+	{
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+		int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000000"));
+		int maxQueryCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_NUMBER_SEGMENT, "0"));
+		int maxMobileEstimationCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_MOBILE_ESTIMATION_CACHE_SIZE, "10000000"));
+		int maxMobileEstimationCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_MOBILE_ESTIMATION_CACHE_NUMBER_SEGMENT, "0"));
+		int maxCloudEstimationCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_CLOUD_ESTIMATION_CACHE_SIZE, "10000000"));
+		int maxCloudEstimationCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_CLOUD_ESTIMATION_CACHE_NUMBER_SEGMENT, "0"));
+		boolean useReplacement = sharedPref.getBoolean(SettingsActivity.KEY_PREF_USE_REPLACEMENT,true);
+
+		/*build decisional semantic cache data loader*/
+
+		// build query managers for query cache
+		SemanticQueryCacheContentManager semanticCacheContentManager = new SemanticQueryCacheContentManager();
+		SemanticQueryCacheResolutionManager semanticCacheResolutionManager = new SemanticQueryCacheResolutionManager();
+		LFUSQEPCacheReplacementManager semanticCacheLFUSQEPCacheManager = new LFUSQEPCacheReplacementManager();
+
+		// build query managers for mobile estimation cache
+		StandartEstimationCacheContentManager mobileEstimationCacheContentManager = new StandartEstimationCacheContentManager();
+		StandartEstimationCacheResolutionManager mobileEstimationCacheResolutionManager = new StandartEstimationCacheResolutionManager();
+		LFUSQEPCacheReplacementManager mobileEstimationCacheLFUSQEPCacheManager = new LFUSQEPCacheReplacementManager();
+
+		// build query managers for cloud estimation cache
+		StandartEstimationCacheContentManager cloudEstimationCacheContentManager = new StandartEstimationCacheContentManager();
+		StandartEstimationCacheResolutionManager cloudEstimationCacheResolutionManager = new StandartEstimationCacheResolutionManager();
+		LFUSQEPCacheReplacementManager cloudEstimationCacheLFUSQEPCacheManager = new LFUSQEPCacheReplacementManager();
+
+
+		//build query cache
+		CacheBuilder<Query,QuerySegment> queryCacheBuilder = CacheBuilder.<Query,QuerySegment>newBuilder();
+		queryCacheBuilder.setCacheContentManager(semanticCacheContentManager);
+		queryCacheBuilder.setCacheResolutionManager(semanticCacheResolutionManager);
+		queryCacheBuilder.setCacheReplacementManager(semanticCacheLFUSQEPCacheManager);
+		queryCacheBuilder.setMaxSize(maxQueryCacheSize);
+		if (maxQueryCacheSegments > 0)//not default
+		{
+			queryCacheBuilder.setMaxSegment(maxQueryCacheSegments);
+		}
+		mQueryCache = queryCacheBuilder.build();
+
+		//build mobile estimation cache
+		CacheBuilder<Query,Estimation> mobileEstimationCacheBuilder = CacheBuilder.<Query,Estimation>newBuilder();
+		mobileEstimationCacheBuilder.setCacheContentManager(mobileEstimationCacheContentManager);
+		mobileEstimationCacheBuilder.setCacheResolutionManager(mobileEstimationCacheResolutionManager);
+		mobileEstimationCacheBuilder.setCacheReplacementManager(mobileEstimationCacheLFUSQEPCacheManager);
+		mobileEstimationCacheBuilder.setMaxSize(maxMobileEstimationCacheSize);
+		if (maxMobileEstimationCacheSegments > 0)//not default
+		{
+			mobileEstimationCacheBuilder.setMaxSegment(maxMobileEstimationCacheSegments);
+		}
+		mMobileEstimationCache = mobileEstimationCacheBuilder.build();
+
+		//build mobile estimation cache
+		CacheBuilder<Query,Estimation> cloudEstimationCacheBuilder = CacheBuilder.<Query,Estimation>newBuilder();
+		cloudEstimationCacheBuilder.setCacheContentManager(cloudEstimationCacheContentManager);
+		cloudEstimationCacheBuilder.setCacheResolutionManager(cloudEstimationCacheResolutionManager);
+		cloudEstimationCacheBuilder.setCacheReplacementManager(cloudEstimationCacheLFUSQEPCacheManager);
+		cloudEstimationCacheBuilder.setMaxSize(maxCloudEstimationCacheSize);
+		if (maxCloudEstimationCacheSegments > 0)//not default
+		{
+			mobileEstimationCacheBuilder.setMaxSegment(maxCloudEstimationCacheSegments);
+		}
+		mCloudEstimationCache = cloudEstimationCacheBuilder.build();
+
 		//build cache manager
 		mDataLoader = new DecisionalSemanticCacheDataLoader(this,mDataAccessProvider,mMobileEstimationCache,mCloudEstimationCache,mQueryCache,mOptimizationParameters,useReplacement);
 	}
