@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ public class Query implements Sizeable {
 	private String mRelation;
 
 	/** The hash set of attributes of the query */
-	private HashSet<String> mAttributes;
+	private LinkedHashSet<String> mAttributes;
 	
 	/** The hash set of attribute allowing contained in the predicates */
 	private HashSet<String> mPredicateAttributes;
@@ -51,9 +52,9 @@ public class Query implements Sizeable {
 	public Query(String relation)
 	{
 		setRelation(relation);
-		mAttributes = new HashSet<String>();
-		mPredicates = new HashSet<Predicate>();
-		mPredicateAttributes = new HashSet<String>();
+		mAttributes = new LinkedHashSet<String>();
+		mPredicates = new LinkedHashSet<Predicate>();
+		mPredicateAttributes = new LinkedHashSet<String>();
 		mExcludedPredicates = new HashSet<Predicate>();
 		mSize += ObjectSizer.getStringSize32bits(relation.length());
 	}
@@ -246,7 +247,7 @@ public class Query implements Sizeable {
 	/**
 	 * @return the attributes
 	 */
-	public final HashSet<String> getAttributes() { return this.mAttributes; }
+	public final LinkedHashSet<String> getAttributes() { return this.mAttributes; }
 
 	/**
 	 * @return the predicateAttributes

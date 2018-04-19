@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +36,9 @@ import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
 /*Class used instead of NewQueryActivity*/
 public class SearchExamRecordActivity extends FragmentActivity implements View.OnClickListener, DatePickerFragment.OnDateDataPass, TimePickerFragment.OnTimeDataPass {
     private ProcessedQueryDbHelper mDBHelper = null;
+    public static String ATTRIBUTELIST = "attributelist";
+
+    private ArrayList<String> attributes;
 
     /*Booleans to know if a field has been selected*/
     private boolean isIdSelected = false,
@@ -170,6 +174,8 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
 
         mDBHelper = new ProcessedQueryDbHelper(this);
 
+        attributes = getIntent().getStringArrayListExtra(ATTRIBUTELIST);
+
         /*ArrayAdapter using the string array*/
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.operators, android.R.layout.simple_spinner_item);
 
@@ -233,7 +239,13 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
     public void launchQuery() {
         /*Base for the query*/
 //        String query = "SELECT * FROM patients WHERE ";
-        String query = "SELECT noteid, patientfirstname, patientlastname, doctorfirstname, doctorlastname, description, p_date_time, heartrate FROM patients WHERE ";
+        String query = "SELECT ";
+        for(int i=0; i<attributes.size(); i++) {
+            if(i>0) query+=", ";
+            String a = attributes.get(i);
+            query+= a;
+        }
+        query+= " FROM patients WHERE ";
 
         int cpt = 0;
         /*Checks if the value is null (i.e. the user didn't enter anything)
@@ -339,8 +351,14 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
         //FIXME: This is a quick fix
         if (cpt == 0) {
 //            query = "SELECT * FROM patients WHERE noteid >= 1";
-            query = "SELECT noteid, patientfirstname, patientlastname, doctorfirstname, doctorlastname, description, p_date_time, heartrate FROM patients WHERE noteid >= 1";
-
+//            query = "SELECT noteid, patientfirstname, patientlastname, doctorfirstname, doctorlastname, description, p_date_time, heartrate FROM patients WHERE noteid >= 1";
+            query = "SELECT ";
+            for(int i=0; i<attributes.size(); i++) {
+                if(i>0) query+=", ";
+                String a = attributes.get(i);
+                query+= a;
+            }
+            query+= " FROM patients WHERE noteid>=1";
         }
 
 

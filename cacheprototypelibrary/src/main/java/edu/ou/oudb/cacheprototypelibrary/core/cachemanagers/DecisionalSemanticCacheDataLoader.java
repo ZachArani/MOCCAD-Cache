@@ -226,7 +226,6 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 		//Only does so if probeQuery and remainderQuery exists, so if trimming occurred
 		List<List<String>> tuples = queryResult.getTuples();
 		if(queryTrimmingResult.probeQuery!=null && queryTrimmingResult.remainderQuery != null) {
-			LinkedHashSet<String> probeAttributes = queryTrimmingResult.probeQuery.getAttributes();
 			//If hybrid, then remainder2 is vertical trim; otherwise, remainder1 is
 			LinkedHashSet<String> remAttributes;
 			if (queryTrimmingResult.remainderQuery2 != null) {
