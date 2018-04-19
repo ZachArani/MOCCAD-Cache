@@ -186,6 +186,9 @@ public class AndroidCachePrototypeApplication extends Application {
 		case "2":
 			setDecisionalSemanticCacheDataLoader();
 			break;
+		case "3":
+			setLFUSQEPCacheDataLoader();
+			break;
 		/*We always go here*/
 		default:
 			setNoCacheDataLoader();

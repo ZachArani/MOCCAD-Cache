@@ -96,6 +96,7 @@ public class SearchExamRecordResultsActivity extends Activity {
                 .replace("[[", "")
                 .replace("[", "")
                 .replace("]]", "");
+        Log.i("RES IS ", res);
 
         /*Splitting to get each row
         * (e.g. 1, Juan Coleman, Joseph Payne, etc... then 2, Pamela Daniels, etc...)*/
@@ -367,6 +368,11 @@ public class SearchExamRecordResultsActivity extends Activity {
     }
 
     /*Puts all IDs into an Array, same for Patients First Names, and so on*/
+    //TODO: Items are being sent back differently when you run then for the first time(add the query yourself) and when you "relaunch one"
+        //Add query: 1, Joseph, Payne, Measurement of Body, 32, Juan, Coleman, 1997-02-12 09:30:00.0
+        //Relaunch Query: 1, Juan, Coleman, Joseph, Payne, Measurement of Body, 1997-02-12 09:30:00.0, 32
+        //NOTE: it appears this only happens when you run a query, switch caches, and then try to relanch said query
+            //It looks like switching caches causes all kinds of mischief
     public void arraysValues() {
         for (int i = 0; i < sArray.length; i++) {
             Log.i("String Array: ", sArray[i]);
