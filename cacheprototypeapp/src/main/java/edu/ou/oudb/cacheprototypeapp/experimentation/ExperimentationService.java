@@ -286,12 +286,25 @@ public class ExperimentationService extends IntentService
 		
 		Query query = null;
 		Set<Predicate> predicates = new HashSet<Predicate>();
+		Set<String> attributes = new HashSet<String>();
+
+		String rightSelect = line.split("SELECT")[1].trim();
+
+		String attributeOf = rightSelect.split("FROM")[0].trim();
 
 		String rightFrom = line.split("FROM")[1].trim();
 
 		String table = rightFrom.split(" ")[0];
 
 		query = new Query(table);
+
+		String[] attributeList = attributeOf.split(",");
+
+		for(String a : attributeList) {
+			attributes.add(a.trim());
+		}
+
+		query.addAttributes(attributes);
 
 		String predicateStr = rightFrom.split("WHERE")[1].trim();
 

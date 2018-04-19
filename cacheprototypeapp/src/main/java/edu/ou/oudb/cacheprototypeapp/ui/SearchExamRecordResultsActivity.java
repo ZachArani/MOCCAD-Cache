@@ -32,11 +32,15 @@ import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.DecisionalSemanticCa
 * Class used instead of ResultListActivity*/
 public class SearchExamRecordResultsActivity extends Activity {
     public static final String RESULT = "result";
+    public static final String ATTRIBUTES = "attributes";
 
     /*ListView*/
     private ListView listView = null;
     /*Array containing all the result*/
     String[] sArray = null;
+
+    /*Array holding the attributes of the query*/
+    String[] attributes = null;
 
     /*Arrays containing each attribute*/
     Integer[] ID = null;
@@ -99,6 +103,7 @@ public class SearchExamRecordResultsActivity extends Activity {
         /*Splitting to get each row
         * (e.g. 1, Juan Coleman, Joseph Payne, etc... then 2, Pamela Daniels, etc...)*/
         sArray = res.split("\n+");
+        attributes = getIntent().getStringArrayExtra(ATTRIBUTES);
 
         /*Defining the Arrays*/
         initializeArrays();
@@ -368,15 +373,45 @@ public class SearchExamRecordResultsActivity extends Activity {
     /*Puts all IDs into an Array, same for Patients First Names, and so on*/
     public void arraysValues() {
         for (int i = 0; i < sArray.length; i++) {
-            ID[i] = Integer.parseInt(sArray[i].split(", +")[0]);
-            PFN[i] = sArray[i].split(", +")[1];
-            PLN[i] = sArray[i].split(", +")[2];
-            DFN[i] = sArray[i].split(", +")[3];
-            DLN[i] = sArray[i].split(", +")[4];
-            Desc[i] = sArray[i].split(", +")[5];
-            Dates[i] = sArray[i].split(", +")[6].substring(0, 10);
-            Times[i] = sArray[i].split(", +")[6].substring(11, 16);
-            HR[i] = Integer.parseInt(sArray[i].split(", +")[7]);
+            String[] splitLine = sArray[i].split(", +");
+            int current = 0;
+            for(String a : attributes) {
+                switch (a) {
+                    case "noteid":
+                        ID[i] = Integer.parseInt(splitLine[current]);
+                        break;
+
+                    case "patientfirstname":
+                        PFN[i] = splitLine[current];
+                        break;
+
+                    case "patientlastname":
+                        PLN[i] = splitLine[current];
+                        break;
+
+                    case "doctorfirstname":
+                        DFN[i] = splitLine[current];
+                        break;
+
+                    case "doctorlastname":
+                        DLN[i] = splitLine[current];
+                        break;
+
+                    case "description":
+                        Desc[i] = splitLine[current];
+                        break;
+
+                    case "p_date_time":
+                        Dates[i] = splitLine[current].substring(0, 10);
+                        Times[i] = splitLine[current].substring(11, 16);
+                        break;
+
+                    case "heartrate":
+                        HR[i] = Integer.parseInt(splitLine[current]);
+                        break;
+                }
+                current++;
+            }
         }
     }
 

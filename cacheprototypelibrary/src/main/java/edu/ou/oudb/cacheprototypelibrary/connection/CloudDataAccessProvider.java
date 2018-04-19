@@ -74,8 +74,8 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 		InputStream jsonStream;
 		// save the string result into preferences
 		
-    	String cloudMetadata = pref.getString(PREF_METADATA, "");
-    	//Below used because empty metadata seems to give a string with brackets in it
+		String cloudMetadata = pref.getString(PREF_METADATA, "");
+		//Below used because empty metadata seems to give a string with brackets in it
 		String cloudMetadata2 =cloudMetadata.replaceAll("\\[","");
 		cloudMetadata2 =cloudMetadata2.replaceAll("\\]","");
 		if(cloudMetadata2.isEmpty())
