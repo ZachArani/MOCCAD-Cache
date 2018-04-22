@@ -24,7 +24,7 @@ public class SettingsActivity extends Activity {
 	public static final String KEY_PREF_IP_ADDRESS = "pref_ip_address";
 	public static final String KEY_PREF_PORT = "pref_port";
 	public static final String KEY_PREF_NB_QUERIES_TO_PROCESS = "pref_nb_queries_to_process";
-	public static final String KEY_PREF_USE_REPLACEMENT = "pref_use_replacement";
+	public static final String KEY_PREF_REPLACEMENT_TYPE = "pref_replacement_type";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

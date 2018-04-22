@@ -10,11 +10,15 @@
 	        android:negativeButtonText="@string/cancel"
 	        android:positiveButtonText="@string/ok"
 	        android:title="@string/pref_cache_type" />
-	    <CheckBoxPreference
-	        android:key="pref_use_replacement"
-        	android:title="@string/pref_use_replacement"
-        	android:summary="@string/pref_use_replacement_summ"
-        	android:defaultValue="true"/>
+	    <ListPreference
+			android:defaultValue="1"
+            android:entries="@array/pref_replacement_type_list_titles"
+            android:entryValues="@array/pref_replacement_type_list_values"
+	        android:key="pref_replacement_type"
+            android:summary="%s"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/ok"
+        	android:title="@string/pref_replacement_type" />
 	</PreferenceCategory>
 
 	<!-- Cloud is the defaultValue -->

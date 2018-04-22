@@ -16,18 +16,25 @@
         <item>No Cache</item>
         <item>Semantic Caching</item>
         <item>Decisional Semantic Caching</item>
-		<item>LFUSQEP Caching (Alpha)</item>
     </string-array>
     <string-array name="pref_cache_type_list_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
-		<item>3</item>
     </string-array>
     
-    <string name="pref_use_replacement">Use Replacement</string>
-    <string name="pref_use_replacement_summ">Replace query results in cache or leave the cache content unmodified</string>
-    
+    <string name="pref_replacement_type">Type of replacement Replacement</string>
+    <string-array name="pref_replacement_type_list_titles">
+        <item>No Replacement</item>
+        <item>LRU Replacement</item>
+        <item>LFUSQEP Replacement</item>
+    </string-array>
+    <string-array name="pref_replacement_type_list_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string name="pref_data_access_provider">Data Access Provider</string>
 
     <string-array name="pref_data_access_provider_list_titles">

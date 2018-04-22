@@ -111,6 +111,15 @@ public class SettingsFragment extends PreferenceFragment
 		    	//build a new cache_manager
 		    	(new SetCacheTypeTask()).execute();
 		    }
+		    else if(key.equals(SettingsActivity.KEY_PREF_REPLACEMENT_TYPE))
+            {
+                int currentValue = Integer.parseInt(sharedPreferences.getString(key, "1"));
+                if(currentValue != 0) //Not on 'no replacement'
+                    mApplication.setUseReplacement(true);
+                else
+                    mApplication.setUseReplacement(false);
+
+            }
 		    else if (key.equals(SettingsActivity.KEY_PREF_MAX_CLOUD_ESTIMATION_CACHE_NUMBER_SEGMENT))
 		    {
 		    	if (mApplication.getCloudEstimationCache() != null)
@@ -217,15 +226,6 @@ public class SettingsFragment extends PreferenceFragment
 
 		    	//update DataAccessProvider
 		    	(new SetDataAccessProviderTask()).execute();
-	    	}
-	    }
-	    
-	    if(pref instanceof CheckBoxPreference)
-	    {
-	    	if(key.equals(SettingsActivity.KEY_PREF_USE_REPLACEMENT))
-	    	{
-	    		boolean useReplacement = sharedPreferences.getBoolean(key, true);
-	    		mApplication.setUseReplacement(useReplacement);
 	    	}
 	    }
 	}

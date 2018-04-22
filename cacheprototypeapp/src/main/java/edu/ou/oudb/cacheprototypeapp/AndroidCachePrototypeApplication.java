@@ -3,6 +3,7 @@ package edu.ou.oudb.cacheprototypeapp;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import edu.ou.oudb.cacheprototypelibrary.connection.DataAccessProvider;
 import edu.ou.oudb.cacheprototypelibrary.connection.StubDataAccessProvider;
 import edu.ou.oudb.cacheprototypelibrary.core.cache.Cache;
 import edu.ou.oudb.cacheprototypelibrary.core.cache.CacheBuilder;
+import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheReplacementManager;
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.DataLoader;
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.DecisionalSemanticCacheDataLoader;
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.NoCacheDataLoader;
@@ -186,14 +188,26 @@ public class AndroidCachePrototypeApplication extends Application {
 		case "2":
 			setDecisionalSemanticCacheDataLoader();
 			break;
-		case "3":
-			setLFUSQEPCacheDataLoader();
-			break;
 		/*We always go here*/
 		default:
 			setNoCacheDataLoader();
 		}
 		
+	}
+
+	public CacheReplacementManager<Query> getCacheReplacementManager()  {
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		String replacement_type = sharedPref.getString(SettingsActivity.KEY_PREF_REPLACEMENT_TYPE, "1");
+		switch(replacement_type) {
+            case "1":
+                Log.i("CACHE REPLACEMENT SET", "LRU CACHE");
+                return new LRUCacheReplacementManager();
+            case "2":
+                Log.i("CACHE REPLACEMENT SET", "LFUSQEP CACHE");
+                return new LFUSQEPCacheReplacementManager();
+            default:
+                return null; //As a lesson to those who haven't added their Cache Managers to the code!
+        }
 	}
 	
 	public void setCurrentQueryResult(List<List<String>> result)
@@ -235,21 +249,20 @@ public class AndroidCachePrototypeApplication extends Application {
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000000"));
 		int maxQueryCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_NUMBER_SEGMENT, "0"));
-		boolean useReplacement = sharedPref.getBoolean(SettingsActivity.KEY_PREF_USE_REPLACEMENT,true);
-		
+		boolean useReplacement = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_REPLACEMENT_TYPE, "1"))!=0; //If the "Cache Replacement" strategy is not 0 (no replacement), then we're using a strategy.
+
 		/*build semantic cache manager*/
 		mMobileEstimationCache=null;
 		mCloudEstimationCache=null;
 		// build managers
 		SemanticQueryCacheContentManager contentManager = new SemanticQueryCacheContentManager();
 		SemanticQueryCacheResolutionManager resolutionManager = new SemanticQueryCacheResolutionManager();
-		LRUCacheReplacementManager lruCacheManager = new LRUCacheReplacementManager();
-		
+
 		// build query cache
 		CacheBuilder<Query,QuerySegment> builder = CacheBuilder.<Query,QuerySegment>newBuilder();
 		builder.setCacheContentManager(contentManager);
 		builder.setCacheResolutionManager(resolutionManager);
-		builder.setCacheReplacementManager(lruCacheManager);
+		builder.setCacheReplacementManager(getCacheReplacementManager());
 		builder.setMaxSize(maxQueryCacheSize);
 		if (maxQueryCacheSegments > 0)//not default
 		{
@@ -271,31 +284,27 @@ public class AndroidCachePrototypeApplication extends Application {
 		int maxMobileEstimationCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_MOBILE_ESTIMATION_CACHE_NUMBER_SEGMENT, "0"));
 		int maxCloudEstimationCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_CLOUD_ESTIMATION_CACHE_SIZE, "10000000"));
 		int maxCloudEstimationCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_CLOUD_ESTIMATION_CACHE_NUMBER_SEGMENT, "0"));
-		boolean useReplacement = sharedPref.getBoolean(SettingsActivity.KEY_PREF_USE_REPLACEMENT,true);
+        boolean useReplacement = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_REPLACEMENT_TYPE, "1"))!=0; //If the "Cache Replacement" strategy is not 0 (no replacement), then we're using a strategy.
 		
 		/*build decisional semantic cache data loader*/
 		
 		// build query managers for query cache
 		SemanticQueryCacheContentManager semanticCacheContentManager = new SemanticQueryCacheContentManager();
 		SemanticQueryCacheResolutionManager semanticCacheResolutionManager = new SemanticQueryCacheResolutionManager();
-		LRUCacheReplacementManager semanticCacheLruCacheManager = new LRUCacheReplacementManager();
-		
+
 		// build query managers for mobile estimation cache
 		StandartEstimationCacheContentManager mobileEstimationCacheContentManager = new StandartEstimationCacheContentManager();
 		StandartEstimationCacheResolutionManager mobileEstimationCacheResolutionManager = new StandartEstimationCacheResolutionManager();
-		LRUCacheReplacementManager mobileEstimationCacheLruCacheManager = new LRUCacheReplacementManager();
-		
+
 		// build query managers for cloud estimation cache
 		StandartEstimationCacheContentManager cloudEstimationCacheContentManager = new StandartEstimationCacheContentManager();
 		StandartEstimationCacheResolutionManager cloudEstimationCacheResolutionManager = new StandartEstimationCacheResolutionManager();
-		LRUCacheReplacementManager cloudEstimationCacheLruCacheManager = new LRUCacheReplacementManager();
-		
 		
 		//build query cache
 		CacheBuilder<Query,QuerySegment> queryCacheBuilder = CacheBuilder.<Query,QuerySegment>newBuilder();
 		queryCacheBuilder.setCacheContentManager(semanticCacheContentManager);
 		queryCacheBuilder.setCacheResolutionManager(semanticCacheResolutionManager);
-		queryCacheBuilder.setCacheReplacementManager(semanticCacheLruCacheManager);
+		queryCacheBuilder.setCacheReplacementManager(getCacheReplacementManager());
 		queryCacheBuilder.setMaxSize(maxQueryCacheSize);
 		if (maxQueryCacheSegments > 0)//not default
 		{
@@ -307,7 +316,7 @@ public class AndroidCachePrototypeApplication extends Application {
 		CacheBuilder<Query,Estimation> mobileEstimationCacheBuilder = CacheBuilder.<Query,Estimation>newBuilder();
 		mobileEstimationCacheBuilder.setCacheContentManager(mobileEstimationCacheContentManager);
 		mobileEstimationCacheBuilder.setCacheResolutionManager(mobileEstimationCacheResolutionManager);
-		mobileEstimationCacheBuilder.setCacheReplacementManager(mobileEstimationCacheLruCacheManager);
+		mobileEstimationCacheBuilder.setCacheReplacementManager(getCacheReplacementManager());
 		mobileEstimationCacheBuilder.setMaxSize(maxMobileEstimationCacheSize);
 		if (maxMobileEstimationCacheSegments > 0)//not default
 		{
@@ -319,7 +328,7 @@ public class AndroidCachePrototypeApplication extends Application {
 		CacheBuilder<Query,Estimation> cloudEstimationCacheBuilder = CacheBuilder.<Query,Estimation>newBuilder();
 		cloudEstimationCacheBuilder.setCacheContentManager(cloudEstimationCacheContentManager);
 		cloudEstimationCacheBuilder.setCacheResolutionManager(cloudEstimationCacheResolutionManager);
-		cloudEstimationCacheBuilder.setCacheReplacementManager(cloudEstimationCacheLruCacheManager);
+		cloudEstimationCacheBuilder.setCacheReplacementManager(getCacheReplacementManager());
 		cloudEstimationCacheBuilder.setMaxSize(maxCloudEstimationCacheSize);
 		if (maxCloudEstimationCacheSegments > 0)//not default
 		{
@@ -331,73 +340,4 @@ public class AndroidCachePrototypeApplication extends Application {
 		mDataLoader = new DecisionalSemanticCacheDataLoader(this,mDataAccessProvider,mMobileEstimationCache,mCloudEstimationCache,mQueryCache,mOptimizationParameters,useReplacement);
 	}
 
-	private void setLFUSQEPCacheDataLoader()
-	{
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
-		int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000000"));
-		int maxQueryCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_NUMBER_SEGMENT, "0"));
-		int maxMobileEstimationCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_MOBILE_ESTIMATION_CACHE_SIZE, "10000000"));
-		int maxMobileEstimationCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_MOBILE_ESTIMATION_CACHE_NUMBER_SEGMENT, "0"));
-		int maxCloudEstimationCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_CLOUD_ESTIMATION_CACHE_SIZE, "10000000"));
-		int maxCloudEstimationCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_CLOUD_ESTIMATION_CACHE_NUMBER_SEGMENT, "0"));
-		boolean useReplacement = sharedPref.getBoolean(SettingsActivity.KEY_PREF_USE_REPLACEMENT,true);
-
-		/*build decisional semantic cache data loader*/
-
-		// build query managers for query cache
-		SemanticQueryCacheContentManager semanticCacheContentManager = new SemanticQueryCacheContentManager();
-		SemanticQueryCacheResolutionManager semanticCacheResolutionManager = new SemanticQueryCacheResolutionManager();
-		LFUSQEPCacheReplacementManager semanticCacheLFUSQEPCacheManager = new LFUSQEPCacheReplacementManager();
-
-		// build query managers for mobile estimation cache
-		StandartEstimationCacheContentManager mobileEstimationCacheContentManager = new StandartEstimationCacheContentManager();
-		StandartEstimationCacheResolutionManager mobileEstimationCacheResolutionManager = new StandartEstimationCacheResolutionManager();
-		LFUSQEPCacheReplacementManager mobileEstimationCacheLFUSQEPCacheManager = new LFUSQEPCacheReplacementManager();
-
-		// build query managers for cloud estimation cache
-		StandartEstimationCacheContentManager cloudEstimationCacheContentManager = new StandartEstimationCacheContentManager();
-		StandartEstimationCacheResolutionManager cloudEstimationCacheResolutionManager = new StandartEstimationCacheResolutionManager();
-		LFUSQEPCacheReplacementManager cloudEstimationCacheLFUSQEPCacheManager = new LFUSQEPCacheReplacementManager();
-
-
-		//build query cache
-		CacheBuilder<Query,QuerySegment> queryCacheBuilder = CacheBuilder.<Query,QuerySegment>newBuilder();
-		queryCacheBuilder.setCacheContentManager(semanticCacheContentManager);
-		queryCacheBuilder.setCacheResolutionManager(semanticCacheResolutionManager);
-		queryCacheBuilder.setCacheReplacementManager(semanticCacheLFUSQEPCacheManager);
-		queryCacheBuilder.setMaxSize(maxQueryCacheSize);
-		if (maxQueryCacheSegments > 0)//not default
-		{
-			queryCacheBuilder.setMaxSegment(maxQueryCacheSegments);
-		}
-		mQueryCache = queryCacheBuilder.build();
-
-		//build mobile estimation cache
-		CacheBuilder<Query,Estimation> mobileEstimationCacheBuilder = CacheBuilder.<Query,Estimation>newBuilder();
-		mobileEstimationCacheBuilder.setCacheContentManager(mobileEstimationCacheContentManager);
-		mobileEstimationCacheBuilder.setCacheResolutionManager(mobileEstimationCacheResolutionManager);
-		mobileEstimationCacheBuilder.setCacheReplacementManager(mobileEstimationCacheLFUSQEPCacheManager);
-		mobileEstimationCacheBuilder.setMaxSize(maxMobileEstimationCacheSize);
-		if (maxMobileEstimationCacheSegments > 0)//not default
-		{
-			mobileEstimationCacheBuilder.setMaxSegment(maxMobileEstimationCacheSegments);
-		}
-		mMobileEstimationCache = mobileEstimationCacheBuilder.build();
-
-		//build mobile estimation cache
-		CacheBuilder<Query,Estimation> cloudEstimationCacheBuilder = CacheBuilder.<Query,Estimation>newBuilder();
-		cloudEstimationCacheBuilder.setCacheContentManager(cloudEstimationCacheContentManager);
-		cloudEstimationCacheBuilder.setCacheResolutionManager(cloudEstimationCacheResolutionManager);
-		cloudEstimationCacheBuilder.setCacheReplacementManager(cloudEstimationCacheLFUSQEPCacheManager);
-		cloudEstimationCacheBuilder.setMaxSize(maxCloudEstimationCacheSize);
-		if (maxCloudEstimationCacheSegments > 0)//not default
-		{
-			mobileEstimationCacheBuilder.setMaxSegment(maxCloudEstimationCacheSegments);
-		}
-		mCloudEstimationCache = cloudEstimationCacheBuilder.build();
-
-		//build cache manager
-		mDataLoader = new DecisionalSemanticCacheDataLoader(this,mDataAccessProvider,mMobileEstimationCache,mCloudEstimationCache,mQueryCache,mOptimizationParameters,useReplacement);
-	}
 }
