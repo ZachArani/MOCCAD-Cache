@@ -6,6 +6,7 @@ import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheReplacementMana
 
 import java.util.Collection;
 import java.util.PriorityQueue;
+import android.util.Log;
 
 
 
@@ -23,7 +24,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
 
     private int lastReset = 0; //How many hits since the last Frequency Reset
 
-    public LFUSQEPCacheReplacementManager() { mEntriesPriorityQueue = new PriorityQueue<LFUSQEPCacheEntry>(); }
+    public LFUSQEPCacheReplacementManager() {Log.i("LFUSQEP", "STARTED NEW MANAGER"); mEntriesPriorityQueue = new PriorityQueue<LFUSQEPCacheEntry>(); }
 
 
     /**
@@ -33,6 +34,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     public boolean update(Query q) //Update Frequency
     {
         boolean ret = false;
+        Log.i("LFUSQEP","Removing Query");
 
         if (mEntriesPriorityQueue.contains(q))
         {
@@ -53,6 +55,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     @Override
     public boolean add(Query q, double score)
     {
+        Log.i("LFUSQEP CACHE", "ADDING QUERY");
         boolean ret;
 
         if (mEntriesPriorityQueue.contains(q))
@@ -99,6 +102,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     public boolean remove(Query q) {
 
         boolean ret;
+        Log.i("LFUSQEP QUERY", "REMOVING QUERY");
 
         if (!mEntriesPriorityQueue.contains(q))
         {

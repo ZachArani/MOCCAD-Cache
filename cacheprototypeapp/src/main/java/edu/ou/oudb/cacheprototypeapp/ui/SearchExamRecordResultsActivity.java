@@ -96,7 +96,6 @@ public class SearchExamRecordResultsActivity extends Activity {
                 .replace("[[", "")
                 .replace("[", "")
                 .replace("]]", "");
-        Log.i("RES IS ", res);
 
         /*Splitting to get each row
         * (e.g. 1, Juan Coleman, Joseph Payne, etc... then 2, Pamela Daniels, etc...)*/
@@ -375,7 +374,6 @@ public class SearchExamRecordResultsActivity extends Activity {
             //It looks like switching caches causes all kinds of mischief
     public void arraysValues() {
         for (int i = 0; i < sArray.length; i++) {
-            Log.i("String Array: ", sArray[i]);
             ID[i] = Integer.parseInt(sArray[i].split(", +")[0]);
             PFN[i] = sArray[i].split(", +")[1];
             PLN[i] = sArray[i].split(", +")[2];

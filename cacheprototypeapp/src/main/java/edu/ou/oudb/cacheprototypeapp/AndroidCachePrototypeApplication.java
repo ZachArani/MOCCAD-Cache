@@ -197,7 +197,7 @@ public class AndroidCachePrototypeApplication extends Application {
 
 	public CacheReplacementManager<Query> getCacheReplacementManager()  {
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		String replacement_type = sharedPref.getString(SettingsActivity.KEY_PREF_REPLACEMENT_TYPE, "1");
+		String replacement_type = sharedPref.getString(SettingsActivity.KEY_PREF_REPLACEMENT_TYPE, "2");
 		switch(replacement_type) {
             case "1":
                 Log.i("CACHE REPLACEMENT SET", "LRU CACHE");
