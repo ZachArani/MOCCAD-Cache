@@ -23,6 +23,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     private PriorityQueue<LFUSQEPCacheEntry> mEntriesPriorityQueue = null;
 
     private int lastReset = 0; //How many hits since the last Frequency Reset
+    private int hitsUntilRestart = 40; //How many hits need to happen before lastReset rolls back to 0
 
     public LFUSQEPCacheReplacementManager() {Log.i("LFUSQEP", "STARTED NEW MANAGER"); mEntriesPriorityQueue = new PriorityQueue<LFUSQEPCacheEntry>(); }
 
@@ -38,6 +39,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
 
         if (mEntriesPriorityQueue.contains(q))
         {
+            lastReset = (lastReset <=hitsUntilRestart) ? ++lastReset : 0; //if lastRest is less than or  equal to hitsUntilRestart, then increment, Else set it back to zero.
             LFUSQEPCacheEntry curCacheEntry = getEntry(q);
             curCacheEntry.incUseInPeriod(); //Increments UseInPeriod
             curCacheEntry.setFrequency(curCacheEntry.getUseInPeriod()/lastReset); //Sets frequency to how many times it's been used in last period
@@ -64,7 +66,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
             ret = false;
             return ret;
         }
-
+        lastReset = (lastReset <= hitsUntilRestart) ? ++lastReset : 0; //if lastRest is less than or  equal to hitsUntilRestart, then increment, Else set it back to zero.
         LFUSQEPCacheEntry cacheEntry = new LFUSQEPCacheEntry();
         cacheEntry.setQuery(q);
         cacheEntry.setQEPScore(score);
@@ -148,7 +150,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         return null; //Not found
     }
 
-    class LFUSQEPCacheEntry
+    class LFUSQEPCacheEntry implements Comparable<LFUSQEPCacheEntry>
     {
         private Query mQuery;
         private double QEPScore = 0; //QEP Score
@@ -253,13 +255,13 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         }
         /**
          *
-         * @param first cache entry
-         * @param second cache entry
+         * @param other Some other cache entry
          * @return the difference between the first and second cache entry's QEP QEPScore
          */
-        public int compare(LFUSQEPCacheEntry first, LFUSQEPCacheEntry second)
+        @Override
+        public int compareTo(LFUSQEPCacheEntry other)
         {
-            return (int)(first.getQEPScore()-second.getQEPScore());
+            return (int)(this.getQEPScore()-other.getQEPScore());
         }
     }
 

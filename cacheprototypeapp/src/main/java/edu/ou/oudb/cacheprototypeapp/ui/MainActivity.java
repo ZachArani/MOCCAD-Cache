@@ -132,7 +132,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			startWeightsActivity();
 			return true;
 		case R.id.action_stats:
-			startStatsActivity();
+			//startStatsActivity();
+			startExperimentation();
 			return true;
 		case R.id.action_experimentation:
 			startExperimentation();
