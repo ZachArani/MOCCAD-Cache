@@ -91,6 +91,12 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
 
     public void onRadioButtonClicked(View view) {
 
+        switch(view.getId()){
+            case R.id.id:
+                id_button.toggle();
+                break;
+        }
+
     }
 
     @Override
@@ -106,6 +112,7 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
 
     /*When clicking on cancel, goes back to previous activity*/
     private void cancelAttributes() {
+
         NavUtils.navigateUpFromSameTask(AttributesSelectionActivity.this);
     }
 
