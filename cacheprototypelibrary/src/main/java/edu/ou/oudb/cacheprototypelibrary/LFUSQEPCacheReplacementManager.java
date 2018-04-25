@@ -263,6 +263,12 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         {
             return (int)(this.getQEPScore()-other.getQEPScore());
         }
+        @Override
+        public boolean equals(Object o)
+        {
+            //k
+            return false;
+        }
     }
 
 }
