@@ -76,7 +76,9 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
     /*Buttons*/
     private Button search,
             date_picker,
-            time_picker;
+            time_picker,
+            //phil
+            join_tester;
 
     //TODO: Save all the arrays into a database / file / HashSet so it is only initialized once
     /*Array containing the values to complete with for the Patient First Names*/
@@ -228,7 +230,18 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         switch (v.getId()) {
             case R.id.search_button:
                 launchQuery();
+                //phil
+                //button for join testing purposes
+            case R.id.join_button:
+                launchJoinTest();
         }
+    }
+
+    //phil
+    public void launchJoinTest(){
+        String query = "SELECT * FROM patients INNER JOIN doctors ON patients.id = doctors.id";
+        mDBHelper.addQuery(getQuery(query));
+        (new QueryProcessTask(this)).execute(getJoinQuery(query));
     }
 
     public void launchQuery() {
@@ -391,6 +404,9 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         }
         query.addAttributes(attributes);
 
+        //phil
+        /* add code later for join*/
+
         /*Only takes requests having a WHERE statement*/
         if (line.contains("WHERE")) {
 
@@ -418,6 +434,15 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         }
 
         return query;
+    }
+
+    //phil
+    //Transform a string into a join query
+    private JoinQuery getJoinQuery(String line){
+        JoinQuery joinQuery = null;
+        String[] rel = {"patients", "doctors"};
+        joinQuery = new JoinQuery(rel);
+        return joinQuery;
     }
 
     /*When Date or Time button is clicked, we display a picker*/
