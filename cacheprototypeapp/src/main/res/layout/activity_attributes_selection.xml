@@ -20,87 +20,79 @@
             android:textSize="34sp" />
 
 
-            <RadioButton
-                android:id="@+id/id"
-                android:layout_width="wrap_content"
-                android:layout_below="@id/project_name"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="ID" />
+        <ToggleButton
+            android:id="@+id/id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/project_name"
+            android:textOn="ID"
+            android:textOff="ID" />
 
-            <RadioButton
-                android:id="@+id/patientfirstname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/id"
-                android:onClick="onRadioButtonClicked"
-                android:text="Patient First Name" />
+        <ToggleButton
+            android:id="@+id/patientfirstname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id"
+            android:textOn="Patient First Name"
+            android:textOff="Patient First Name" />
 
-            <RadioButton
-                android:id="@+id/patientlastname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/patientfirstname"
-                android:onClick="onRadioButtonClicked"
-                android:text="Patient Last Name" />
+        <ToggleButton
+            android:id="@+id/patientlastname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/patientfirstname"
+            android:textOn="Patient Last Name"
+            android:textOff="Patient Last Name" />
 
-            <RadioButton
-                android:id="@+id/doctorfirstname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/patientlastname"
-                android:onClick="onRadioButtonClicked"
-                android:text="Doctor First Name" />
+        <ToggleButton
+            android:id="@+id/doctorfirstname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/patientlastname"
+            android:textOn="Doctor First Name"
+            android:textOff="Doctor First Name" />
 
-            <RadioButton
-                android:id="@+id/doctorlastname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/doctorfirstname"
-                android:onClick="onRadioButtonClicked"
-                android:text="Doctor Last Name" />
+        <ToggleButton
+            android:id="@+id/doctorlastname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/doctorfirstname"
+            android:textOn="Doctor Last Name"
+            android:textOff="Doctor Last Name" />
 
-            <RadioButton
-                android:id="@+id/description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/doctorlastname"
-                android:onClick="onRadioButtonClicked"
-                android:text="Description" />
+        <ToggleButton
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/doctorlastname"
+            android:textOn="Description"
+            android:textOff="Description" />
 
-            <RadioButton
-                android:id="@+id/p_date_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/description"
-                android:onClick="onRadioButtonClicked"
-                android:text="Date and Time" />
+        <ToggleButton
+            android:id="@+id/p_date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description"
+            android:textOn="Date and Time"
+            android:textOff="Date and Time" />
 
-            <RadioButton
-                android:id="@+id/heartrate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/p_date_time"
-                android:onClick="onRadioButtonClicked"
-                android:text="Heart Rate" />
+        <ToggleButton
+            android:id="@+id/heartrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/p_date_time"
+            android:textOn="Heart Rate"
+            android:textOff="Heart Rate" />
 
         <!-- Launch Button-->
         <Button
-            android:id="@+id/confirm_button"
-            android:layout_width="200dp"
+            android:id="@+id/confirmButton"
+            android:layout_width="161dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/heartrate"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
+            android:layout_below="@id/heartrate"
             android:text="@string/confirm" />
-
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:text="@string/cancel" />
 
     </RelativeLayout>
 
