@@ -200,7 +200,7 @@ public class Query implements Sizeable {
 			if (!addPredicateAttribute(attribute))
 				return false;
 		}
-		
+
 		return true;
 	}
 	

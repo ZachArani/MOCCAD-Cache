@@ -1,6 +1,6 @@
 SELECT * FROM patients WHERE noteid > 25;
 SELECT * FROM patients WHERE noteid >= 40;
-SELECT * FROM patients WHERE heartrate < 55;
+SELECT * FROM patients WHERE noteid >= 40;
 SELECT * FROM patients WHERE heartrate >= 50;
 SELECT * FROM patients WHERE description = 'Measurement%20of%20Body';
 SELECT * FROM patients WHERE description = 'Analysis%20of%20Body%20Flu';

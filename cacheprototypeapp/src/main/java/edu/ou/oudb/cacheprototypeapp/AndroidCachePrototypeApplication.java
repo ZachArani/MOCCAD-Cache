@@ -324,7 +324,7 @@ public class AndroidCachePrototypeApplication extends Application {
 		}
 		mMobileEstimationCache = mobileEstimationCacheBuilder.build();
 		
-		//build mobile estimation cache
+		//build cloud estimation cache
 		CacheBuilder<Query,Estimation> cloudEstimationCacheBuilder = CacheBuilder.<Query,Estimation>newBuilder();
 		cloudEstimationCacheBuilder.setCacheContentManager(cloudEstimationCacheContentManager);
 		cloudEstimationCacheBuilder.setCacheResolutionManager(cloudEstimationCacheResolutionManager);

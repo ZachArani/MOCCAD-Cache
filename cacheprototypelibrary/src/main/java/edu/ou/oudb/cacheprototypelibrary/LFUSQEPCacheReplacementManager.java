@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheReplacementManager;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.PriorityQueue;
 import android.util.Log;
@@ -22,8 +23,8 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
 
     private PriorityQueue<LFUSQEPCacheEntry> mEntriesPriorityQueue = null;
 
-    private int lastReset = 0; //How many hits since the last Frequency Reset
-    private int hitsUntilRestart = 40; //How many hits need to happen before lastReset rolls back to 0
+    private double lastReset = 0; //How many hits since the last Frequency Reset
+    private double hitsUntilRestart = 40; //How many hits need to happen before lastReset rolls back to 0
 
     public LFUSQEPCacheReplacementManager() {Log.i("LFUSQEP", "STARTED NEW MANAGER"); mEntriesPriorityQueue = new PriorityQueue<LFUSQEPCacheEntry>(); }
 
@@ -34,15 +35,17 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     @Override
     public boolean update(Query q) //Update Frequency
     {
+        LFUSQEPCacheEntry qHolder = new LFUSQEPCacheEntry();
+        qHolder.setQuery(q);
+        boolean inQueue = mEntriesPriorityQueue.contains(qHolder);
         boolean ret = false;
-        Log.i("LFUSQEP","Removing Query");
-
-        if (mEntriesPriorityQueue.contains(q))
+        Log.i("LFUSQEP","Updating Query");
+        if (mEntriesPriorityQueue.contains(qHolder))
         {
             lastReset = (lastReset <=hitsUntilRestart) ? ++lastReset : 0; //if lastRest is less than or  equal to hitsUntilRestart, then increment, Else set it back to zero.
             LFUSQEPCacheEntry curCacheEntry = getEntry(q);
             curCacheEntry.incUseInPeriod(); //Increments UseInPeriod
-            curCacheEntry.setFrequency(curCacheEntry.getUseInPeriod()/lastReset); //Sets frequency to how many times it's been used in last period
+            curCacheEntry.setFrequency(); //Sets frequency to how many times it's been used in last period
             curCacheEntry.setScore();
             mEntriesPriorityQueue.add(curCacheEntry); //Put back into the queue
             ret = true;
@@ -58,9 +61,10 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     public boolean add(Query q, double score)
     {
         Log.i("LFUSQEP CACHE", "ADDING QUERY");
+        LFUSQEPCacheEntry qHolder = new LFUSQEPCacheEntry();
+        qHolder.setQuery(q);
         boolean ret;
-
-        if (mEntriesPriorityQueue.contains(q))
+        if (mEntriesPriorityQueue.contains(qHolder))
         {
             update(q);
             ret = false;
@@ -71,13 +75,14 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         cacheEntry.setQuery(q);
         cacheEntry.setQEPScore(score);
         cacheEntry.incUseInPeriod();
+        cacheEntry.setFrequency();
         cacheEntry.setScore();
         mEntriesPriorityQueue.add(cacheEntry);
         ret = true;
 
         return ret;
     }
-
+//TODO: ADD SET SCORE AND SET FREQUENCY THAT UPDATE THOSE FOR EVERYTHING IN THE QUEUE
     /**
      * {@inheritDoc}
      */
@@ -141,13 +146,19 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
      * @return CacheEntry which is passed
      */
     private LFUSQEPCacheEntry getEntry(Query q){
-        for(int k = 0; k<mEntriesPriorityQueue.size(); k++){
-            LFUSQEPCacheEntry temp = mEntriesPriorityQueue.poll();
-            if(temp.getQuery().equals(q))
-                return temp;
-            mEntriesPriorityQueue.add(temp);
+        ArrayList<LFUSQEPCacheEntry> queryHolder = new ArrayList<LFUSQEPCacheEntry>(); //Holds queries while we iterate through queue
+        LFUSQEPCacheEntry holder = null;
+        while(mEntriesPriorityQueue.size() !=0)
+        {
+            holder = mEntriesPriorityQueue.poll();
+            if(holder.getQuery().equals(q))
+                break;
+            queryHolder.add(holder);
+            holder = null;
         }
-        return null; //Not found
+        for(LFUSQEPCacheEntry tmp : queryHolder)
+            mEntriesPriorityQueue.add(tmp); //Re-add all the things we took out of the queue back in
+        return holder; //If holder actually found a value, it'll return it. Else, Null
     }
 
     class LFUSQEPCacheEntry implements Comparable<LFUSQEPCacheEntry>
@@ -204,19 +215,18 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         }
 
         /**
-         *
-         * @param f set  the frequency of the query using LFUPP (Least Frequently used with respect to Periodicity and Priority)
+         * Sets teh freqency as useInPeriod/lastReset
          */
-        public final void setFrequency(double f)
+        public final void setFrequency()
         {
-            frequency = f;
+            frequency = useInPeriod/lastReset;
         }
 
         /**
          *
          * @return how many times this query has been used in the current period
          */
-        public final int getUseInPeriod()
+        public final double getUseInPeriod()
         {
             return useInPeriod;
         }
@@ -226,7 +236,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
          */
         public final void incUseInPeriod()
         {
-            useInPeriod++;
+            ++useInPeriod;
         }
 
         /**
@@ -251,6 +261,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
          */
         public final void setScore()
         {
+
             score = (frequency * QEPScore)/mQuery.size();
         }
         /**
