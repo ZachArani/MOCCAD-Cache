@@ -239,9 +239,9 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
 
     //phil
     public void launchJoinTest(){
-        String query = "SELECT * FROM patients INNER JOIN doctors ON patients.id = doctors.id";
+        String query = "SELECT * FROM patients INNER JOIN doctors ON patients.doctorlastname = doctors.doctorlastname";
         mDBHelper.addQuery(getQuery(query));
-        (new QueryProcessTask(this)).execute(getJoinQuery(query));
+        (new QueryProcessTask(this)).execute(getQuery(query));
     }
 
     public void launchQuery() {
@@ -391,15 +391,13 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         query = new Query(table);
 
         String[] attributeList;
-        if (!att.equals("*"))
-        {
+        if (!att.equals("*")) {
             attributeList = att.split(", ");
         } else {
             attributeList = new String[]
                     {"noteid", "patientfirstname", "patientlastname", "doctorfirstname", "doctorlastname", "description", "p_date_time", "heartrate"};
         }
-        for(String a: attributeList)
-        {
+        for (String a : attributeList) {
             attributes.add(a);
         }
         query.addAttributes(attributes);
@@ -434,15 +432,6 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         }
 
         return query;
-    }
-
-    //phil
-    //Transform a string into a join query
-    private JoinQuery getJoinQuery(String line){
-        JoinQuery joinQuery = null;
-        String[] rel = {"patients", "doctors"};
-        joinQuery = new JoinQuery(rel);
-        return joinQuery;
     }
 
     /*When Date or Time button is clicked, we display a picker*/
