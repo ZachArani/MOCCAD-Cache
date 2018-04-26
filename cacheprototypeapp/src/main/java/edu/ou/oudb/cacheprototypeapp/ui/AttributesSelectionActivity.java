@@ -403,6 +403,15 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         query.addAttributes(attributes);
 
         //phil
+
+        /*building static join query
+        String table1 = "patients";
+        String table2 = "doctors";
+        query = new Query(table1, table2);
+        attributeList = new String[]
+                {"noteid", "patientfirstname", "patientlastname", "doctorfirstname", "doctorlastname", "description", "p_date_time", "heartrate"};
+        return query;*/
+
         /* add code later for join*/
 
         /*Only takes requests having a WHERE statement*/
