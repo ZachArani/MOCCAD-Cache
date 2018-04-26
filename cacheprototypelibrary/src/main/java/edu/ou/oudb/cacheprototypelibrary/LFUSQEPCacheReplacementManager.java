@@ -45,9 +45,9 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
             lastReset = (lastReset <=hitsUntilRestart) ? ++lastReset : 0; //if lastRest is less than or  equal to hitsUntilRestart, then increment, Else set it back to zero.
             LFUSQEPCacheEntry curCacheEntry = getEntry(q);
             curCacheEntry.incUseInPeriod(); //Increments UseInPeriod
-            curCacheEntry.setFrequency(); //Sets frequency to how many times it's been used in last period
-            curCacheEntry.setScore();
             mEntriesPriorityQueue.add(curCacheEntry); //Put back into the queue
+            updateFrequencies(); //Update all scores/Frequencies in cache
+            updateScores();
             ret = true;
         }
 
@@ -75,9 +75,10 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
         cacheEntry.setQuery(q);
         cacheEntry.setQEPScore(score);
         cacheEntry.incUseInPeriod();
-        cacheEntry.setFrequency();
-        cacheEntry.setScore();
         mEntriesPriorityQueue.add(cacheEntry);
+        updateFrequencies(); //Now that we've added to the cache, update all frequencies/scores
+        updateScores();
+
         ret = true;
 
         return ret;
@@ -160,6 +161,29 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
             mEntriesPriorityQueue.add(tmp); //Re-add all the things we took out of the queue back in
         return holder; //If holder actually found a value, it'll return it. Else, Null
     }
+
+    /**
+     * Updates the frequency for all items in the Cache
+     */
+    public final void updateFrequencies()
+    {
+        for(LFUSQEPCacheEntry entry : mEntriesPriorityQueue)
+        {
+            entry.setFrequency();
+        }
+    }
+
+    /**
+     * Updates the scores for all items in the Cache
+     */
+    public final void updateScores()
+    {
+        for(LFUSQEPCacheEntry entry : mEntriesPriorityQueue)
+        {
+            entry.setScore();
+        }
+    }
+
 
     class LFUSQEPCacheEntry implements Comparable<LFUSQEPCacheEntry>
     {
