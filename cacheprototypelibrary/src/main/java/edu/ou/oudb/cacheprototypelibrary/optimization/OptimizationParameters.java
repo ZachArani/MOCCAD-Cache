@@ -11,7 +11,9 @@ public class OptimizationParameters {
 	// Getters
 	public int getTime(){ return time; }
 	public int getMoney(){ return money; }
-	public int getEnergy(){ return energy; }
+	public int getEnergy(){
+		return energy;
+	}
 
 	// Setters
 	public void setTime(int t){ this.time = t; }

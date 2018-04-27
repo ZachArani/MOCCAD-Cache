@@ -21,7 +21,7 @@ import edu.ou.oudb.cacheprototypelibrary.estimationcache.MobileEstimationComputa
  */
 public class StatisticsManager {
 
-    private static final String FOLDER_NAME = "/MOCCADCacheStatitics";
+    private static final String FOLDER_NAME = "/MOCCADCacheStatistics";
     private static final String DATE_FORMAT = "yyyyMMddHHmmss";
     private static final String PREFIX_FILE_NAME = "stats";
     private static final String EXTENSION= ".txt";
