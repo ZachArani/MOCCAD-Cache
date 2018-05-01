@@ -50,13 +50,13 @@ public class ExperimentationService extends IntentService
 		int nbQueriesToExecute = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_NB_QUERIES_TO_PROCESS,"0"));
 		int sizeOfQuerySet = 0;
 		GenerateQueries test = new GenerateQueries(100);
-		for(String query : test.generate(1000))
+	/*	for(String query : test.generate(1000))
         {
             Log.i("", query);
         }
-
+*/
 		// used to update estimations on the cloud
-		int[] experiments = {R.raw.queries};
+		int[] experiments = {R.raw.experiment_queries_1};
 		
 		int[] warmupexp = {
 			   			//R.raw.queries_exp_extended_hit_0,
@@ -79,7 +79,7 @@ public class ExperimentationService extends IntentService
 
 		//FIXME: WASN'T THERE
 		int[] myExperiment = {
-				R.raw.queries_maxime
+                R.raw.experiment_queries_1
 		};
 
 		//FIXME: WASN'T COMMENTED
