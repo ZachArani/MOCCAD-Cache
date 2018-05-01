@@ -94,7 +94,7 @@
 		   android:title="@string/pref_max_number_segment" />
 
 		<ListPreference
-		   android:defaultValue="100000000"
+		   android:defaultValue="100000"
 		   android:entries="@array/pref_max_cache_size_list_titles"
 		   android:entryValues="@array/pref_max_cache_size_list_values"
 		   android:key="pref_max_query_cache_size"
@@ -116,7 +116,7 @@
 		   android:title="@string/pref_max_number_segment" />
 
 		<ListPreference
-		   android:defaultValue="10000000"
+		   android:defaultValue="10000"
 		   android:entries="@array/pref_max_cache_size_list_titles"
 		   android:entryValues="@array/pref_max_cache_size_list_values"
 		   android:key="pref_max_mobile_estimation_cache_size"
@@ -139,7 +139,7 @@
 		   android:title="@string/pref_max_number_segment" />
 
 		<ListPreference
-		   android:defaultValue="10000000"
+		   android:defaultValue="10000"
 		   android:entries="@array/pref_max_cache_size_list_titles"
 		   android:entryValues="@array/pref_max_cache_size_list_values"
 		   android:key="pref_max_cloud_estimation_cache_size"

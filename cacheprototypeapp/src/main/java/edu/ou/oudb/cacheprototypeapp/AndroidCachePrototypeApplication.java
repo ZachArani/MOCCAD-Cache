@@ -247,7 +247,7 @@ public class AndroidCachePrototypeApplication extends Application {
 	private void setSemanticCacheDataLoader()
 	{
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000000"));
+		int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000"));
 		int maxQueryCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_NUMBER_SEGMENT, "0"));
 		boolean useReplacement = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_REPLACEMENT_TYPE, "1"))!=0; //If the "Cache Replacement" strategy is not 0 (no replacement), then we're using a strategy.
 
@@ -278,7 +278,7 @@ public class AndroidCachePrototypeApplication extends Application {
 	{
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-		int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000000"));
+		int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000"));
 		int maxQueryCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_NUMBER_SEGMENT, "0"));
 		int maxMobileEstimationCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_MOBILE_ESTIMATION_CACHE_SIZE, "10000000"));
 		int maxMobileEstimationCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_MOBILE_ESTIMATION_CACHE_NUMBER_SEGMENT, "0"));

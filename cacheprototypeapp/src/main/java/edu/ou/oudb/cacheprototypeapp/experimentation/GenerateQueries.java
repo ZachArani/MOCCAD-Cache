@@ -96,7 +96,10 @@ public class GenerateQueries {
 
             for(List<String> value : attributePossibilities)
             {
-                possibilities.get(i).add(value.get(0)); //Add each value into that attribute's list
+                if(i == 6)
+                    possibilities.get(i).add(value.get(0).replaceAll(" ", "%20")); //If description, we need to replace spaces with %20 for HTML formatting
+                else
+                    possibilities.get(i).add(value.get(0)); //Add each value into that attribute's list
             }
         }
 
@@ -106,12 +109,12 @@ public class GenerateQueries {
     public String generateNum(String attribute, ArrayList<String> possibilities)
     {
 
-        return "SELECT * from patients WHERE " + attribute + " " + operators.get((int)(Math.random() * operators.size())) + " " + possibilities.get((int)(Math.random() * (possibilities.size())));
+        return "SELECT * FROM patients WHERE " + attribute + " " + operators.get((int)(Math.random() * operators.size())) + " " + possibilities.get((int)(Math.random() * (possibilities.size()))) + ";";
     }
 
     public String generateString(String attribute, ArrayList<String> possibilities)
     {
-        return "SELECT * from patients WHERE " + attribute + " = '" + possibilities.get((int)(Math.random() * (possibilities.size()))) + "'";
+        return "SELECT * FROM patients WHERE " + attribute + " = '" + possibilities.get((int)(Math.random() * (possibilities.size()))) + "';";
     }
 
     public String generateDate(String attribute, ArrayList<String> possibilities)
@@ -120,11 +123,11 @@ public class GenerateQueries {
 
         if(date_or_time == 0)
         {
-            return "SELECT * from patients WHERE substr(" + attribute +  ",0,10) " + operators.get((int)(Math.random() * operators.size())) + " '" + possibilities.get((int)(Math.random() * (possibilities.size()))).substring(0,10)+"'";
+            return "SELECT * FROM patients WHERE substr(" + attribute +  ",0,10) " + operators.get((int)(Math.random() * operators.size())) + " %27" + possibilities.get((int)(Math.random() * (possibilities.size()))).substring(0,10)+"%27;";
         }
         else
         {
-            return "SELECT * from patients WHERE substr(" + attribute + ",12) " + operators.get((int)(Math.random() * operators.size())) + " '" + possibilities.get((int)(Math.random() * (possibilities.size()))).substring(11) + "'";
+            return "SELECT * FROM patients WHERE substr(" + attribute + ",12) " + operators.get((int)(Math.random() * operators.size())) + " %27" + possibilities.get((int)(Math.random() * (possibilities.size()))).substring(11) + "%27;";
         }
     }
     public List<List<String>> process(String query) throws JSONParserException, DownloadDataException {

@@ -109,6 +109,7 @@
 	<string name="pref_max_size">Maximum size</string>
 
 	<string-array name="pref_max_cache_size_list_titles">
+		<item>100KB</item>
 	    <item>10MB</item> 
 	    <item>20MB</item>
 	    <item>30MB</item>
@@ -121,6 +122,7 @@
 		<item>500MB</item>
 	</string-array>
 	<string-array name="pref_max_cache_size_list_values">
+		<item>100000</item>
 	    <item>10000000</item> 
 	    <item>20000000</item>
 	    <item>30000000</item>

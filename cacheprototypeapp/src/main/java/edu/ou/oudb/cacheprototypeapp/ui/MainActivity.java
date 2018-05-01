@@ -345,7 +345,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                     
                 case BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED:
                 	
-                	((AndroidCachePrototypeApplication) getApplication()).setUseReplacement(false);
+                	//((AndroidCachePrototypeApplication) getApplication()).setUseReplacement(false);
                 	
                 	mBuilder.setContentText("WarmUp complete").setProgress(0,0,false);
                 	

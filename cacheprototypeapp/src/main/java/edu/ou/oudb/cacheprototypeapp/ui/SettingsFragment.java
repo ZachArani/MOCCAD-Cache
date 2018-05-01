@@ -185,7 +185,7 @@ public class SettingsFragment extends PreferenceFragment
 		    {
 		    	if (mApplication.getQueryCache() != null)
 		    	{
-			    	int currentValue = Integer.parseInt(sharedPreferences.getString(key, "100000000"));
+			    	int currentValue = Integer.parseInt(sharedPreferences.getString(key, "100000"));
 			    	mApplication.getQueryCache().setMaxSize(currentValue);
 		    	}
 		    }
