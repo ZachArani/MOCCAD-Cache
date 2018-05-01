@@ -49,7 +49,9 @@ public class ExperimentationService extends IntentService
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		int nbQueriesToExecute = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_NB_QUERIES_TO_PROCESS,"0"));
 		int sizeOfQuerySet = 0;
-		
+		GenerateQueries test = new GenerateQueries(100);
+		test.generate(1000);
+
 		// used to update estimations on the cloud
 		int[] experiments = {R.raw.queries};
 		

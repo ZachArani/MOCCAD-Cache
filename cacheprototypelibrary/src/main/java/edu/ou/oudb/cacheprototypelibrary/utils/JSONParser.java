@@ -157,7 +157,8 @@ public class JSONParser {
 				Log.d("DB_INFO","attribute names: " + attributeNames);
 				Log.d("DB_INFO","attribute types: " + attributeTypes);
 				Log.d("DB_INFO","minimum for attributes: " + minForAttributes);
-				Log.d("DB_INFO","maximum for attributes: " + maxForAttributes);
+				Log.d(
+"DB_INFO","maximum for attributes: " + maxForAttributes);
 				Log.d("DB_INFO","number of different values for attributes: " + nbDifferentValuesForAttributes);
 				
 				dbInfo.put(relationName, new RelationMetadata(
@@ -169,7 +170,8 @@ public class JSONParser {
 												maxTupleSize,
 												minForAttributes,
 												maxForAttributes,
-												nbDifferentValuesForAttributes
+
+						nbDifferentValuesForAttributes
 											));
 				
 			}
