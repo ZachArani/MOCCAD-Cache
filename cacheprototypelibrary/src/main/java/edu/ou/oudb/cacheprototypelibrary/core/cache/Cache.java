@@ -178,6 +178,7 @@ public class Cache<K extends Sizeable,V extends Sizeable>{
      */
 	public K replace()
 	{
+
 		return mCReplacementManager.replace();
 	}
 

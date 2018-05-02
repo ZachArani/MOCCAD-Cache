@@ -183,6 +183,10 @@ public class SemanticQueryCacheContentManager implements CacheContentManager<Que
 		return size;
 	}
 
+	public void decCount(){
+		mSegments.size();
+	}
+
 	@Override
 	public Set<Query> getEntrySet() {
 		return mSegments.keySet();

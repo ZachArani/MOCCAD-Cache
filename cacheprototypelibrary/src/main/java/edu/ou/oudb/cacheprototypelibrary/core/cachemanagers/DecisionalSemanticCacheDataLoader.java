@@ -251,7 +251,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
                         && queryTrimmingResult.type != QueryTrimmingType.CACHE_EXTENDED_HIT_INCLUDED
                         && queryTrimmingResult.type != QueryTrimmingType.CACHE_EXTENDED_HIT_EQUIVALENT))
                 {
-                    while(mQueryCache.isCountFull())
+                    if(mQueryCache.isCountFull())
                     {
                         queriesToBeRemoved.add(mQueryCache.replace());
                     }
