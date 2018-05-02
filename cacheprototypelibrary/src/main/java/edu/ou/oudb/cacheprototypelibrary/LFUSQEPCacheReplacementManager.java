@@ -111,8 +111,9 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
 
         boolean ret;
         Log.i("LFUSQEP QUERY", "REMOVING QUERY");
-
-        if (!mEntriesPriorityQueue.contains(q))
+        LFUSQEPCacheEntry qHolder = new LFUSQEPCacheEntry();
+        qHolder.setQuery(q);
+        if (!mEntriesPriorityQueue.contains(qHolder))
         {
             ret = false;
             return ret;

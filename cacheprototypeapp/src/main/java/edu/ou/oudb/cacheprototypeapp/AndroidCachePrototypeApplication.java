@@ -316,7 +316,7 @@ public class AndroidCachePrototypeApplication extends Application {
 		CacheBuilder<Query,Estimation> mobileEstimationCacheBuilder = CacheBuilder.<Query,Estimation>newBuilder();
 		mobileEstimationCacheBuilder.setCacheContentManager(mobileEstimationCacheContentManager);
 		mobileEstimationCacheBuilder.setCacheResolutionManager(mobileEstimationCacheResolutionManager);
-		mobileEstimationCacheBuilder.setCacheReplacementManager(getCacheReplacementManager());
+		mobileEstimationCacheBuilder.setCacheReplacementManager(new LRUCacheReplacementManager());
 		mobileEstimationCacheBuilder.setMaxSize(maxMobileEstimationCacheSize);
 		if (maxMobileEstimationCacheSegments > 0)//not default
 		{
@@ -328,7 +328,7 @@ public class AndroidCachePrototypeApplication extends Application {
 		CacheBuilder<Query,Estimation> cloudEstimationCacheBuilder = CacheBuilder.<Query,Estimation>newBuilder();
 		cloudEstimationCacheBuilder.setCacheContentManager(cloudEstimationCacheContentManager);
 		cloudEstimationCacheBuilder.setCacheResolutionManager(cloudEstimationCacheResolutionManager);
-		cloudEstimationCacheBuilder.setCacheReplacementManager(getCacheReplacementManager());
+		cloudEstimationCacheBuilder.setCacheReplacementManager(new LRUCacheReplacementManager());
 		cloudEstimationCacheBuilder.setMaxSize(maxCloudEstimationCacheSize);
 		if (maxCloudEstimationCacheSegments > 0)//not default
 		{

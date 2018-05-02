@@ -139,7 +139,7 @@ public class SettingsFragment extends PreferenceFragment
 		    {
 		    	if (mApplication.getCloudEstimationCache() != null)
 		    	{
-			    	int currentValue = Integer.parseInt(sharedPreferences.getString(key, "100000000"));
+			    	int currentValue = Integer.parseInt(sharedPreferences.getString(key, "100000"));
 			    	mApplication.getCloudEstimationCache().setMaxSize(currentValue);
 		    	}
 		    }
@@ -162,7 +162,7 @@ public class SettingsFragment extends PreferenceFragment
 		    {
 		    	if (mApplication.getMobileEstimationCache() != null)
 		    	{
-			    	int currentValue = Integer.parseInt(sharedPreferences.getString(key, "100000000"));
+			    	int currentValue = Integer.parseInt(sharedPreferences.getString(key, "100000"));
 			    	mApplication.getMobileEstimationCache().setMaxSize(currentValue);
 		    	}
 		    }

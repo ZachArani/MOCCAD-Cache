@@ -37,7 +37,7 @@ import edu.ou.oudb.cacheprototypelibrary.utils.StatisticsManager;
  * @author Mikaël Perrin
  * @since 1.0
  * Class defining Mikael's algorithm for the management of a query with 2 estimation caches and
- * a query cache
+ * a query caches
  */
 public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySegment> {
 
