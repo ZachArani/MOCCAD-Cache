@@ -111,6 +111,5 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         intent.putExtra(SearchExamRecordActivity.ATTRIBUTELIST, attributes);
 
         startActivity(intent);
-        System.out.println("button pressed");
     }
 }
