@@ -293,7 +293,7 @@ public class Query implements Sizeable {
 	public boolean respectsAttributes(String relation, List<String> tuple) throws NumberFormatException
 	{
 		RelationMetadata relationMetadata = Metadata.getInstance().getRelationMetadata(relation);
-		boolean isValidTuple = false;
+		boolean isValidTuple = true;
 		Iterator<String> it = mAttributes.iterator();
 		while(it.hasNext() && isValidTuple)
 		{
@@ -328,7 +328,7 @@ public class Query implements Sizeable {
 				+ ((mPredicateAttributes == null) ? 0 : mPredicateAttributes
 						.hashCode());
 		result = prime * result
-				+ ((mPredicates == null) ? 0 : mPredicates.hashCode());
+				+ ((mAttributes == null) ? 0 : mAttributes.hashCode());
 		result = prime * result
 				+ ((mRelation == null) ? 0 : mRelation.hashCode());
 		return result;
@@ -361,6 +361,13 @@ public class Query implements Sizeable {
 				return false;
 			}
 		} else if (!mPredicateAttributes.equals(other.mPredicateAttributes)) {
+			return false;
+		}
+		if (mAttributes == null) {
+			if (other.mAttributes != null) {
+				return false;
+			}
+		} else if (!mAttributes.equals(other.mAttributes)) {
 			return false;
 		}
 		if (mPredicates == null) {
