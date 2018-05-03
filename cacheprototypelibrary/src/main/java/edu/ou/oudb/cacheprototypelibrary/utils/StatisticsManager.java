@@ -150,7 +150,8 @@ public class StatisticsManager {
             mLogPW.print(tag);
             mLogPW.print(":");
             long time = SystemClock.elapsedRealtimeNanos();
-            mLogPW.print(time);
+           // mLogPW.print(time);
+            mLogPW.print(time-startingTime);
             mLogPW.println();
             mLogPW.print(ENERGY_COST_TAG);
             mLogPW.print(":");
@@ -168,14 +169,14 @@ public class StatisticsManager {
     {
         if(mLogPW != null)
         {
-            mLogPW.print(STOP_COMPUTE_CLOUD_ESTIMATION_TAG);
+          /*  mLogPW.print(STOP_COMPUTE_CLOUD_ESTIMATION_TAG);
             mLogPW.print(":");
             mLogPW.print(startTime+duration);
             mLogPW.println();
             mLogPW.print(ENERGY_COST_TAG);
             mLogPW.print(":");
             mLogPW.print(CloudEstimationComputationManager.estimateEnergyLowNetwork(duration));
-            mLogPW.println();
+            mLogPW.println();*/
             mLogPW.print(MONEY_COST_TAG);
             mLogPW.print(":");
             mLogPW.print(returnedMoneyCost);
@@ -192,14 +193,14 @@ public class StatisticsManager {
     {
         if(mLogPW != null)
         {
-            mLogPW.print(STOP_CLOUD_PROCESS_TAG);
+            /*mLogPW.print(STOP_CLOUD_PROCESS_TAG);
             mLogPW.print(":");
             mLogPW.print(startTime+(duration));
             mLogPW.println();
             mLogPW.print(ENERGY_COST_TAG);
             mLogPW.print(":");
             mLogPW.print(CloudEstimationComputationManager.estimateEnergyLowNetwork(duration));
-            mLogPW.println();
+            mLogPW.println();*/
             mLogPW.print(MONEY_COST_TAG);
             mLogPW.print(":");
             mLogPW.print(returnedMoneyCost);
@@ -215,7 +216,7 @@ public class StatisticsManager {
 
     public static void stopMobileProcess(long startTime)
     {
-        if(mLogPW != null)
+      /*  if(mLogPW != null)
         {
             mLogPW.print(STOP_MOBILE_PROCESS_TAG);
             mLogPW.print(":");
@@ -226,7 +227,7 @@ public class StatisticsManager {
             mLogPW.print(":");
             mLogPW.print(MobileEstimationComputationManager.estimateEnergy(time-startTime));
             mLogPW.println();
-        }
+        }*/
     }
 
     public static long startDownloadData()
@@ -236,7 +237,7 @@ public class StatisticsManager {
 
     public static void stopDownloadData(long startTime)
     {
-        if(mLogPW != null)
+       /* if(mLogPW != null)
         {
             mLogPW.print(STOP_DOWNLOAD_DATA_TAG);
             mLogPW.print(":");
@@ -247,7 +248,7 @@ public class StatisticsManager {
             mLogPW.print(":");
             mLogPW.print(CloudEstimationComputationManager.estimateEnergyHighNetwork(time-startTime));
             mLogPW.println();
-        }
+        }*/
     }
 
     public static long startDownloadEstimationResult()
@@ -257,7 +258,7 @@ public class StatisticsManager {
 
     public static void stopDownloadEstimationResult(long startTime)
     {
-        if(mLogPW != null)
+       /* if(mLogPW != null)
         {
             mLogPW.print(STOP_DOWNLOAD_ESTIMATION_RESULT_TAG);
             mLogPW.print(":");
@@ -268,7 +269,7 @@ public class StatisticsManager {
             mLogPW.print(":");
             mLogPW.print(CloudEstimationComputationManager.estimateEnergyHighNetwork(time-startTime));
             mLogPW.println();
-        }
+        }*/
     }
 
     public static void newQueryCacheExactHit()
@@ -324,7 +325,7 @@ public class StatisticsManager {
     }
 
     public static void stopCacheAnalysis(long startingTime) {
-        printStopTask(startingTime, STOP_CACHE_ANALYSIS_TAG);
+     //   printStopTask(startingTime, STOP_CACHE_ANALYSIS_TAG);
     }
 
     public static long startQueryProcess() {
@@ -340,7 +341,7 @@ public class StatisticsManager {
     }
 
     public static void stopQueryExecution(long startingTime) {
-        printStopTask(startingTime,STOP_QUERY_EXECUTION_TAG);
+        //printStopTask(startingTime,STOP_QUERY_EXECUTION_TAG);
     }
 
     public static long startCacheReplacement() {
@@ -348,7 +349,7 @@ public class StatisticsManager {
     }
 
     public static void stopCacheReplacement(long startingTime) {
-        printStopTask(startingTime, STOP_CACHE_REPLACEMENT_TAG);
+      //  printStopTask(startingTime, STOP_CACHE_REPLACEMENT_TAG);
     }
 
 
@@ -357,7 +358,7 @@ public class StatisticsManager {
     }
 
     public static void stopDecisionProcess(long startingTime) {
-        printStopTask(startingTime,STOP_DECISION_PROCESS_TAG);
+       // printStopTask(startingTime,STOP_DECISION_PROCESS_TAG);
     }
 
     public static void newMobileEstimationCacheHit()
