@@ -81,7 +81,7 @@ public class GenerateQueries {
         ArrayList<ArrayList<String>> possibilities = new ArrayList<>();
         possibilities.add(new ArrayList<String>()); //Have to have a new ArrayList for the list of attributes
         try {
-            attributes = process("show columns in patients");
+            attributes = process("show columns in one");
         } catch(JSONParserException | DownloadDataException e) {}
 
         for(int i = 0; i<attributes.size(); i++) {
@@ -91,7 +91,7 @@ public class GenerateQueries {
         for(int i = 1; i<attributes.size()+1; i++)
         {
             try {
-                attributePossibilities = process("SELECT " + possibilities.get(0).get(i-1) + " FROM patients"); //Gets every entry for an attribute in the table
+                attributePossibilities = process("SELECT " + possibilities.get(0).get(i-1) + " FROM one"); //Gets every entry for an attribute in the table
             } catch(JSONParserException | DownloadDataException e){}
 
             for(List<String> value : attributePossibilities)
@@ -109,12 +109,12 @@ public class GenerateQueries {
     public String generateNum(String attribute, ArrayList<String> possibilities)
     {
 
-        return "SELECT * FROM patients WHERE " + attribute + " " + operators.get((int)(Math.random() * operators.size())) + " " + possibilities.get((int)(Math.random() * (possibilities.size()))) + ";";
+        return "SELECT * FROM one WHERE " + attribute + " " + operators.get((int)(Math.random() * operators.size())) + " " + possibilities.get((int)(Math.random() * (possibilities.size()))) + ";";
     }
 
     public String generateString(String attribute, ArrayList<String> possibilities)
     {
-        return "SELECT * FROM patients WHERE " + attribute + " = '" + possibilities.get((int)(Math.random() * (possibilities.size()))) + "';";
+        return "SELECT * FROM one WHERE " + attribute + " = '" + possibilities.get((int)(Math.random() * (possibilities.size()))) + "';";
     }
 
     public String generateDate(String attribute, ArrayList<String> possibilities)
@@ -123,11 +123,11 @@ public class GenerateQueries {
 
         if(date_or_time == 0)
         {
-            return "SELECT * FROM patients WHERE substr(" + attribute +  ",0,10) " + operators.get((int)(Math.random() * operators.size())) + " %27" + possibilities.get((int)(Math.random() * (possibilities.size()))).substring(0,10)+"%27;";
+            return "SELECT * FROM one WHERE substr(" + attribute +  ",0,10) " + operators.get((int)(Math.random() * operators.size())) + " %27" + possibilities.get((int)(Math.random() * (possibilities.size()))).substring(0,10)+"%27;";
         }
         else
         {
-            return "SELECT * FROM patients WHERE substr(" + attribute + ",12) " + operators.get((int)(Math.random() * operators.size())) + " %27" + possibilities.get((int)(Math.random() * (possibilities.size()))).substring(11) + "%27;";
+            return "SELECT * FROM one WHERE substr(" + attribute + ",12) " + operators.get((int)(Math.random() * operators.size())) + " %27" + possibilities.get((int)(Math.random() * (possibilities.size()))).substring(11) + "%27;";
         }
     }
     public List<List<String>> process(String query) throws JSONParserException, DownloadDataException {

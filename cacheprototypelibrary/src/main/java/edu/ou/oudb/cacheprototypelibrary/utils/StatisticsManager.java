@@ -76,6 +76,10 @@ public class StatisticsManager {
     private static FileOutputStream mLogFOS = null;
     private static PrintWriter mLogPW = null;
 
+    private static long totalTime = 0;
+    private static double totalCost = 0;
+    private static double totalEnergy = 0;
+
     public static void createFileWriter()
     {
         createFileWriter(DEFAULT_NAME);
@@ -152,9 +156,11 @@ public class StatisticsManager {
             long time = SystemClock.elapsedRealtimeNanos();
            // mLogPW.print(time);
             mLogPW.print(time-startingTime);
+            totalTime+= (time-startingTime);
             mLogPW.println();
             mLogPW.print(ENERGY_COST_TAG);
             mLogPW.print(":");
+            totalEnergy+=MobileEstimationComputationManager.estimateEnergy(time-startingTime);
             mLogPW.print(MobileEstimationComputationManager.estimateEnergy(time-startingTime));
             mLogPW.println();
         }
@@ -179,6 +185,7 @@ public class StatisticsManager {
             mLogPW.println();*/
             mLogPW.print(MONEY_COST_TAG);
             mLogPW.print(":");
+            totalCost+=returnedMoneyCost;
             mLogPW.print(returnedMoneyCost);
             mLogPW.println();
         }
@@ -203,6 +210,7 @@ public class StatisticsManager {
             mLogPW.println();*/
             mLogPW.print(MONEY_COST_TAG);
             mLogPW.print(":");
+            totalCost+=returnedMoneyCost;
             mLogPW.print(returnedMoneyCost);
             mLogPW.println();
         }
@@ -392,6 +400,21 @@ public class StatisticsManager {
             mLogPW.print(":");
             mLogPW.print(coeff);
             mLogPW.println();
+        }
+    }
+
+    public static void finishedExperiment()
+    {
+        if(mLogPW != null)
+        {
+            mLogPW.println("RESULTS:");
+            mLogPW.println(String.valueOf(totalTime));
+            mLogPW.println(String.valueOf(totalEnergy));
+            mLogPW.println(String.valueOf(totalCost));
+            Log.i("RESULTS", String.valueOf(totalTime));
+            Log.i("RESULTS", String.valueOf(totalEnergy));
+            Log.i("RESULTS", String.valueOf(totalCost));
+            totalCost = 0.0; totalEnergy = 0.0; totalTime = 0;
         }
     }
 

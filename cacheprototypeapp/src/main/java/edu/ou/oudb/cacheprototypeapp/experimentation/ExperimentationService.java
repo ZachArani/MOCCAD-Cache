@@ -49,14 +49,14 @@ public class ExperimentationService extends IntentService
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		int nbQueriesToExecute = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_NB_QUERIES_TO_PROCESS,"0"));
 		int sizeOfQuerySet = 0;
-		GenerateQueries test = new GenerateQueries(100);
+	/*	GenerateQueries test = new GenerateQueries(100);
 		for(String query : test.generate(1000))
         {
             Log.i("", query);
         }
-
+		*/
 		// used to update estimations on the cloud
-		int[] experiments = {R.raw.experiment_queries_1};
+		int[] experiments = {R.raw.locality_queries};
 		
 		int[] warmupexp = {
 			   			//R.raw.queries_exp_extended_hit_0,
@@ -79,7 +79,7 @@ public class ExperimentationService extends IntentService
 
 		//FIXME: WASN'T THERE
 		int[] myExperiment = {
-                R.raw.experiment_queries_1
+                R.raw.locality_queries
 		};
 
 		//FIXME: WASN'T COMMENTED
@@ -144,9 +144,10 @@ public class ExperimentationService extends IntentService
 
 
                     //<editor-fold desc="LOG START EXPERIMENTATION">
-                    StatisticsManager.createFileWriter("exp_extended_" + i);
+                    StatisticsManager.createFileWriter("test_experiment_" + i);
                     //</editor-fold>
                     runExperimentation(queriesToProcess, nbQueriesToExecute);
+                    StatisticsManager.finishedExperiment();
                     //<editor-fold desc="LOG STOP EXPERIMENTATION">
                     StatisticsManager.close();
                     //</editor-fold>

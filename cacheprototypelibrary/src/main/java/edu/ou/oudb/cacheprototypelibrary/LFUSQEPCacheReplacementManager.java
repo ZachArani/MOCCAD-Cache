@@ -24,7 +24,7 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     private PriorityQueue<LFUSQEPCacheEntry> mEntriesPriorityQueue = null;
 
     private double lastReset = 0; //How many hits since the last Frequency Reset
-    private double hitsUntilRestart = 40; //How many hits need to happen before lastReset rolls back to 0
+    private double hitsUntilRestart = 10; //How many hits need to happen before lastReset rolls back to 0
 
     public LFUSQEPCacheReplacementManager() {Log.i("LFUSQEP", "STARTED NEW MANAGER"); mEntriesPriorityQueue = new PriorityQueue<LFUSQEPCacheEntry>(); }
 

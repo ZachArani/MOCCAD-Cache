@@ -100,7 +100,7 @@ public class JSONParser {
 					}
 				} 
 				
-				// get minimum value for each attribute
+				// get minimum value for each attribute //Might have to hardcode
 				Map<String,Double> minForAttributes = new HashMap<String,Double>();
 				JSONObject minForAttributesJSONObject = curRelation.getJSONObject(TAG_MIN_VAL_FOR_ATTR);
 				if (minForAttributesJSONObject != null)
@@ -139,7 +139,7 @@ public class JSONParser {
 				// get the number of different values for attribute
 				Map<String,Long> nbDifferentValuesForAttributes = new HashMap<String,Long>();
 				JSONObject nbDiffForAttributesJSONObject = curRelation.getJSONObject(TAG_NB_DIFF_VAL_FOR_ATTR);
-				if (nbDiffForAttributesJSONObject != null)
+				if (nbDiffForAttributesJSONObject != null && nbDiffForAttributesJSONObject.length() !=0)
 				{
 					for(String attributeName :attributeNames)
 					{
