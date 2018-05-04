@@ -304,7 +304,7 @@ public class AndroidCachePrototypeApplication extends Application {
 		CacheBuilder<Query,QuerySegment> queryCacheBuilder = CacheBuilder.<Query,QuerySegment>newBuilder();
 		queryCacheBuilder.setCacheContentManager(semanticCacheContentManager);
 		queryCacheBuilder.setCacheResolutionManager(semanticCacheResolutionManager);
-		queryCacheBuilder.setCacheReplacementManager(new LFUSQEPCacheReplacementManager());
+		queryCacheBuilder.setCacheReplacementManager(new LRUCacheReplacementManager());
 		queryCacheBuilder.setMaxSize(maxQueryCacheSize);
 		if (maxQueryCacheSegments > 0)//not default
 		{

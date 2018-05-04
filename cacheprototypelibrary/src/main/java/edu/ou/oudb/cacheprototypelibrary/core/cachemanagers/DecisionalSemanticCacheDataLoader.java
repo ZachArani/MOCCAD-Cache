@@ -265,7 +265,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 
                     // INSERTION
 					//TODO: ScoreF should only be attached when the cacheReplacement needs it.
-                    mQueryCache.add(query, queryResult, scoreF);
+                    mQueryCache.add(query, queryResult/*,scoreF*/);
                     //<editor-fold desc="LOG NEW QUERY CACHE REPLACEMENT">
                     StatisticsManager.newQueryCacheReplacement();
                     //</editor-fold>
