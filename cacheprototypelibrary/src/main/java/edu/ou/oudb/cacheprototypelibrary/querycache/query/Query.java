@@ -330,6 +330,8 @@ public class Query implements Sizeable {
 		result = prime * result
 				+ ((mAttributes == null) ? 0 : mAttributes.hashCode());
 		result = prime * result
+				+ ((mPredicates == null) ? 0 : mPredicates.hashCode());
+		result = prime * result
 				+ ((mRelation == null) ? 0 : mRelation.hashCode());
 		return result;
 	}
