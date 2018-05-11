@@ -18,7 +18,7 @@ public class GenerateTuples {
     String[] lastNames;
     String[] descriptions;
     int total = 0;
-    int current = 1;
+    int current = 0;
     GregorianCalendar gc;
     String tableName;
 

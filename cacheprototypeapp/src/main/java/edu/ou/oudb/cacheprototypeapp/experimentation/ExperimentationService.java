@@ -55,6 +55,7 @@ public class ExperimentationService extends IntentService
             Log.i("", query);
         }
 */
+
 		// used to update estimations on the cloud
 		int[] experiments = {R.raw.locality_queries};
 		
@@ -79,7 +80,7 @@ public class ExperimentationService extends IntentService
 
 		//FIXME: WASN'T THERE
 		int[] myExperiment = {
-                R.raw.tuples_experiment_3
+                R.raw.tuples_experiment_5
 		};
 
 		//FIXME: WASN'T COMMENTED
@@ -101,8 +102,7 @@ public class ExperimentationService extends IntentService
 		mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
 
 		warmupCache(warmupQueries);
-		
-		if (!handleErrors())
+        if (!handleErrors())
 		{
 			mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
 
@@ -127,7 +127,6 @@ public class ExperimentationService extends IntentService
             }*/
 
             //System.gc(); // clean memory
-
 			for (int k=0; k < 1; ++k) {
                 // experimentation for exact hit
 				//FIXME: PREVIOUSLY experimentsExtendedHit instead of myExperiment
@@ -146,6 +145,7 @@ public class ExperimentationService extends IntentService
                     //<editor-fold desc="LOG START EXPERIMENTATION">
                     StatisticsManager.createFileWriter("test_experiment_" + i);
                     //</editor-fold>
+                    StatisticsManager.finishedExperiment();
                     runExperimentation(queriesToProcess, nbQueriesToExecute);
                     StatisticsManager.finishedExperiment();
                     //<editor-fold desc="LOG STOP EXPERIMENTATION">
