@@ -69,7 +69,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 		dbInfoMap = new HashMap<String, RelationMetadata>();
 	
 		String dbInfo = null;
-		InputStream jsonStream;
+		InputStream jsonStream = null;
 		// save the string result into preferences
 		
 		String cloudMetadata = pref.getString(PREF_METADATA, "");

@@ -59,11 +59,12 @@ import edu.ou.oudb.cacheprototypelibrary.utils.JSONLoader;
     }
 
     @Override
-    protected List<List<String>> doInBackground(Query... query) {
+    protected List<List<String>> doInBackground() {
         List<List<String>> ret = null;
-        NoCacheDataLoader tnoCacheDataLoader = null;
+        NoCacheDataLoader tnoCacheDataLoader = new NoCacheDataLoader(mContext, );
+        JoinQuery query = new JoinQuery();
         try {
-            ret = tnoCacheDataLoader.load(mQuery);
+            ret = tnoCacheDataLoader.load(query);
             return ret;
         } catch (ConnectException | ConstraintsNotRespectedException
                 | DownloadDataException | JSONParserException e) {
