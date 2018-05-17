@@ -1,21 +1,18 @@
 package edu.ou.oudb.cacheprototypeapp.ui;
 
-import java.net.ConnectException;
-import java.util.LinkedList;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
+
+import java.net.ConnectException;
+import java.util.List;
 
 import edu.ou.oudb.cacheprototypeapp.AndroidCachePrototypeApplication;
 import edu.ou.oudb.cacheprototypeapp.R;
@@ -26,15 +23,14 @@ import edu.ou.oudb.cacheprototypelibrary.querycache.exception.JSONParserExceptio
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
 import edu.ou.oudb.cacheprototypelibrary.utils.JSONLoader;
 
-public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>> {
+/*public class JoinExp extends AsyncTask<Query, Void, List<List<String>>> {
 
     private ProgressDialog mProgressDialog = null;
     private Context mContext = null;
-    private Query mQuery = null;
-    private WakeLock wakeLock = null;
+    private PowerManager.WakeLock wakeLock = null;
     private Exception exception = null;
 
-    public QueryProcessTask(Context context) {
+    public JoinExp(Context context) {
         mContext = context;
     }
 
@@ -44,7 +40,7 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
         mProgressDialog = ProgressDialog.show(mContext, mContext.getString(R.string.processing_query), mContext.getString(R.string.processing_query_message));
 
         mProgressDialog.setCancelable(true);
-        mProgressDialog.setOnCancelListener(new OnCancelListener() {
+        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
 
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -64,19 +60,15 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
 
     @Override
     protected List<List<String>> doInBackground(Query... query) {
-        mQuery = query[0];
-        System.out.println("mQuery: " + mQuery.toSQLString());
         List<List<String>> ret = null;
-        //NoCacheDataLoader tnoCacheDataLoader = null;
+        NoCacheDataLoader tnoCacheDataLoader = null;
         try {
-            ret = ((AndroidCachePrototypeApplication) mContext.getApplicationContext()).getDataLoader().load(mQuery);
-            //ret = tnoCacheDataLoader.load(mQuery);
+            ret = tnoCacheDataLoader.load(mQuery);
             return ret;
-        } catch (ConnectException | ConstraintsNotRespectedException |
-                DownloadDataException | JSONParserException e) {
+        } catch (ConnectException | ConstraintsNotRespectedException
+                | DownloadDataException | JSONParserException e) {
             exception = e;
         }
-
 
         return ret;
     }
@@ -112,7 +104,6 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
             toast.show();
         } else {
             launchQueryResultsActivity(result);
-//			lauchResultActivity(mQuery.getRelation(),result);
         }
         super.onPostExecute(result);
     }
@@ -122,14 +113,6 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
 
         JSONLoader.abort();
     }
-
-//    private void lauchResultActivity(String relation, List<List<String>> result) {
-//        Intent intent = new Intent(mContext, ResultListActivity.class);
-//        intent.putExtra(ResultListActivity.QUERY_RELATION, relation);
-//        ((AndroidCachePrototypeApplication) mContext.getApplicationContext()).setCurrentQueryResult(result);
-//
-//        mContext.startActivity(intent);
-//    }
 
     private void launchQueryResultsActivity(List<List<String>> result) {
         Intent intent = new Intent(mContext, SearchExamRecordResultsActivity.class);
@@ -148,4 +131,4 @@ public class QueryProcessTask extends AsyncTask<Query, Void, List<List<String>>>
             Log.d("error_launch_err_dialog", "Can't get the fragment manager with this");
         }
     }
-}
+}*/
