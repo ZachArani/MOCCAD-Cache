@@ -139,7 +139,7 @@ public class JSONParser {
 				// get the number of different values for attribute
 				Map<String,Long> nbDifferentValuesForAttributes = new HashMap<String,Long>();
 				JSONObject nbDiffForAttributesJSONObject = curRelation.getJSONObject(TAG_NB_DIFF_VAL_FOR_ATTR);
-				if (nbDiffForAttributesJSONObject != null)
+				if (nbDiffForAttributesJSONObject != null && nbDiffForAttributesJSONObject.length() !=0)
 				{
 					for(String attributeName :attributeNames)
 					{
