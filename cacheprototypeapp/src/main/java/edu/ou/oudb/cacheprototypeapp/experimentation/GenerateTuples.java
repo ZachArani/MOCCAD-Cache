@@ -11,6 +11,7 @@ import edu.ou.oudb.cacheprototypelibrary.querycache.exception.JSONParserExceptio
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.QuerySegment;
 import edu.ou.oudb.cacheprototypelibrary.utils.JSONLoader;
 import edu.ou.oudb.cacheprototypelibrary.utils.JSONParser;
+import edu.ou.oudb.cacheprototypelibrary.utils.StatisticsManager;
 
 public class GenerateTuples {
 
@@ -44,6 +45,7 @@ public class GenerateTuples {
     public void getTuples()
     {
         String result;
+        StatisticsManager.createFileWriter("test_experiment_tuples");
         while(current <= total)
         {
             result = "(" + generateID() + ", "
@@ -52,8 +54,9 @@ public class GenerateTuples {
                     + generateDescription() + ", "
                     + generateDate() +", "
                     + generateHeartrate() + "), ";
-            Log.i("TUPLE", result);
+            StatisticsManager.newPosedQuery(result);
         }
+        StatisticsManager.close();
     }
 
     private String generateFirstName()

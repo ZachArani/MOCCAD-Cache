@@ -50,6 +50,8 @@ public class ExperimentationService extends IntentService
 		int nbQueriesToExecute = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_NB_QUERIES_TO_PROCESS,"0"));
 		int sizeOfQuerySet = 0;
 		GenerateQueries test = new GenerateQueries(100);
+		GenerateTuples tupleMaker = new GenerateTuples("testTable", 250000);
+		tupleMaker.generate();
 		/*for(String query : test.generate(500))
         {
             Log.i("", query);
