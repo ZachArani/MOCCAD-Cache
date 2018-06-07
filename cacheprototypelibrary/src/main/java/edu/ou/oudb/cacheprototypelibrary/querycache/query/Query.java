@@ -42,7 +42,7 @@ public class Query implements Sizeable {
 	private Set<Predicate> mExcludedPredicates;
 
 	/** Memory Size of a query */
-	private long mSize = 0;
+	public long mSize = 0;
 	
 	/**
 	 * The query constructor

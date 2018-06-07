@@ -228,7 +228,16 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
         switch (v.getId()) {
             case R.id.search_button:
                 launchQuery();
+            case R.id.join_button:
+                launchJoinQuery();
         }
+    }
+
+    public void launchJoinQuery(){
+        String query = "SELECT * FROM patients INNER JOIN doctors ON doctors.id = patients.doctorid";
+        mDBHelper.addQuery(getQuery(query)); // Add the query to the Processed Queries
+        (new QueryProcessTask(this)).execute(getQuery(query));
+//        }
     }
 
     public void launchQuery() {
