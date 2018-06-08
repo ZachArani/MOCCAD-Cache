@@ -40,7 +40,7 @@ public class JoinQuery extends Query{
         jPredicates = new HashMap<String, Predicate>();
         jExcludedPredicates = new HashMap<String, Predicate>();
         joinAttributes = new HashMap<String, String>();
-        mSize += ObjectSizer.getStringSize32bits(relation.size());
+        mSize += ObjectSizer.getStringSize32bits(relation.size()); //TODO: remove first relation from calculation (already calculated in super)
     }
 
     private void setjRelation(int nb, String rel){
@@ -52,6 +52,7 @@ public class JoinQuery extends Query{
         }
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -150,6 +151,7 @@ public class JoinQuery extends Query{
         return true;
     }
 
+    @Override
     public String toSQLString() {
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT ");

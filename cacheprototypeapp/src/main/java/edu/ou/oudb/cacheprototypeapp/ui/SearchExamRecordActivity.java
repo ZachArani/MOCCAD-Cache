@@ -234,7 +234,7 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
     }
 
     public void launchJoinQuery(){
-        String query = "SELECT * FROM patients INNER JOIN doctors ON doctors.id = patients.doctorid";
+        String query = "SELECT * FROM pat INNER JOIN doc ON doc.id = pat.docid;";
         mDBHelper.addQuery(getQuery(query)); // Add the query to the Processed Queries
         (new QueryProcessTask(this)).execute(getQuery(query));
 //        }
