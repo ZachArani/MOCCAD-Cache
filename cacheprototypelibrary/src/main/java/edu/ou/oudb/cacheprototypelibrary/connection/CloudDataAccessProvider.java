@@ -53,7 +53,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 	{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-		String ipAddress = pref.getString(PREF_IP_ADDRESS,"localhost"); //school is 10.204.69.210, Jason home is 192.168.0.132 - change in two places here, and in preferences.xml in cacheprototypeapp
+		String ipAddress = pref.getString(PREF_IP_ADDRESS,"10.204.21.38"); //school is 10.204.69.210, Jason home is 192.168.0.132 - change in two places here, and in preferences.xml in cacheprototypeapp
 
 		String port = pref.getString(PREF_PORT,"8080");
 

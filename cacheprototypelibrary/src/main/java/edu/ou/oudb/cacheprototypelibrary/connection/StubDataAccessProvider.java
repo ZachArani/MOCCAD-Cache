@@ -14,7 +14,7 @@ import edu.ou.oudb.cacheprototypelibrary.querycache.query.QuerySegment;
 
 public class StubDataAccessProvider implements DataAccessProvider{
 
-	private static final String RELATION = "patients";
+	private static final String RELATION = "NOTE";
 	
 	
 	@Override
