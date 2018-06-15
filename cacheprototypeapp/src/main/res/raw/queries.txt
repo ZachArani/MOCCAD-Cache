@@ -1,14 +1,2 @@
-SELECT * FROM patients WHERE noteid > 30;
-SELECT * FROM patients WHERE noteid < 15;
-SELECT * FROM patients WHERE heartrate >= 70;
-SELECT * FROM patients WHERE heartrate <= 64;
-SELECT * FROM patients WHERE patientname = 'Pamela%20Daniels';
-SELECT * FROM patients WHERE patientname = 'Anthony%20Martin';
-SELECT * FROM patients WHERE doctorname = 'Joseph%20Payne';
-SELECT * FROM patients WHERE doctorname = 'Marie%20Hawkins';
-SELECT * FROM patiemts WHERE description = 'Measurement%20of%20Body';
-SELECT * FROM patiemts WHERE description = 'Endoscopy';
-SELECT * FROM patients WHERE p_date = '1979-01-25';
-SELECT * FROM patients WHERE p_date = '2015-09-27';
-SELECT * FROM patients WHERE p_time = '8:30am';
-SELECT * FROM patients WHERE p_time = '9:00pm';
+SELECT * FROM exp WHERE noteid > 50;
+SELECT * FROM exp WHERE noteid < 15;
