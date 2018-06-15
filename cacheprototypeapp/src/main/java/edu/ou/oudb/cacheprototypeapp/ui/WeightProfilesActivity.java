@@ -168,6 +168,7 @@ public class WeightProfilesActivity extends Activity implements View.OnClickList
         Log.d("WEIGHT TIME", "" + sharedPref.getInt(WEIGHT_TIME, MAX / 3));
         Log.d("WEIGHT MONEY", "" + sharedPref.getInt(WEIGHT_MONEY, MAX / 3));
         Log.d("WEIGHT ENERGY", "" + sharedPref.getInt(WEIGHT_ENERGY, MAX / 3));
+        Log.d("Data Access Provider", "" + sharedPref.getString("pref_ip_address", "DEFAULT"));
         /*Goes to the search exam page*/
 //        Intent intent = new Intent(this, SearchExamRecordActivity.class);
         Intent intent = new Intent(this, AttributesSelectionActivity.class);
