@@ -103,7 +103,7 @@ public class ExperimentationService extends IntentService
 		// warming cache up
 		mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
 
-		warmupCache(warmupQueries);
+	//	warmupCache(warmupQueries);
         if (!handleErrors())
 		{
 			mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");

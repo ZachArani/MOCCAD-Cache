@@ -1,2 +1,2 @@
-SELECT * FROM exp WHERE noteid > 50;
+SELECT * FROM exp WHERE noteid > 218750;
 SELECT * FROM exp WHERE noteid < 15;
