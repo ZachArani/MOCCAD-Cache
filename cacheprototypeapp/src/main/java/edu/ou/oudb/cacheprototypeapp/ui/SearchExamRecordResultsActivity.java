@@ -50,6 +50,17 @@ public class SearchExamRecordResultsActivity extends Activity {
     String[] Times = null;
     Integer[] HR = null;
 
+    /*Array Containing join attributes*/
+    Integer[] IDJ = null;
+    String[] PFNJ = null; // Patient First Name
+    String[] PLNJ = null; // Patient Last Name
+    String[] DFNJ = null; // Same with Doctor
+    String[] DLNJ = null;
+    String[] DescJ = null;
+    String[] DatesJ = null;
+    String[] TimesJ = null;
+    Integer[] HRJ = null;
+
     /*Button to show / hide the costs*/
     private Button show_costs = null;
 
@@ -104,9 +115,6 @@ public class SearchExamRecordResultsActivity extends Activity {
         /*Defining the Arrays*/
         initializeArrays();
 
-        /*Filling the Arrays*/
-        arraysValues();
-
         /*Shows or hides the costs*/
         onShowCostsButtonClicked();
 
@@ -115,10 +123,20 @@ public class SearchExamRecordResultsActivity extends Activity {
         costTime.setText("" + String.format(Locale.US, "%.3f", (DecisionalSemanticCacheDataLoader.resultTimeM + DecisionalSemanticCacheDataLoader.resultTimeC) * 0.001) + " ms");
         costEnergy.setText("" + String.format(Locale.US, "%.4f", (DecisionalSemanticCacheDataLoader.resultEnergyM + DecisionalSemanticCacheDataLoader.resultEnergyC)) + " mAh");
 
-        /*Creation of the list using our custom adapter
-        * Arrays will be used in SearchExamRecordResultsAdapter*/
-        SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
+        SearchExamRecordResultsAdapter adapter = null;
+
+        /*Filling the Arrays*/
+        if(sArray[0].split(",").length > 8){
+            arraysValuesJoin();
+            adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR, IDJ, PFNJ, PLNJ, DFNJ, DLNJ, DescJ, DatesJ, TimesJ, HRJ);
+        }else {
+            arraysValues();
+            /*Creation of the list using our custom adapter
+             * Arrays will be used in SearchExamRecordResultsAdapter*/
+            adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
+        }
         listView.setAdapter(adapter);
+
     }
 
     /*Sorting methods*/
@@ -364,6 +382,38 @@ public class SearchExamRecordResultsActivity extends Activity {
         Dates = new String[sArray.length];
         Times = new String[sArray.length];
         HR = new Integer[sArray.length];
+        IDJ = new Integer[sArray.length];
+        PFNJ = new String[sArray.length];
+        PLNJ = new String[sArray.length];
+        DFNJ = new String[sArray.length];
+        DLNJ = new String[sArray.length];
+        DescJ = new String[sArray.length];
+        DatesJ = new String[sArray.length];
+        TimesJ = new String[sArray.length];
+        HRJ = new Integer[sArray.length];
+    }
+
+    public void arraysValuesJoin(){
+        for (int i = 0; i < sArray.length; i++) {
+            ID[i] = Integer.parseInt(sArray[i].split(", +")[0]);
+            PFN[i] = sArray[i].split(", +")[1];
+            PLN[i] = sArray[i].split(", +")[2];
+            DFN[i] = sArray[i].split(", +")[3];
+            DLN[i] = sArray[i].split(", +")[4];
+            Desc[i] = sArray[i].split(", +")[5];
+            Dates[i] = sArray[i].split(", +")[6].substring(0, 10);
+            Times[i] = sArray[i].split(", +")[6].substring(11, 16);
+            HR[i] = Integer.parseInt(sArray[i].split(", +")[7]);
+            IDJ[i] = Integer.parseInt(sArray[i].split(", +")[8]);
+            PFNJ[i] = sArray[i].split(", +")[9];
+            PLNJ[i] = sArray[i].split(", +")[10];
+            DFNJ[i] = sArray[i].split(", +")[11];
+            DLNJ[i] = sArray[i].split(", +")[12];
+            DescJ[i] = sArray[i].split(", +")[13];
+            DatesJ[i] = sArray[i].split(", +")[14].substring(0, 10);
+            TimesJ[i] = sArray[i].split(", +")[14].substring(11, 16);
+            HRJ[i] = Integer.parseInt(sArray[i].split(", +")[15]);
+        }
     }
 
     /*Puts all IDs into an Array, same for Patients First Names, and so on*/
@@ -377,12 +427,12 @@ public class SearchExamRecordResultsActivity extends Activity {
             ID[i] = Integer.parseInt(sArray[i].split(", +")[0]);
             PFN[i] = sArray[i].split(", +")[1];
             PLN[i] = sArray[i].split(", +")[2];
-            Desc[i] = sArray[i].split(", +")[3];
-            HR[i] = Integer.parseInt(sArray[i].split(", +")[4]);
-            DFN[i] = sArray[i].split(", +")[5];
-            DLN[i] = sArray[i].split(", +")[6];
-            Dates[i] = sArray[i].split(", +")[7].substring(0, 10);
-            Times[i] = sArray[i].split(", +")[7].substring(11, 16);
+            DFN[i] = sArray[i].split(", +")[3];
+            DLN[i] = sArray[i].split(", +")[4];
+            Desc[i] = sArray[i].split(", +")[5];
+            Dates[i] = sArray[i].split(", +")[6].substring(0, 10);
+            Times[i] = sArray[i].split(", +")[6].substring(11, 16);
+            HR[i] = Integer.parseInt(sArray[i].split(", +")[7]);
         }
     }
 

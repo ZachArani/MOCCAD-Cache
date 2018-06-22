@@ -25,6 +25,7 @@ import edu.ou.oudb.cacheprototypeapp.provider.ProcessedQueryDbHelper;
 import edu.ou.oudb.cacheprototypelibrary.connection.CloudDataAccessProvider;
 import edu.ou.oudb.cacheprototypelibrary.querycache.exception.InvalidPredicateException;
 import edu.ou.oudb.cacheprototypelibrary.querycache.exception.TrivialPredicateException;
+import edu.ou.oudb.cacheprototypelibrary.querycache.query.JoinQuery;
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.Predicate;
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.PredicateFactory;
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
@@ -46,7 +47,8 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
             isDescriptionSelected = false,
             isDateSelected = false,
             isTimeSelected = false,
-            isHeartrateSelected = false;
+            isHeartrateSelected = false,
+            jQuery = false;
 
     /*Spinners*/
     private Spinner id_op,
@@ -234,7 +236,8 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
     }
 
     public void launchJoinQuery(){
-        String query = "SELECT * FROM pat INNER JOIN doc ON doc.id = pat.docid;";
+        jQuery = true;
+        String query = "SELECT * FROM patients INNER JOIN one ON one.noteid = patients.noteid;";
         mDBHelper.addQuery(getQuery(query)); // Add the query to the Processed Queries
         (new QueryProcessTask(this)).execute(getQuery(query));
 //        }
@@ -371,6 +374,34 @@ public class SearchExamRecordActivity extends FragmentActivity implements View.O
 
     /*Convert a String to a Query*/
     private Query getQuery(String line) {
+
+        /*if(jQuery == true){
+            JoinQuery jq = null;
+
+            String leftFrom = line.split("FROM")[0].trim();
+
+            String att = leftFrom.substring(7); //should be first non-space after SELECT
+
+            String rightFrom = line.split("FROM")[1].trim();
+
+            String table = rightFrom.split(" ")[0];
+
+            jq = new Query(table);
+
+            String[] attributeList;
+            if (!att.equals("*"))
+            {
+                attributeList = att.split(", ");
+            } else {
+                attributeList = new String[]
+                        {"noteid", "patientfirstname", "patientlastname", "doctorfirstname", "doctorlastname", "description", "p_date_time", "heartrate"};
+            }
+            for(String a: attributeList)
+            {
+                attributes.add(a);
+            }
+            query.addAttributes(attributes);
+        }*/
 
         Query query = null;
         Set<Predicate> predicates = new HashSet<Predicate>();

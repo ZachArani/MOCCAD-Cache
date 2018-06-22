@@ -107,6 +107,17 @@
     <string name="attr4">Date:</string>
     <string name="attr5">Time:</string>
     <string name="attr6">Heart Rate:</string>
+    <string name="attrj">IDJ:</string>
+    <string name="attr1fullj">Patient NameJ:</string>
+    <string name="attr1j">Patient First NameJ:</string>
+    <string name="attr1bisj">Patient Last NameJ:</string>
+    <string name="attr2fullj">Doctor NameJ:</string>
+    <string name="attr2j">Doctor First NameJ:</string>
+    <string name="attr2bisj">Doctor Last NameJ:</string>
+    <string name="attr3j">DescriptionJ:</string>
+    <string name="attr4j">DateJ:</string>
+    <string name="attr5j">TimeJ:</string>
+    <string name="attr6j">Heart RateJ:</string>
     <!-- Welcome Page -->
     <string name="welcome_message">Welcome to the MOCCAD Prototype Application !
         \n\n\nThis application allows you to search for information respecting your constraints / needs.

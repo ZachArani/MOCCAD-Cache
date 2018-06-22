@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:ignore="contentDescription">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
         <!-- IMAGE -->
         <ImageView
             android:id="@+id/image"
@@ -171,160 +170,4 @@
             android:layout_marginTop="20dp"
             android:layout_toEndOf="@id/patientnameText"
             android:textSize="18sp" />
-
-
-        <TextView
-            android:id="@+id/idTextJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/heartrateText"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/attrj"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/idValJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/heartrateText"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_toEndOf="@id/idTextJ"
-            android:textSize="18sp" />
-
-
-        <TextView
-            android:id="@+id/patientTextJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/idTextJ"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/attr1fullj"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/patientValJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/idTextJ"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_toEndOf="@id/patientTextJ"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/doctornameTextJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@id/idText"
-            android:layout_below="@id/patientTextJ"
-            android:layout_marginTop="20dp"
-            android:text="@string/attr2fullj"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/doctorValJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/patientTextJ"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_toEndOf="@id/doctornameTextJ"
-            android:textSize="18sp" />
-
-
-        <TextView
-            android:id="@+id/descriptionTextJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@id/idText"
-            android:layout_below="@id/doctornameTextJ"
-            android:layout_marginTop="20dp"
-            android:text="@string/attr3j"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/descriptionValJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/doctornameTextJ"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_toEndOf="@id/descriptionTextJ"
-            android:textSize="18sp" />
-
-        <!-- DATE -->
-        <TextView
-            android:id="@+id/dateTextJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@id/idText"
-            android:layout_below="@id/descriptionTextJ"
-            android:layout_marginTop="20dp"
-            android:text="@string/attr4j"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/dateValJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/descriptionValJ"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_toEndOf="@id/dateTextJ"
-            android:textSize="18sp" />
-
-        <!-- TIME -->
-        <TextView
-            android:id="@+id/timeTextJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@id/idText"
-            android:layout_below="@id/dateTextJ"
-            android:layout_marginTop="20dp"
-            android:text="@string/attr5j"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/timeValJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/dateValJ"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_toEndOf="@id/timeTextJ"
-            android:textSize="18sp" />
-
-        <!-- HEART RATE -->
-        <TextView
-            android:id="@+id/heartrateTextJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@id/idText"
-            android:layout_below="@id/timeTextJ"
-            android:layout_marginTop="20dp"
-            android:text="@string/attr6j"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/heartrateValJ"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/timeValJ"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_toEndOf="@id/heartrateTextJ"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
-</ScrollView>
-
+</RelativeLayout>

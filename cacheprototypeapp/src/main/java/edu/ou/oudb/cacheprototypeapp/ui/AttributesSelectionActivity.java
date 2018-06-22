@@ -17,14 +17,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import edu.ou.oudb.cacheprototypeapp.R;
 import edu.ou.oudb.cacheprototypeapp.provider.ProcessedQueryDbHelper;
 import edu.ou.oudb.cacheprototypelibrary.connection.CloudDataAccessProvider;
 import edu.ou.oudb.cacheprototypelibrary.querycache.exception.InvalidPredicateException;
 import edu.ou.oudb.cacheprototypelibrary.querycache.exception.TrivialPredicateException;
+import edu.ou.oudb.cacheprototypelibrary.querycache.query.JoinQuery;
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.Predicate;
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.PredicateFactory;
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
@@ -75,6 +80,7 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
 
     /*Buttons*/
     private Button search,
+            jbutton,
             date_picker,
             time_picker,
             //phil
@@ -224,24 +230,28 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         onFieldClicked();
 
         search.setOnClickListener(this);
+        jbutton.setOnClickListener(this);
     }
 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.search_button:
                 launchQuery();
+                break;
                 //phil
                 //button for join testing purposes
             case R.id.join_button:
                 launchJoinTest();
+                break;
         }
     }
 
     //phil
     public void launchJoinTest(){
-        String query = "SELECT * FROM patients INNER JOIN doctors ON patients.doctorlastname = doctors.doctorlastname";
-        mDBHelper.addQuery(getQuery(query));
-        (new QueryProcessTask(this)).execute(getQuery(query));
+        Log.d("hi", "hoi");
+        String query = "SELECT * FROM patients INNER JOIN one ON patients.noteid = one.noteid";
+        mDBHelper.addQuery(getJoinQuery(query));
+        (new QueryProcessTask(this)).execute(getJoinQuery(query));
     }
 
     public void launchQuery() {
@@ -373,12 +383,59 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
 //        }
     }
 
+    private JoinQuery getJoinQuery(String line){
+
+        JoinQuery jquery = null;
+        //1st relation is stored as the main relation
+        Set<Predicate> predicates = new HashSet<Predicate>();
+        Set<String> attributes = new LinkedHashSet<String>();
+        //join attribute relation
+        HashMap<String, String> jattr = new HashMap<String, String>();
+        //relation on join
+        ArrayList relations = new ArrayList();
+
+        //trimming to get relevant values
+        String leftFrom = line.split("FROM")[0].trim();
+        String rightfrom = line.split("FROM")[1].trim();
+        String firstrel = rightfrom.split("INNER JOIN")[0].trim();
+        String[] tablAttributes = rightfrom.split("INNER JOIN")[1].split(" ");
+        String secondrel = tablAttributes[1];
+        String jattr1 = tablAttributes[3];
+        String jattr2 = tablAttributes[5];
+        String att = leftFrom.substring(7);
+
+        //QueryBUilding
+        jquery = new JoinQuery(firstrel, 1);
+        //Attribute management
+        String[] attributeList;
+        if (!att.equals("*")) {
+            attributeList = att.split(", ");
+        } else {
+            attributeList = new String[]
+                    {"patients.noteid", "patients.patientfirstname", "patients.patientlastname", "patients.doctorfirstname", "patients.doctorlastname", "patients.description", "patients.p_date_time", "patients.heartrate", "one.noteid", "one.patientfirstname", "one.patientlastname", "one.doctorfirstname", "one.doctorlastname", "one.description", "one.p_date_time", "one.heartrate"};
+        }
+        for (String a : attributeList) {
+            attributes.add(a);
+        }
+        //query.addAttributes(attributes);
+        relations.add(secondrel);
+        //jattribute
+        jattr.put(firstrel, jattr1);
+        jattr.put(secondrel, jattr2);
+        //Adding stuff to the query
+        jquery.addAttributes(attributes);
+        jquery.fillJAttributes(jattr);
+        jquery.fillRelations(relations);
+        String sql = jquery.toSQLString();
+        return jquery;
+    }
+
     /*Convert a String to a Query*/
     private Query getQuery(String line) {
 
         Query query = null;
         Set<Predicate> predicates = new HashSet<Predicate>();
-        Set<String> attributes = new HashSet<String>();
+        LinkedHashSet<String> attributes = new LinkedHashSet<String>();
 
         String leftFrom = line.split("FROM")[0].trim();
 
@@ -768,6 +825,7 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         description_value = (AutoCompleteTextView) findViewById(R.id.description_value);
         /*Search button, Date and Time pickers*/
         search = (Button) findViewById(R.id.search_button);
+        jbutton = (Button) findViewById(R.id.join_button);
         date_picker = (Button) findViewById(R.id.date_picker);
         time_picker = (Button) findViewById(R.id.time_picker);
     }

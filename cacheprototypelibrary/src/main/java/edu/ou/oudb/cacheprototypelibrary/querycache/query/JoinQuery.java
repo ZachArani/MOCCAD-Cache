@@ -3,6 +3,7 @@ package edu.ou.oudb.cacheprototypelibrary.querycache.query;/* Stuff related to j
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import edu.ou.oudb.cacheprototypelibrary.metadata.ObjectSizer;
@@ -13,7 +14,7 @@ public class JoinQuery extends Query{
     private ArrayList<String> jRelation;
 
     /** Attributes to look for in the others relations */
-    private HashMap<String, String> jAttributes;
+    //private HashMap<String, String> jAttributes;
 
     /** Joins qttributes for each table **/
     private HashMap<String, String> joinAttributes;
@@ -27,29 +28,35 @@ public class JoinQuery extends Query{
     /** Excluded Predicates: !(ExcludedPredicates)*/
     private HashMap<String, Predicate> jExcludedPredicates;
 
-    public JoinQuery(ArrayList<String> relation)
+    public JoinQuery(String relation, int nbrel)
     {
-        super(relation.get(0));
-        jRelation = new ArrayList<String>();
-        //Fill jRelation with the relation array value except 1st
-        for (int i = 1; i < (relation.size()-1); i++){
-            setjRelation(i, relation.get(i));
-        }
+        super(relation);
+        jRelation = new ArrayList<>(1+nbrel);
         jPredicateAttributes = new HashMap<String, String>();
-        jAttributes = new HashMap<String, String>();
+        //jAttributes = new HashMap<String, String>();
         jPredicates = new HashMap<String, Predicate>();
         jExcludedPredicates = new HashMap<String, Predicate>();
         joinAttributes = new HashMap<String, String>();
-        mSize += ObjectSizer.getStringSize32bits(relation.size()); //TODO: remove first relation from calculation (already calculated in super)
+    }
+
+    public void fillRelations(ArrayList<String> relation){
+        //Fill jRelation with the relation array value except 1st
+        for (int i = 0; i < (relation.size()); i++){
+            jRelation.add(relation.get(i));
+        }
     }
 
     private void setjRelation(int nb, String rel){
         if (rel != null)
         {
-            this.jRelation.set(nb-1, rel);
+            this.jRelation.set(nb, rel);
             mSize -= ObjectSizer.getStringSize32bits(jRelation.size());
             mSize += ObjectSizer.getStringSize32bits(rel.length());
         }
+    }
+
+    public void fillJAttributes(HashMap<String, String> jattr){
+        joinAttributes.putAll(jattr);
     }
 
     @Override
@@ -65,13 +72,13 @@ public class JoinQuery extends Query{
         }
 
         JoinQuery other = (JoinQuery) obj;
-        if (jAttributes == null){
+        /*if (jAttributes == null){
             if(other.jAttributes != null) {
                 return false;
             }
         }else if(!jAttributes.equals(other.jAttributes)){
             return false;
-        }
+        }*/
 
         if (jPredicateAttributes == null){
             if(other.jPredicateAttributes != null) {
@@ -156,7 +163,7 @@ public class JoinQuery extends Query{
         StringBuilder builder = new StringBuilder();
         builder.append("SELECT ");
 
-        int sizeAttributes = getAttributes().size() + jAttributes.size();
+        int sizeAttributes = getAttributes().size();
 
         if (sizeAttributes == 0)
         {
@@ -164,6 +171,9 @@ public class JoinQuery extends Query{
         }
 
         int k = 0;
+
+
+        LinkedHashSet<String> orderAttributes = new LinkedHashSet<>(getAttributes());
         //q loop
         for(String a: getAttributes()) {
             builder.append(a);
@@ -172,67 +182,25 @@ public class JoinQuery extends Query{
             }
             k++;
         }
-        //join loop
+        /*join loop
         for(int i = 0; i < jAttributes.size(); i++) {
             builder.append(", ");
             builder.append(jAttributes.get(i));
-        }
+        }*/
 
         builder.append(" FROM ");
         builder.append(getRelation());
-
+        builder.append(" INNER JOIN ");
+        builder.append(jRelation.get(0));
+        /*
         for(int i = 0; i < jRelation.size(); i++) {
             builder.append(", ");
             builder.append(jRelation.get(i));
-        }
+        }*/
 
-        for(int i = 0; i < jRelation.size(); i++){
-            builder.append(" INNER JOIN ");
-            builder.append(jRelation.get(i));
             builder.append(" ON ");
             // table2.joinattribute = table1.joinattribute
-            builder.append(jRelation.get(i)+"."+joinAttributes.get(jRelation.get(i))+" = "+getRelation()+"."+joinAttributes.get(getRelation()));
-        }
-
-/**
-        int sizePredicates = mPredicates.size();
-        int sizeExcludedPredicates = mExcludedPredicates.size();
-
-        if (sizePredicates + sizeExcludedPredicates > 0)
-        {
-            builder.append(" WHERE ");
-        }
-
-        int i = 0;
-        for(Predicate p: mPredicates)
-        {
-            builder.append(p);
-            if (i < sizePredicates-1)
-            {
-                builder.append(" AND ");
-            }
-            ++i;
-        }
-
-
-
-        if (sizeExcludedPredicates != 0)
-        {
-            builder.append(" AND NOT ( ");
-            i = 0;
-            for(Predicate p: mExcludedPredicates)
-            {
-                builder.append(p);
-                if (i < sizeExcludedPredicates-1)
-                {
-                    builder.append(" AND ");
-                }
-                ++i;
-            }
-
-            builder.append(" )");
-        }
- **/
+            builder.append(joinAttributes.get(jRelation.get(0))+" = "+ joinAttributes.get(getRelation()));
 
         builder.append(";");
 

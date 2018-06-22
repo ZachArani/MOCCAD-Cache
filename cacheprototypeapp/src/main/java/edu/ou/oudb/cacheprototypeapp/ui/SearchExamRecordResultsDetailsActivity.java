@@ -30,6 +30,16 @@ public class SearchExamRecordResultsDetailsActivity extends Activity {
     public static final String TIMES = "times";
     public static final String HEARTRATES = "heartrates";
 
+    public static final String IDJ = "idJ";
+    public static final String PATIENTSFJ = "patientsFJ";
+    public static final String PATIENTSLJ = "patientsLJ";
+    public static final String DOCTORSFJ = "doctorsFJ";
+    public static final String DOCTORSLJ = "doctorsLJ";
+    public static final String DESCRIPTIONSJ = "descriptionsJ";
+    public static final String DATESJ = "datesJ";
+    public static final String TIMESJ = "timesJ";
+    public static final String HEARTRATESJ = "heartratesJ";
+
     private ImageView image = null;
 
     private TextView idVal = null;
@@ -40,9 +50,22 @@ public class SearchExamRecordResultsDetailsActivity extends Activity {
     private TextView timeVal = null;
     private TextView heartrateVal = null;
 
+    private TextView idValJ = null;
+    private TextView patientValJ = null;
+    private TextView doctorValJ = null;
+    private TextView descriptionValJ = null;
+    private TextView dateValJ = null;
+    private TextView timeValJ = null;
+    private TextView heartrateValJ = null;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_exam_record_results_details);
+        Integer idj = getIntent().getIntExtra(IDJ, -1);
+        if(idj != -1) {
+            setContentView(R.layout.activity_search_exam_record_results_details);
+        }else{
+            setContentView(R.layout.activity_search_exam_record_results_details1);
+        }
 
         initializeVariables();
 
@@ -62,6 +85,16 @@ public class SearchExamRecordResultsDetailsActivity extends Activity {
         String time = getIntent().getStringExtra(TIMES);
         Integer heartrate = getIntent().getIntExtra(HEARTRATES, 1);
 
+        String patientFj = getIntent().getStringExtra(PATIENTSFJ);
+        String patientLj = getIntent().getStringExtra(PATIENTSLJ);
+        String doctorFj = getIntent().getStringExtra(DOCTORSFJ);
+        String doctorLj = getIntent().getStringExtra(DOCTORSLJ);
+        String descriptionj = getIntent().getStringExtra(DESCRIPTIONSJ);
+        String datej = getIntent().getStringExtra(DATESJ);
+        String timej = getIntent().getStringExtra(TIMESJ);
+        Integer heartratej = getIntent().getIntExtra(HEARTRATESJ, 1);
+
+
         /*Displaying the time under the 12h format*/
         String AM_PM = "AM";
         if (Integer.parseInt(time.split(":")[0]) > 12) {
@@ -79,6 +112,16 @@ public class SearchExamRecordResultsDetailsActivity extends Activity {
         dateVal.setText(date);
         timeVal.setText(time + " " + AM_PM);
         heartrateVal.setText(String.valueOf(heartrate));
+
+        if(idj !=-1) {
+            idValJ.setText(String.valueOf(idj));
+            patientValJ.setText(patientFj + " " + patientLj);
+            doctorValJ.setText(doctorFj + " " + doctorLj);
+            descriptionValJ.setText(descriptionj);
+            dateValJ.setText(datej);
+            timeValJ.setText(timej + " " + AM_PM);
+            heartrateValJ.setText(String.valueOf(heartratej));
+        }
     }
 
     private void initializeVariables() {
@@ -91,6 +134,14 @@ public class SearchExamRecordResultsDetailsActivity extends Activity {
         dateVal = (TextView) findViewById(R.id.dateVal);
         timeVal = (TextView) findViewById(R.id.timeVal);
         heartrateVal = (TextView) findViewById(R.id.heartrateVal);
+
+        idValJ = (TextView) findViewById(R.id.idValJ);
+        patientValJ = (TextView) findViewById(R.id.patientValJ);
+        doctorValJ = (TextView) findViewById(R.id.doctorValJ);
+        descriptionValJ = (TextView) findViewById(R.id.descriptionValJ);
+        dateValJ = (TextView) findViewById(R.id.dateValJ);
+        timeValJ = (TextView) findViewById(R.id.timeValJ);
+        heartrateValJ = (TextView) findViewById(R.id.heartrateValJ);
     }
 
     @Override
