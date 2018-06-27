@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -138,6 +139,9 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
             "Imaging", "Measurement of Body"
     };
 
+    //Table 2 join value one by default
+    String table2val = "one";
+
     /*Used when launching the query*/
 
     /*Attributes*/
@@ -228,7 +232,6 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         onSpinnerItemSelected();
         onDateTimeClicked();
         onFieldClicked();
-
         search.setOnClickListener(this);
         jbutton.setOnClickListener(this);
     }
@@ -246,10 +249,135 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         }
     }
 
+    public void onRadioButtonClicked(View view){
+        boolean checked = ((RadioButton)view).isChecked();
+        switch (view.getId()){
+            case R.id.one_rb:
+                if(checked){
+                    table2val = "one";
+                }
+                break;
+            case R.id.two_rb:
+                if(checked){
+                    table2val = "two";
+                }
+                break;
+            case R.id.three_rb:
+                if(checked){
+                    table2val = "three";
+                }
+                break;
+        }
+    }
+
     //phil
     public void launchJoinTest(){
         Log.d("hi", "hoi");
-        String query = "SELECT * FROM patients INNER JOIN one ON patients.noteid = one.noteid";
+        String query = "SELECT * FROM patients INNER JOIN " + table2val +  " ON patients.noteid = " + table2val + ".noteid WHERE ";
+        int cpt = 0;
+        /*Checks if the value is null (i.e. the user didn't enter anything)
+         * Also checks if the value is empty (i.e. if the user entered something and erased it)
+         * The null test needs to be the first, or an exception is thrown*/
+        if (valueId == null || valueId.isEmpty()) {
+            isIdSelected = false;
+        }
+        if (valuePa == null || valuePa.isEmpty()) {
+            isPatientSelected = false;
+        }
+        if (valuePa2 == null || valuePa2.isEmpty()) {
+            isPatientSecondSelected = false;
+        }
+        if (valueDo == null || valueDo.isEmpty()) {
+            isDoctorSelected = false;
+        }
+        if (valueDo2 == null || valueDo2.isEmpty()) {
+            isDoctorSecondSelected = false;
+        }
+        if (valueDe == null || valueDe.isEmpty()) {
+            isDescriptionSelected = false;
+        }
+        if (valueHe == null || valueHe.isEmpty()) {
+            isHeartrateSelected = false;
+        }
+        /*In case the user cancels the DatePicker / TimePicker selection
+         * This needs to be done because otherwise the boolean are considered true*/
+        if (valueDa == null) {
+            isDateSelected = false;
+        }
+        if (valueTi == null) {
+            isTimeSelected = false;
+        }
+        /*Looks if fields have been filled out or not
+         * If not, selects all, else we look how much have been filled,
+         * and construct the request based on that*/
+        /*The replacements and %27 are used in the URL when the request is launched*/
+        if (isIdSelected) {
+            query = query.concat("patients."+ attributeId + " " + operatorId + " " + valueId);
+            cpt++;
+        }
+        if (isPatientSelected) {
+            if (cpt > 0) {
+                query = query.concat(" AND ");
+            }
+            query = query.concat("patients."+ attributePa + " " + operatorPa + " %27" + valuePa + "%27");
+            cpt++;
+        }
+        if (isPatientSecondSelected) {
+            if (cpt > 0) {
+                query = query.concat(" AND ");
+            }
+            query = query.concat("patients."+ attributePa2 + " " + operatorPa2 + " %27" + valuePa2 + "%27");
+            cpt++;
+        }
+        if (isDoctorSelected) {
+            if (cpt > 0) {
+                query = query.concat(" AND ");
+            }
+            query = query.concat("patients."+ attributeDo + " " + operatorDo + " %27" + valueDo + "%27");
+            cpt++;
+        }
+        if (isDoctorSecondSelected) {
+            if (cpt > 0) {
+                query = query.concat(" AND ");
+            }
+            query = query.concat("patients."+ attributeDo2 + " " + operatorDo2 + " %27" + valueDo2 + "%27");
+            cpt++;
+        }
+        if (isDescriptionSelected) {
+            if (cpt > 0) {
+                query = query.concat(" AND ");
+            }
+            query = query.concat("patients."+ attributeDe + " " + operatorDe + " %27" + valueDe.replace(" ", "%20") + "%27");
+            cpt++;
+        }
+        if (isDateSelected) {
+            if (cpt > 0) {
+                query = query.concat(" AND ");
+            }
+            /*For both Date and Time, we need to specify that we are taking a substring of the attribute
+             * We do this to isolate the part we want, in order to run the query*/
+            query = query.concat("substr(" + "patients."+ attributeDaTi + ",0,10) " + operatorDa + " %27" + valueDa + "%27");
+            cpt++;
+        }
+        if (isTimeSelected) {
+            if (cpt > 0) {
+                query = query.concat(" AND ");
+            }
+            query = query.concat("substr(" + "patients."+ attributeDaTi + ",12) " + operatorTi + " %27" + valueTi + "%27");
+            cpt++;
+        }
+        if (isHeartrateSelected) {
+            if (cpt > 0) {
+                query = query.concat(" AND ");
+            }
+            query = query.concat("patients."+ attributeHe + " " + operatorHe + " " + valueHe);
+            cpt++;
+        }
+
+        if(cpt==0){
+            query = "SELECT * FROM patients INNER JOIN " + table2val +  " ON patients.noteid = " + table2val + ".noteid";
+        }
+        query = query.concat(";");
         mDBHelper.addQuery(getJoinQuery(query));
         (new QueryProcessTask(this)).execute(getJoinQuery(query));
     }
@@ -411,8 +539,18 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         if (!att.equals("*")) {
             attributeList = att.split(", ");
         } else {
-            attributeList = new String[]
-                    {"patients.noteid", "patients.patientfirstname", "patients.patientlastname", "patients.doctorfirstname", "patients.doctorlastname", "patients.description", "patients.p_date_time", "patients.heartrate", "one.noteid", "one.patientfirstname", "one.patientlastname", "one.doctorfirstname", "one.doctorlastname", "one.description", "one.p_date_time", "one.heartrate"};
+            attributeList = new String[16];
+            int j = 0;
+            String[] attrtable = new String[]{"noteid", "patientfirstname", "patientlastname", "doctorfirstname", "doctorlastname", "description", "p_date_time", "heartrate"};
+            for(int i = 0; i < 8; i++){
+                attributeList[i] = "patients." + attrtable[j];
+                j++;
+            }
+            j = 0;
+            for(int i = 8; i < 16; i++){
+                attributeList[i] = table2val + "." + attrtable[j];
+                j++;
+            }
         }
         for (String a : attributeList) {
             attributes.add(a);
@@ -426,7 +564,36 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         jquery.addAttributes(attributes);
         jquery.fillJAttributes(jattr);
         jquery.fillRelations(relations);
+
+        //Predicates
+
+        if (line.contains("WHERE")) {
+
+            String predicateStr = rightfrom.split("WHERE")[1].trim();
+
+            predicateStr = predicateStr.substring(0, predicateStr.length() - 1);
+
+            String[] predicateList = predicateStr.split("AND");
+
+            int size = predicateList.length;
+
+            String predicateItems[] = null;
+            for (int i = 0; i < size; ++i) {
+                predicateItems = predicateList[i].trim().split(" ");
+                try {
+                    Predicate p = PredicateFactory.createPredicate(predicateItems[0], predicateItems[1], predicateItems[2]);
+                    predicates.add(p);
+                } catch (TrivialPredicateException | InvalidPredicateException e) {
+                    Log.e("PARSE_QUERY_LINE", "invalid predicate");
+                    return null;
+                }
+            }
+
+            jquery.addPredicates(predicates);
+        }
         String sql = jquery.toSQLString();
+
+
         return jquery;
     }
 
@@ -828,6 +995,7 @@ public class AttributesSelectionActivity extends FragmentActivity implements Vie
         jbutton = (Button) findViewById(R.id.join_button);
         date_picker = (Button) findViewById(R.id.date_picker);
         time_picker = (Button) findViewById(R.id.time_picker);
+
     }
 
     @Override

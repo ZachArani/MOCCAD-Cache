@@ -98,6 +98,7 @@ public class SearchExamRecordResultsAdapter extends ArrayAdapter<String>{
         this.datesJ = datesj;
         this.timesJ = timesj;
         this.heartratesJ = heartratesj;
+        this.isJoin = true;
     }
 
 

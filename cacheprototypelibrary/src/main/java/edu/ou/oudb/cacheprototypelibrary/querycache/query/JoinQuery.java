@@ -13,29 +13,14 @@ public class JoinQuery extends Query{
     /** Relations to join with the first table */
     private ArrayList<String> jRelation;
 
-    /** Attributes to look for in the others relations */
-    //private HashMap<String, String> jAttributes;
-
-    /** Joins qttributes for each table **/
+    /** Joins attributes for each table **/
     private HashMap<String, String> joinAttributes;
-
-    /** Predicate attributes in others tables */
-    private HashMap<String, String> jPredicateAttributes;
-
-    /** Collection of predicates (conjunction)*/
-    private HashMap<String, Predicate> jPredicates;
-
-    /** Excluded Predicates: !(ExcludedPredicates)*/
-    private HashMap<String, Predicate> jExcludedPredicates;
 
     public JoinQuery(String relation, int nbrel)
     {
         super(relation);
         jRelation = new ArrayList<>(1+nbrel);
-        jPredicateAttributes = new HashMap<String, String>();
         //jAttributes = new HashMap<String, String>();
-        jPredicates = new HashMap<String, Predicate>();
-        jExcludedPredicates = new HashMap<String, Predicate>();
         joinAttributes = new HashMap<String, String>();
     }
 
@@ -46,14 +31,6 @@ public class JoinQuery extends Query{
         }
     }
 
-    private void setjRelation(int nb, String rel){
-        if (rel != null)
-        {
-            this.jRelation.set(nb, rel);
-            mSize -= ObjectSizer.getStringSize32bits(jRelation.size());
-            mSize += ObjectSizer.getStringSize32bits(rel.length());
-        }
-    }
 
     public void fillJAttributes(HashMap<String, String> jattr){
         joinAttributes.putAll(jattr);
@@ -80,35 +57,12 @@ public class JoinQuery extends Query{
             return false;
         }*/
 
-        if (jPredicateAttributes == null){
-            if(other.jPredicateAttributes != null) {
-                return false;
-            }
-        }else if(!jPredicateAttributes.equals(other.jPredicateAttributes)){
-            return false;
-        }
 
         if (jRelation == null){
             if(other.jRelation != null) {
                 return false;
             }
         }else if(!jRelation.equals(other.jRelation)){
-            return false;
-        }
-
-        if (jExcludedPredicates == null){
-            if(other.jExcludedPredicates != null) {
-                return false;
-            }
-        }else if(!jExcludedPredicates.equals(other.jExcludedPredicates)){
-            return false;
-        }
-
-        if (jPredicates == null){
-            if(other.jPredicates != null) {
-                return false;
-            }
-        }else if(!jPredicates.equals(other.jPredicates)){
             return false;
         }
 
@@ -201,6 +155,21 @@ public class JoinQuery extends Query{
             builder.append(" ON ");
             // table2.joinattribute = table1.joinattribute
             builder.append(joinAttributes.get(jRelation.get(0))+" = "+ joinAttributes.get(getRelation()));
+
+            if(getPredicates().size() > 0){
+                builder.append(" WHERE ");
+                int i = 0;
+                Set<Predicate> qPredicates = getPredicates();
+                for(Predicate p: qPredicates)
+                {
+                    builder.append(p);
+                    if (i < qPredicates.size()-1)
+                    {
+                        builder.append(" AND ");
+                    }
+                    ++i;
+                }
+            }
 
         builder.append(";");
 

@@ -54,18 +54,30 @@ public class RelationMetadata {
 	@Nullable
 	public Double getAttributeMinValue(String attributeName)
 	{
+		if(attributeName.contains(".")){
+			String attrName = attributeName.split("\\.")[1];
+			return mMinValueForAttributeMap.get(attrName);
+		}
 		return mMinValueForAttributeMap.get(attributeName);
 	}
 	
 	@Nullable
 	public Double getAttributeMaxValue(String attributeName)
 	{
+		if(attributeName.contains(".")){
+			String attrName = attributeName.split("\\.")[1];
+			return mMaxValueForAttributeMap.get(attrName);
+		}
 		return mMaxValueForAttributeMap.get(attributeName);
 	}
 	
 	@Nullable
 	public Long getAttributeNbValue(String attributeName)
 	{
+		if(attributeName.contains(".")){
+			String attrName = attributeName.split("\\.")[1];
+			return mNbDifferentValuesForAttributeMap.get(attrName);
+		}
 		return mNbDifferentValuesForAttributeMap.get(attributeName);
 	}
 	

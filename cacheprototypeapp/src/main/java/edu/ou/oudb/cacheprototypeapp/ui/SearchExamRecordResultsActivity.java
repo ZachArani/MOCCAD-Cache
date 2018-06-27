@@ -151,10 +151,15 @@ public class SearchExamRecordResultsActivity extends Activity {
             }
             sArray[j] = string;
         }
-        /*Filling the Arrays with the updated order to update the list*/
-        arraysValues();
-        SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
-        listView.setAdapter(adapter);
+        if(sArray[0].split(",").length > 8){
+            arraysValuesJoin();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR, IDJ, PFNJ, PLNJ, DFNJ, DLNJ, DescJ, DatesJ, TimesJ, HRJ);
+            listView.setAdapter(adapter);
+        }else {
+            arraysValues();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
+            listView.setAdapter(adapter);
+        }
     }
 
     public void sortByPatientFirstName() {
@@ -172,9 +177,15 @@ public class SearchExamRecordResultsActivity extends Activity {
             }
             sArray[j] = string;
         }
-        arraysValues();
-        SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
-        listView.setAdapter(adapter);
+        if(sArray[0].split(",").length > 8){
+            arraysValuesJoin();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR, IDJ, PFNJ, PLNJ, DFNJ, DLNJ, DescJ, DatesJ, TimesJ, HRJ);
+            listView.setAdapter(adapter);
+        }else {
+            arraysValues();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
+            listView.setAdapter(adapter);
+        }
     }
 
     public void sortByPatientLastName() {
@@ -189,9 +200,15 @@ public class SearchExamRecordResultsActivity extends Activity {
             }
             sArray[j] = string;
         }
-        arraysValues();
-        SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
-        listView.setAdapter(adapter);
+        if(sArray[0].split(",").length > 8){
+            arraysValuesJoin();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR, IDJ, PFNJ, PLNJ, DFNJ, DLNJ, DescJ, DatesJ, TimesJ, HRJ);
+            listView.setAdapter(adapter);
+        }else {
+            arraysValues();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
+            listView.setAdapter(adapter);
+        }
     }
 
     public void sortByDoctorFirstName() {
@@ -206,9 +223,15 @@ public class SearchExamRecordResultsActivity extends Activity {
             }
             sArray[j] = string;
         }
-        arraysValues();
-        SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
-        listView.setAdapter(adapter);
+        if(sArray[0].split(",").length > 8){
+            arraysValuesJoin();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR, IDJ, PFNJ, PLNJ, DFNJ, DLNJ, DescJ, DatesJ, TimesJ, HRJ);
+            listView.setAdapter(adapter);
+        }else {
+            arraysValues();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
+            listView.setAdapter(adapter);
+        }
     }
 
     public void sortByDoctorLastName() {
@@ -223,9 +246,15 @@ public class SearchExamRecordResultsActivity extends Activity {
             }
             sArray[j] = string;
         }
-        arraysValues();
-        SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
-        listView.setAdapter(adapter);
+        if(sArray[0].split(",").length > 8){
+            arraysValuesJoin();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR, IDJ, PFNJ, PLNJ, DFNJ, DLNJ, DescJ, DatesJ, TimesJ, HRJ);
+            listView.setAdapter(adapter);
+        }else {
+            arraysValues();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
+            listView.setAdapter(adapter);
+        }
     }
 
     public void sortByDescription() {
@@ -240,9 +269,15 @@ public class SearchExamRecordResultsActivity extends Activity {
             }
             sArray[j] = string;
         }
-        arraysValues();
-        SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
-        listView.setAdapter(adapter);
+        if(sArray[0].split(",").length > 8){
+            arraysValuesJoin();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR, IDJ, PFNJ, PLNJ, DFNJ, DLNJ, DescJ, DatesJ, TimesJ, HRJ);
+            listView.setAdapter(adapter);
+        }else {
+            arraysValues();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
+            listView.setAdapter(adapter);
+        }
     }
 
     public void sortByDate() {
@@ -257,9 +292,15 @@ public class SearchExamRecordResultsActivity extends Activity {
             }
             sArray[j] = string;
         }
-        arraysValues();
-        SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
-        listView.setAdapter(adapter);
+        if(sArray[0].split(",").length > 8){
+            arraysValuesJoin();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR, IDJ, PFNJ, PLNJ, DFNJ, DLNJ, DescJ, DatesJ, TimesJ, HRJ);
+            listView.setAdapter(adapter);
+        }else {
+            arraysValues();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
+            listView.setAdapter(adapter);
+        }
     }
 
     public void sortByTime() {
@@ -274,9 +315,15 @@ public class SearchExamRecordResultsActivity extends Activity {
             }
             sArray[j] = string;
         }
-        arraysValues();
-        SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
-        listView.setAdapter(adapter);
+        if(sArray[0].split(",").length > 8){
+            arraysValuesJoin();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR, IDJ, PFNJ, PLNJ, DFNJ, DLNJ, DescJ, DatesJ, TimesJ, HRJ);
+            listView.setAdapter(adapter);
+        }else {
+            arraysValues();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
+            listView.setAdapter(adapter);
+        }
     }
 
     public void sortByHeartRate() {
@@ -291,9 +338,15 @@ public class SearchExamRecordResultsActivity extends Activity {
             }
             sArray[j] = string;
         }
-        arraysValues();
-        SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
-        listView.setAdapter(adapter);
+        if(sArray[0].split(",").length > 8){
+            arraysValuesJoin();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR, IDJ, PFNJ, PLNJ, DFNJ, DLNJ, DescJ, DatesJ, TimesJ, HRJ);
+            listView.setAdapter(adapter);
+        }else {
+            arraysValues();
+            SearchExamRecordResultsAdapter adapter = new SearchExamRecordResultsAdapter(this, imgid, ID, PFN, PLN, DFN, DLN, Desc, Dates, Times, HR);
+            listView.setAdapter(adapter);
+        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

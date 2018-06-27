@@ -62,8 +62,10 @@ public class SearchExamRecordResultsDetailsActivity extends Activity {
         super.onCreate(savedInstanceState);
         Integer idj = getIntent().getIntExtra(IDJ, -1);
         if(idj != -1) {
+            //join view
             setContentView(R.layout.activity_search_exam_record_results_details);
         }else{
+            //regularview
             setContentView(R.layout.activity_search_exam_record_results_details1);
         }
 
