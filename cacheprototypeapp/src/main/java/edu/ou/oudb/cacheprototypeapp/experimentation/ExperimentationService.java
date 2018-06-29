@@ -44,7 +44,7 @@ public class ExperimentationService extends IntentService
 	protected void onHandleIntent(Intent workIntent) {
 
 		//FIXME: WAS THE MIKAEL'S CACHE QUERIES VERSION
-		List<Query> warmupQueries = getQueries(this, R.raw.cache_queries);
+		List<Query> warmupQueries = getQueries(this, R.raw.vr_warmup_queries);
 		List<Query> queriesToProcess = null;
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		int nbQueriesToExecute = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_NB_QUERIES_TO_PROCESS,"0"));
@@ -82,7 +82,18 @@ public class ExperimentationService extends IntentService
 
 		//FIXME: WASN'T THERE
 		int[] myExperiment = {
-                R.raw.queries
+                R.raw.vr_hit_100,
+				R.raw.vr_hit_90,
+				R.raw.vr_hit_80,
+				R.raw.vr_hit_70,
+				R.raw.vr_hit_60,
+				R.raw.vr_hit_50,
+				R.raw.vr_hit_40,
+				R.raw.vr_hit_30,
+				R.raw.vr_hit_20,
+				R.raw.vr_hit_10,
+				R.raw.vr_hit_0,
+
 		};
 
 		//FIXME: WASN'T COMMENTED

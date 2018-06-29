@@ -1,0 +1,10 @@
+SELECT * FROM exp WHERE noteid < 100;
+SELECT * FROM exp WHERE noteid > 240000;
+SELECT * FROM exp WHERE patientfirstname = 'Kerr';
+SELECT * FROM exp WHERE patientfirstname = 'Clayton';
+SELECT * FROM exp WHERE patientlastname = 'Powers';
+SELECT * FROM exp WHERE patientlastname = 'Moore';
+SELECT * FROM exp WHERE doctorfirstname = 'William';
+SELECT * FROM exp WHERE doctorfirstname = 'Adel';
+SELECT * FROM exp WHERE doctorlastname = 'Tyler';
+SELECT * FROM exp WHERE doctorlastname = 'Armstrong';
