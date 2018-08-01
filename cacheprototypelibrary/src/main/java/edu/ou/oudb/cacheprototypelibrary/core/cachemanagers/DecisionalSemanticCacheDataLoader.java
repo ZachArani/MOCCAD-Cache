@@ -236,7 +236,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
             {
                 Set<Query> queriesToBeRemoved = new HashSet<Query>();
                 //if an entry in cache contains the result of the probe query
-                // we replace that entry with the most recent one
+                // we replace that entry with the most r`ecent one
                 if (queryTrimmingResult.entryQuery != null
                         &&
 						(queryTrimmingResult.type == QueryTrimmingType.CACHE_HORIZONTAL

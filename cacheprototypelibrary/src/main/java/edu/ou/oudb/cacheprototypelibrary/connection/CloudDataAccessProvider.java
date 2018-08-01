@@ -39,7 +39,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 
     private static final int CLOUD_COEFF = 5;
 	
-	private String mURLBase = "http://10.204.69.210:8080/CloudWebService/rest/";
+		private String mURLBase = "http://10.204.69.210:8080/CloudWebService/rest/";
 
 	private String mURLGetRelationMetadata = mURLBase + URL_DB_INFO;
 	
