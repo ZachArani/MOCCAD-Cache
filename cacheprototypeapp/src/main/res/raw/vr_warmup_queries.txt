@@ -7,4 +7,4 @@ SELECT * FROM exp WHERE patientlastname = 'Moore';
 SELECT * FROM exp WHERE doctorfirstname = 'William';
 SELECT * FROM exp WHERE doctorfirstname = 'Adel';
 SELECT * FROM exp WHERE doctorlastname = 'Tyler';
-SELECT * FROM exp WHERE doctorlastname = 'Armstrong';
+SELECT * FROM exp WHERE noteid < 999 AND heartrate < 199;

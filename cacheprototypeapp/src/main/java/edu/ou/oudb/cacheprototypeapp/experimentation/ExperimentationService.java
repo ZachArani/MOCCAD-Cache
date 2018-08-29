@@ -82,9 +82,8 @@ public class ExperimentationService extends IntentService
 
 		//FIXME: WASN'T THERE
 		int[] myExperiment = {
-                R.raw.vr_hit_100
-				/*R.raw.vr_hit_90,
-				R.raw.vr_hit_80,
+				R.raw.vr_hit_90
+				/*R.raw.vr_hit_80,
 				R.raw.vr_hit_70,
 				R.raw.vr_hit_60,
 				R.raw.vr_hit_50,
@@ -92,7 +91,7 @@ public class ExperimentationService extends IntentService
 				R.raw.vr_hit_30,
 				R.raw.vr_hit_20,
 				R.raw.vr_hit_10,
-				R.raw.vr_hit_0,*/
+				R.raw.vr_hit_0*/
 
 		};
 
@@ -114,7 +113,7 @@ public class ExperimentationService extends IntentService
 		// warming cache up
 		mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
 
-	//	warmupCache(warmupQueries);
+		warmupCache(warmupQueries);
         if (!handleErrors())
 		{
 			mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
