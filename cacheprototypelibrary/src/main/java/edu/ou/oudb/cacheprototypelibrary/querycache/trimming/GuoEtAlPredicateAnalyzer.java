@@ -349,7 +349,7 @@ public class GuoEtAlPredicateAnalyzer implements PredicatesAnalyzer {
                     respectsSatisfiability = false;
                 }
             /*Building the graph with Strings*/
-            } else if (mNodeMapS.size() > 0) {
+            } if (mNodeMapS.size() > 0) {
                 mNodeStringGraphCollapsed = mNodeStringGraph.getCollapsedGraph();
                 if (mNodeStringGraphCollapsed != null) {
                     try {
@@ -362,7 +362,7 @@ public class GuoEtAlPredicateAnalyzer implements PredicatesAnalyzer {
                     respectsSatisfiability = false;
                 }
             /*Building the graph with Date and Time*/
-            } else if (mNodeMapDT.size() > 0) {
+            } if (mNodeMapDT.size() > 0) {
                 mNodeDateTimeGraphCollapsed = mNodeDateTimeGraph.getCollapsedGraph();
                 if (mNodeDateTimeGraphCollapsed != null) {
                     try {
