@@ -10,6 +10,7 @@ import java.util.List;
 import edu.ou.oudb.cacheprototypeapp.ui.SettingsActivity;
 import edu.ou.oudb.cacheprototypeapp.ui.WeightProfilesActivity;
 import edu.ou.oudb.cacheprototypelibrary.LRUCacheReplacementManager;
+import edu.ou.oudb.cacheprototypelibrary.QEPCacheReplacementManager;
 import edu.ou.oudb.cacheprototypelibrary.SemanticQueryCacheContentManager;
 import edu.ou.oudb.cacheprototypelibrary.SemanticQueryCacheResolutionManager;
 import edu.ou.oudb.cacheprototypelibrary.StandartEstimationCacheContentManager;
@@ -304,7 +305,7 @@ public class AndroidCachePrototypeApplication extends Application {
 		CacheBuilder<Query,QuerySegment> queryCacheBuilder = CacheBuilder.<Query,QuerySegment>newBuilder();
 		queryCacheBuilder.setCacheContentManager(semanticCacheContentManager);
 		queryCacheBuilder.setCacheResolutionManager(semanticCacheResolutionManager);
-		queryCacheBuilder.setCacheReplacementManager(new LFUSQEPCacheReplacementManager());
+		queryCacheBuilder.setCacheReplacementManager(new QEPCacheReplacementManager());
 		queryCacheBuilder.setMaxSize(maxQueryCacheSize);
 		if (maxQueryCacheSegments > 0)//not default
 		{

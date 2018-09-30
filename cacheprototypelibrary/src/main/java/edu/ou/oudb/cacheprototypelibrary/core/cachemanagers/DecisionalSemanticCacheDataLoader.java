@@ -48,6 +48,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 	private CloudEstimationComputationManager mCloudEstimationComputationManager = null;
 	private MobileEstimationComputationManager mMobileEstimationComputationManager = null;
 	private boolean mUsingReplacement = true;
+	private double scoreModifier = 0.0;
 
 	// Stats
 	public static long totalTimeM;
@@ -236,7 +237,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
             {
                 Set<Query> queriesToBeRemoved = new HashSet<Query>();
                 //if an entry in cache contains the result of the probe query
-                // we replace that entry with the most r`ecent one
+                // we replace that entry with the most recent one
                 if (queryTrimmingResult.entryQuery != null
                         &&
 						(queryTrimmingResult.type == QueryTrimmingType.CACHE_HORIZONTAL
@@ -265,7 +266,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 
                     // INSERTION
 					//TODO: ScoreF should only be attached when the cacheReplacement needs it.
-                    mQueryCache.add(query, queryResult,scoreF);
+                    mQueryCache.add(query, queryResult, scoreF, scoreModifier);
                     //<editor-fold desc="LOG NEW QUERY CACHE REPLACEMENT">
                     StatisticsManager.newQueryCacheReplacement();
                     //</editor-fold>
@@ -303,7 +304,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 	 * @throws JSONParserException thrown if error while parsing result
 	 * @throws ConstraintsNotRespectedException thrown if constraints are not respected
 	 */
-	private void buildQueryPlan(Query query,
+	private void buildQueryPlan(Query query, //TODO: ADD SCORE METHODS
 									QueryTrimmingResult queryTrimmingResult, 
 									Estimation probeQueryMobileEstimation,
 									Estimation probeQueryCloudEstimation,
@@ -321,6 +322,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 			resultTimeM = costTimeM;
 			resultMoneyM = costMoneyM;
 			resultEnergyM = costEnergyM;
+			scoreModifier = 1.00; //FULL-POINT
 			cacheHitType = "Cache Hit";
 			executedOn = "Mobile";
 			scoreF = scoreM;
@@ -333,6 +335,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultTimeM = costTimeM;
 				resultMoneyM = costMoneyM;
 				resultEnergyM = costEnergyM;
+				scoreModifier = 1.00; //Basically the same as a cache hit
 				cacheHitType = "Cache Extended Hit Equivalent";
 				executedOn = "Mobile";
 				scoreF = scoreM;
@@ -349,6 +352,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultTimeM = costTimeM;
 				resultMoneyM = costMoneyM;
 				resultEnergyM = costEnergyM;
+				scoreModifier = 0.5; //HALF-POINT
 				cacheHitType = "Cache Extended Hit Included";
 				executedOn = "Mobile";
 				scoreF = scoreM;
@@ -379,6 +383,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultTimeC = costTimeC;
 				resultMoneyC = costMoneyC;
 				resultEnergyC = costEnergyC;
+				scoreModifier = 0.5; //HALF-POINT
 				cacheHitType = "Cache Extended Hit Included";
 				executedOn = "Cloud";
 				scoreF = scoreC;
@@ -416,6 +421,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultTimeM = costTimeM;
 				resultMoneyM = costMoneyM;
 				resultEnergyM = costEnergyM;
+				scoreModifier = 0.25; //QUARTER-POINT
 				cacheHitType = "Cache Partial Hit";
 				if(queryTrimmingResult.type==QueryTrimmingType.CACHE_HORIZONTAL) {
 					cacheHitType = cacheHitType + ": Horizontal";
@@ -459,6 +465,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultTimeC = costTimeC;
 				resultMoneyC = costMoneyC;
 				resultEnergyC = costEnergyC;
+				scoreModifier = 0.25;
 				cacheHitType = "Cache Partial Hit";
 				executedOn = "Cloud";
 				scoreF = scoreC;
@@ -492,6 +499,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 				resultTimeC = costTimeC;
 				resultMoneyC = costMoneyC;
 				resultEnergyC = costEnergyC;
+				scoreModifier = 0.00; //ZERO-POINT
 				cacheHitType = "Cache Miss";
 				executedOn = "Cloud";
 				scoreF = scoreC;

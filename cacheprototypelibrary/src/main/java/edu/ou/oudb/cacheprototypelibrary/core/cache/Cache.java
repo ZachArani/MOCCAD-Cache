@@ -82,7 +82,15 @@ public class Cache<K extends Sizeable,V extends Sizeable>{
 		return mCContentManager.add(key, value);
 	}
 
-    /**
+	public V add(K key, V value, double QEPScore, double scoreModifier)
+	{
+		if(mCReplacementManager instanceof LFUSQEPCacheReplacementManager)
+			mCReplacementManager.add(key, QEPScore, scoreModifier);
+		return mCContentManager.add(key, value);
+	}
+
+
+	/**
      * remove all the given keys
      * @param keys the keys to be removed
      * @return true if removed, false otherwise

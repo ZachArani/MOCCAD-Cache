@@ -39,7 +39,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 
     private static final int CLOUD_COEFF = 5;
 	
-		private String mURLBase = "http://10.204.69.210:8080/CloudWebService/rest/";
+		private String mURLBase = "http://172.27.232.37:8080/CloudWebService/rest/";
 
 	private String mURLGetRelationMetadata = mURLBase + URL_DB_INFO;
 	
@@ -52,7 +52,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 	public CloudDataAccessProvider(Context context) throws DownloadDataException, JSONParserException
 	{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		String ipAddress = pref.getString(PREF_IP_ADDRESS,"10.204.69.210"); //school is 10.204.69.210, Jason home is 192.168.0.132 - change in two places here, and in preferences.xml in cacheprototypeapp
+		String ipAddress = pref.getString(PREF_IP_ADDRESS,"172.27.232.37"); //school is 10.204.69.210, Jason home is 192.168.0.132 - change in two places here, and in preferences.xml in cacheprototypeapp
 		String port = pref.getString(PREF_PORT,"8080");
 	
 		StringBuilder urlBaseBuilder = new StringBuilder("http://");
@@ -73,7 +73,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 		// save the string result into preferences
 		
 		String cloudMetadata = pref.getString(PREF_METADATA, "");
-		if(cloudMetadata.isEmpty())
+		if(cloudMetadata.isEmpty()  || cloudMetadata.equals("[]"))
 		{
 			jsonStream = JSONLoader.getJSONInputStreamFromUrl(mURLGetRelationMetadata);
 			BufferedReader r = new BufferedReader(new InputStreamReader(jsonStream));

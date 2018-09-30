@@ -36,6 +36,15 @@ public interface CacheReplacementManager<K extends Sizeable>{
 	 * @return true if removed, false otherwise
 	 */
 
+    /**
+     *
+     * @param key
+     * @param score
+     * @param scoreModifier POINT to modify QEP score by for cache entry
+     * @return
+     */
+	public boolean add(K key, double score, double scoreModifier);
+
 	public boolean remove(K key);
 	
 	/**
@@ -51,6 +60,14 @@ public interface CacheReplacementManager<K extends Sizeable>{
 	 * @return true if updated, false otherwise
 	 */
 	public boolean update(K key);
+
+	/**
+	 *
+	 * @param key
+	 * @param scoreModifier update query with new score modifier
+	 * @return
+	 */
+	public boolean update(K key, double scoreModifier);
 	
 	/**
 	 * The method returning the entry to be replaced

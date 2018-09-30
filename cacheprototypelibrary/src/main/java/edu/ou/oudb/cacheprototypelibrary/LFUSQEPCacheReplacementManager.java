@@ -55,6 +55,13 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     }
 
     /**
+     * (@inheritDoc)
+     */
+    @Override
+    public boolean update(Query q, double scoreModifier){
+        return update(q);
+    }
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -83,6 +90,16 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
 
         return ret;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean add(Query q, double score, double scoreModifier){
+        return add(q, score);
+    }
+
+
 //TODO: ADD SET SCORE AND SET FREQUENCY THAT UPDATE THOSE FOR EVERYTHING IN THE QUEUE
     /**
      * {@inheritDoc}

@@ -64,6 +64,17 @@ public class LRUCacheReplacementManager implements CacheReplacementManager<Query
 		return ret;
 	}
 
+	/**
+	 *
+	 * @param q
+	 * @param scoreModifier update query with new score modifier
+	 * @return update(query)
+	 */
+	@Override
+	public boolean update(Query q, double scoreModifier){
+		return update(q);
+	}
+
     /**
      * {@inheritDoc}
      */
@@ -112,6 +123,18 @@ public class LRUCacheReplacementManager implements CacheReplacementManager<Query
     public boolean add(Query key, double score){
 	    return add(key);
     }
+
+	/**
+	 *
+	 * @param key
+	 * @param score
+	 * @param scoreModifier POINT to modify QEP score by for cache entry
+	 * @return result of add(key)
+	 */
+    @Override
+    public boolean add(Query key, double score, double scoreModifier){
+		return add(key);
+	}
 
 
     /**

@@ -19,7 +19,7 @@ import edu.ou.oudb.cacheprototypelibrary.utils.JSONParser;
 
 public class GenerateQueries {
 
-    String url = "http://10.204.69.210:8080/CloudWebService/rest/result?query=";
+    String url = "http://172.27.232.37:8080/CloudWebService/rest/result?query=";
 
     ArrayList<String> operators;
     public GenerateQueries(int size)
