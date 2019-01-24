@@ -53,6 +53,12 @@ public interface CacheReplacementManager<K extends Sizeable>{
 	 * @return true if removed, false otherwise
 	 */
 	public boolean removeAll(Collection<K> keys);
+
+	/**
+	 * Clears the entire cache
+	 * @return true if cleared, false otherwise
+	 */
+	public boolean clear();
 	
 	/**
 	 * update the metadata used for the replacement policy

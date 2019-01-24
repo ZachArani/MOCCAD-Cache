@@ -44,7 +44,6 @@ public class QEPCacheReplacementManager implements CacheReplacementManager<Query
     public boolean update(Query q, double scoreModifier){
         QEPCacheEntry qHolder = new QEPCacheEntry();
         qHolder.setQuery(q);
-        boolean inQueue = mEntriesPriorityQueue.contains(qHolder);
         boolean ret = false;
         Log.i("QEPCache", "Updating Query");
         if(mEntriesPriorityQueue.contains(qHolder))
@@ -72,7 +71,6 @@ public class QEPCacheReplacementManager implements CacheReplacementManager<Query
     @Override
     public boolean add(Query q, double QEPScore, double scoreModifier)
     {
-        Log.i("LFUSQEP CACHE", "ADDING QUERY");
         QEPCacheEntry qHolder = new QEPCacheEntry();
         qHolder.setQuery(q);
         qHolder.setQEPScore(QEPScore);
@@ -84,6 +82,7 @@ public class QEPCacheReplacementManager implements CacheReplacementManager<Query
             ret = false;
             return ret;
         }
+        Log.i("QEP CACHE", "ADDING QUERY");
         mEntriesPriorityQueue.add(qHolder);
 
         ret = true;
@@ -147,6 +146,12 @@ public class QEPCacheReplacementManager implements CacheReplacementManager<Query
         }
 
         return removed;
+    }
+
+    @Override
+    public boolean clear(){
+        mEntriesPriorityQueue.clear();
+        return true;
     }
 
     /**
@@ -225,7 +230,7 @@ public class QEPCacheReplacementManager implements CacheReplacementManager<Query
          * Turns score into QEPScore * 10^14
          */
         public final void normalizeScore(){
-            score = QEPScore * Math.pow(10,14);
+            score = QEPScore * Math.pow(10,11);
         }
 
         /**
@@ -234,8 +239,7 @@ public class QEPCacheReplacementManager implements CacheReplacementManager<Query
         public final void setScore(double amount)
         {
 
-            double normanlizedQEP = QEPScore * Math.pow(10,14);
-            score = normanlizedQEP + amount;
+            score = score + amount;
         }
         /**
          *
@@ -257,7 +261,7 @@ public class QEPCacheReplacementManager implements CacheReplacementManager<Query
         {
             if(o instanceof QEPCacheEntry)
             {
-                if(((QEPCacheEntry)(o)).getQuery() == this.getQuery())
+                if(((QEPCacheEntry)(o)).getQuery().equals(this.getQuery()))
                     return true;
             }
             return false;

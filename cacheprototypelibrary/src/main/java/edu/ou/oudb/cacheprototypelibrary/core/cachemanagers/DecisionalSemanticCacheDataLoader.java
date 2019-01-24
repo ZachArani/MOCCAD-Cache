@@ -250,7 +250,8 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
                 if (queryTrimmingResult.entryQuery == null
                         ||	(queryTrimmingResult.entryQuery != null
                         && queryTrimmingResult.type != QueryTrimmingType.CACHE_EXTENDED_HIT_INCLUDED
-                        && queryTrimmingResult.type != QueryTrimmingType.CACHE_EXTENDED_HIT_EQUIVALENT))
+                        && queryTrimmingResult.type != QueryTrimmingType.CACHE_EXTENDED_HIT_EQUIVALENT)) //TODO: Fix to make it actually track stuff in the cache. Hit_included/Equivialant arent being tracked
+
                 {
                     if(mQueryCache.isCountFull())
                     {
@@ -266,15 +267,24 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 
                     // INSERTION
 					//TODO: ScoreF should only be attached when the cacheReplacement needs it.
-                    mQueryCache.add(query, queryResult, scoreF, scoreModifier);
+                    mQueryCache.add(query, queryResult/*, scoreF, scoreModifier*/);
                     //<editor-fold desc="LOG NEW QUERY CACHE REPLACEMENT">
                     StatisticsManager.newQueryCacheReplacement();
                     //</editor-fold>
                 }
+              /*  if(queryTrimmingResult.entryQuery != null
+						&& (queryTrimmingResult.type == QueryTrimmingType.CACHE_EXTENDED_HIT_INCLUDED
+						|| queryTrimmingResult.type == QueryTrimmingType.CACHE_EXTENDED_HIT_EQUIVALENT))
+                {
+                    mQueryCache.add(query, queryResult, scoreF, scoreModifier); // We know this wont actually add, but it'll update scores as needed
+                }*/
             }
             //else we do not insert in cache.
         }
-		
+        /*else if(mUsingReplacement && mQueryCache.containsKey(query)){
+            mQueryCache.add(query, queryResult, scoreF, scoreModifier); // We know this wont actually add, but it'll update scores as needed
+        }*/
+
 		/* at this point the query has been processed. */
 
         //<editor-fold desc="LOG STOP CACHE REPLACEMENT">

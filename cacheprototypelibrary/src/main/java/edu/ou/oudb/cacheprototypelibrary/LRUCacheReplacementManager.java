@@ -211,7 +211,15 @@ public class LRUCacheReplacementManager implements CacheReplacementManager<Query
 		
 		return removed;
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean clear(){
+		mEntriesHashMap.clear();
+		return true;
+	}
+
 	class LRUCacheEntry
 	{
 		private Query mQuery;

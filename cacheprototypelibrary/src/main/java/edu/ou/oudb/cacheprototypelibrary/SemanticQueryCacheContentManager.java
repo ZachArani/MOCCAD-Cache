@@ -168,6 +168,16 @@ public class SemanticQueryCacheContentManager implements CacheContentManager<Que
 		return removed;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean clear(){
+		mSize = 0;
+		mSegments.clear();
+		return true;
+	}
+
 	@Override
 	public long size() {
 		

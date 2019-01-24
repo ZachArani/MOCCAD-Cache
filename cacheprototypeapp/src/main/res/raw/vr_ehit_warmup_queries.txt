@@ -7,4 +7,4 @@ SELECT * FROM exp WHERE heartrate = 25;
 SELECT * FROM exp WHERE heartrate = 26;
 SELECT * FROM exp WHERE heartrate = 27;
 SELECT * FROM exp WHERE heartrate = 28;
-SELECT * FROM exp WHERE heartrate = 30;
+SELECT * FROM exp WHERE heartrate <= 80;

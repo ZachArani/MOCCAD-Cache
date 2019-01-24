@@ -87,6 +87,15 @@ public class StandartEstimationCacheContentManager implements CacheContentManage
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean clear(){
+		mSize = 0;
+		mSegments.clear();
+		return true;
+	}
+	/**
 	 * @author Mikael Perrin
 	 * @since 1.0
 	 * TrimmingResult returned after lookup on estimation cache

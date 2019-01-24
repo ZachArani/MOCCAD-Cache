@@ -158,10 +158,11 @@ public class StatisticsManager {
             mLogPW.print(time-startingTime);
             totalTime+= (time-startingTime);
             mLogPW.println();
+            double localEnergy = MobileEstimationComputationManager.estimateEnergy(time-startingTime);
             mLogPW.print(ENERGY_COST_TAG);
             mLogPW.print(":");
-            totalEnergy+=MobileEstimationComputationManager.estimateEnergy(time-startingTime);
-            mLogPW.print(MobileEstimationComputationManager.estimateEnergy(time-startingTime));
+            totalEnergy+=localEnergy;
+            mLogPW.print(localEnergy);
             mLogPW.println();
         }
     }
@@ -185,7 +186,7 @@ public class StatisticsManager {
             mLogPW.println();*/
             mLogPW.print(MONEY_COST_TAG);
             mLogPW.print(":");
-            totalCost+=returnedMoneyCost;
+           // totalCost+=returnedMoneyCost;
             mLogPW.print(returnedMoneyCost);
             mLogPW.println();
         }
@@ -410,7 +411,7 @@ public class StatisticsManager {
             mLogPW.println("RESULTS:");
             mLogPW.println("Time: " + String.valueOf(totalTime));
             mLogPW.println("Energy: " + String.valueOf(totalEnergy));
-            mLogPW.println("Cost" + String.valueOf(totalCost));
+            mLogPW.println("Cost: " + String.valueOf(totalCost));
             Log.i("RESULTS", String.valueOf(totalTime));
             Log.i("RESULTS", String.valueOf(totalEnergy));
             Log.i("RESULTS", String.valueOf(totalCost));

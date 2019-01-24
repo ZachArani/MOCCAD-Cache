@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import edu.ou.oudb.cacheprototypelibrary.LFUSQEPCacheReplacementManager;
+import edu.ou.oudb.cacheprototypelibrary.QEPCacheReplacementManager;
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheContentManager;
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheReplacementManager;
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheResolutionManager;
@@ -84,7 +85,7 @@ public class Cache<K extends Sizeable,V extends Sizeable>{
 
 	public V add(K key, V value, double QEPScore, double scoreModifier)
 	{
-		if(mCReplacementManager instanceof LFUSQEPCacheReplacementManager)
+		if(mCReplacementManager instanceof LFUSQEPCacheReplacementManager || mCReplacementManager instanceof QEPCacheReplacementManager)
 			mCReplacementManager.add(key, QEPScore, scoreModifier);
 		return mCContentManager.add(key, value);
 	}
@@ -103,6 +104,14 @@ public class Cache<K extends Sizeable,V extends Sizeable>{
 		}
 		
 		return mCContentManager.removeAll(keys);
+	}
+
+	public boolean clear(){
+		if(mCReplacementManager != null)
+		{
+			mCReplacementManager.clear();
+		}
+		return mCContentManager.clear();
 	}
 
     /**

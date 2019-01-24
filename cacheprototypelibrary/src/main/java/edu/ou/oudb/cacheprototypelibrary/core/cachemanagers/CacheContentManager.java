@@ -57,6 +57,12 @@ public interface CacheContentManager<K extends Sizeable,V extends Sizeable>{
      */
 	public boolean remove(K key);
 
+	/**
+	 * Removes all entries from cache
+	 * @return true if cleared. false otherwise
+	 */
+	public boolean clear();
+
     /**
      * @return the set of keys
      */

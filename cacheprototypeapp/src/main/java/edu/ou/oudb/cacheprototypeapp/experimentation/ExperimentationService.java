@@ -29,6 +29,8 @@ import edu.ou.oudb.cacheprototypelibrary.querycache.query.Predicate;
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.PredicateFactory;
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
 import edu.ou.oudb.cacheprototypelibrary.utils.StatisticsManager;
+import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.DataLoader;
+import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.DecisionalSemanticCacheDataLoader;
 
 public class ExperimentationService extends IntentService
 {
@@ -44,7 +46,7 @@ public class ExperimentationService extends IntentService
 	protected void onHandleIntent(Intent workIntent) {
 
 		//FIXME: WAS THE MIKAEL'S CACHE QUERIES VERSION
-		List<Query> warmupQueries = getQueries(this, R.raw.vr_warmup_queries);
+		List<Query> warmupQueries = getQueries(this, R.raw.vr_phit_warmup_queries);
 		List<Query> queriesToProcess = null;
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		int nbQueriesToExecute = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_NB_QUERIES_TO_PROCESS,"0"));
@@ -82,18 +84,18 @@ public class ExperimentationService extends IntentService
 
 		//FIXME: WASN'T THERE
 		int[] myExperiment = {
-				R.raw.vr_hit_90
-				/*R.raw.vr_hit_80,
-				R.raw.vr_hit_70,
-				R.raw.vr_hit_60,
-				R.raw.vr_hit_50,
-				R.raw.vr_hit_40,
-				R.raw.vr_hit_30,
-				R.raw.vr_hit_20,
-				R.raw.vr_hit_10,
-				R.raw.vr_hit_0*/
-
-		};
+				R.raw.vr_phit_100,
+                R.raw.vr_phit_90,
+                R.raw.vr_phit_80,
+                R.raw.vr_phit_70,
+                R.raw.vr_phit_60,
+                R.raw.vr_phit_50,
+                R.raw.vr_phit_40,
+                R.raw.vr_phit_30,
+                R.raw.vr_phit_20,
+                R.raw.vr_phit_10,
+                R.raw.vr_phit_0
+        };
 
 		//FIXME: WASN'T COMMENTED
         int[] experimentsExtendedHit = {
@@ -111,12 +113,8 @@ public class ExperimentationService extends IntentService
                         };
 		
 		// warming cache up
-		mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
-
-		warmupCache(warmupQueries);
         if (!handleErrors())
 		{
-			mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
 
 
             /*for (int i = 0; i < warmupexp.length; ++i) {
@@ -143,6 +141,11 @@ public class ExperimentationService extends IntentService
                 // experimentation for exact hit
 				//FIXME: PREVIOUSLY experimentsExtendedHit instead of myExperiment
                 for (int i = 0; i < myExperiment.length; ++i) {
+                    //Warm-up cache
+                    mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
+                    warmupCache(warmupQueries);
+                    mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
+                    //Gather Queries
                     queriesToProcess = getQueries(this, myExperiment[i]);
                     sizeOfQuerySet = queriesToProcess.size();
                     if (nbQueriesToExecute != 0) {
@@ -153,14 +156,15 @@ public class ExperimentationService extends IntentService
                                 String.valueOf(sizeOfQuerySet));
                     }
 
-
+                    //Begin experiment
                     //<editor-fold desc="LOG START EXPERIMENTATION">
                     StatisticsManager.createFileWriter("test_experiment_" + i);
                     //</editor-fold>
-                    StatisticsManager.finishedExperiment();
+                    StatisticsManager.finishedExperiment(); //Clear experiment log writer before starting
                     runExperimentation(queriesToProcess, nbQueriesToExecute);
                     StatisticsManager.finishedExperiment();
                     //<editor-fold desc="LOG STOP EXPERIMENTATION">
+                    clearCache(); //Remove all entries from cache before we start again
                     StatisticsManager.close();
                     //</editor-fold>
 
@@ -298,6 +302,19 @@ public class ExperimentationService extends IntentService
 		}
 		
 		return queries;
+	}
+
+	/**
+	 * Clear cache (usually between experiments)
+	 * @return if cache was cleared
+	 */
+	private boolean clearCache(){
+		DataLoader loader = ((AndroidCachePrototypeApplication)getApplicationContext()).getDataLoader();
+		if(loader instanceof DecisionalSemanticCacheDataLoader){
+			((DecisionalSemanticCacheDataLoader) loader).getQueryCache().clear();
+			return true;
+		}
+		return false;
 	}
 
 	private Query getQuery(String line) {

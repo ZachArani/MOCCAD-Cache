@@ -170,7 +170,7 @@ public class PowerProfile {
      * @param context the application context.
      */
     private void readPowerValuesFromXml(Context context) {
-        XmlResourceParser parser = context.getResources().getXml(R.xml.power_profile_asus_zenfone_go_5_5);
+        XmlResourceParser parser = context.getResources().getXml(R.xml.power_profile_v10);
         boolean parsingArray = false;
         ArrayList<Double> array = new ArrayList<Double>();
         String arrayName = null;

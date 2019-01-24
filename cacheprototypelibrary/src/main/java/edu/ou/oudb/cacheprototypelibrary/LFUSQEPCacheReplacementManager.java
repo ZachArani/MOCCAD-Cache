@@ -160,6 +160,15 @@ public class LFUSQEPCacheReplacementManager implements CacheReplacementManager<Q
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean clear(){
+        mEntriesPriorityQueue.clear();
+        return true;
+    }
+
+    /**
      * Removes and returns the desired entry from the Priority Queue or null otherwise.
      * @param q The Query to search by
      * @return CacheEntry which is passed

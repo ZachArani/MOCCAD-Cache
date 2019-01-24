@@ -26,7 +26,7 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
                 result.probeQuery = inputQuery;
             /*Goes to GuoEtAlPredicateAnalyzer
             * Use Ctrl+B on the method*/
-            } else if (geapanalyzer.respectsImplicationIntegerDomain(inputQuery.getPredicates(), segmentQuery.getPredicates()))
+                } else if (geapanalyzer.respectsImplicationIntegerDomain(inputQuery.getPredicates(), segmentQuery.getPredicates()))
             {
                 if (verticalTrim==1) //extended hit
                 {
@@ -63,6 +63,7 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
                     result.remainderQuery = new Query(inputQuery.getRelation());
                     result.remainderQuery.addPredicates(inputQuery.getPredicates());
                     result.remainderQuery.addAttributes(attributeSet2);
+                    return result;
                 }
 
             /*Goes to GuoEtAlPredicateAnalyzer*/
@@ -78,6 +79,7 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
                     result.remainderQuery.addPredicates(inputQuery.getPredicates());
                     result.remainderQuery.addExcludedPredicates(segmentQuery.getPredicates());
                     result.remainderQuery.addAttributes(inputQuery.getAttributes());
+                    return result;
                 } else if(verticalTrim==2) {
                     result.type = QueryTrimmingType.CACHE_HYBRID;
 
@@ -108,6 +110,7 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
                     result.remainderQuery2.addAttributes(inputQuery.getAttributes());
                     result.remainderQuery2.addPredicates(inputQuery.getPredicates());
                     result.remainderQuery2.addExcludedPredicates(segmentQuery.getPredicates());
+                    return result;
                 }
             }
         }
