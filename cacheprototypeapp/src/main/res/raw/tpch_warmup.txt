@@ -1,0 +1,10 @@
+SELECT * FROM customer WHERE c_acctbal < 300 AND c_acctbal > 298;
+SELECT * FROM customer WHERE c_acctbal < 600 AND c_acctbal > 597;
+SELECT * FROM customer WHERE c_acctbal < 270 AND c_acctbal > 260;
+SELECT * FROM customer WHERE c_acctbal < 362 AND c_acctbal > 361;
+SELECT * FROM customer WHERE c_acctbal < 102 AND c_acctbal > 100;
+SELECT * FROM customer WHERE c_acctbal < 500 AND c_acctbal > 499;
+SELECT * FROM customer WHERE c_acctbal < 802 AND c_acctbal > 800;
+SELECT * FROM customer WHERE c_acctbal < 300 AND c_acctbal > 298;
+SELECT * FROM customer WHERE c_acctbal < 300 AND c_acctbal > 298;
+SELECT * FROM customer WHERE c_acctbal < 300 AND c_acctbal > 298;

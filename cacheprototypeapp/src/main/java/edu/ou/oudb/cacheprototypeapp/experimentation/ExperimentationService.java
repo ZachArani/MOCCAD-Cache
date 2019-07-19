@@ -46,19 +46,11 @@ public class ExperimentationService extends IntentService
 	protected void onHandleIntent(Intent workIntent) {
 
 		//FIXME: WAS THE MIKAEL'S CACHE QUERIES VERSION
-		List<Query> warmupQueries = getQueries(this, R.raw.vr_phit_warmup_queries);
+		//List<Query> warmupQueries = getQueries(this, R.raw.tpch_warmup);
 		List<Query> queriesToProcess = null;
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		int nbQueriesToExecute = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_NB_QUERIES_TO_PROCESS,"0"));
 		int sizeOfQuerySet = 0;
-		//GenerateQueries test = new GenerateQueries(100);
-		GenerateTuples tupleMaker = new GenerateTuples("testTable", 250000);
-		//tupleMaker.generate();
-		/*for(String query : test.generate(500))
-        {
-            Log.i("", query);
-        }
-*/
 
 		// used to update estimations on the cloud
 		int[] experiments = {R.raw.queries};
@@ -84,17 +76,7 @@ public class ExperimentationService extends IntentService
 
 		//FIXME: WASN'T THERE
 		int[] myExperiment = {
-				R.raw.vr_phit_100,
-                R.raw.vr_phit_90,
-                R.raw.vr_phit_80,
-                R.raw.vr_phit_70,
-                R.raw.vr_phit_60,
-                R.raw.vr_phit_50,
-                R.raw.vr_phit_40,
-                R.raw.vr_phit_30,
-                R.raw.vr_phit_20,
-                R.raw.vr_phit_10,
-                R.raw.vr_phit_0
+				R.raw.tpch_test
         };
 
 		//FIXME: WASN'T COMMENTED
@@ -139,11 +121,10 @@ public class ExperimentationService extends IntentService
             //System.gc(); // clean memory
 			for (int k=0; k < 1; ++k) {
                 // experimentation for exact hit
-				//FIXME: PREVIOUSLY experimentsExtendedHit instead of myExperiment
                 for (int i = 0; i < myExperiment.length; ++i) {
                     //Warm-up cache
-                    mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
-                    warmupCache(warmupQueries);
+                 //   mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
+               //     warmupCache(warmupQueries);
                     mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
                     //Gather Queries
                     queriesToProcess = getQueries(this, myExperiment[i]);
@@ -158,15 +139,49 @@ public class ExperimentationService extends IntentService
 
                     //Begin experiment
                     //<editor-fold desc="LOG START EXPERIMENTATION">
-                    StatisticsManager.createFileWriter("test_experiment_" + i);
+                    StatisticsManager.createFileWriter("test_experiment_" + i + "_LRU");
                     //</editor-fold>
+					//First run, LRU
+					((AndroidCachePrototypeApplication) getApplicationContext()).updateQueryCache("LRU");
                     StatisticsManager.finishedExperiment(); //Clear experiment log writer before starting
+					//TODO: Edit logger to have CSV format
                     runExperimentation(queriesToProcess, nbQueriesToExecute);
                     StatisticsManager.finishedExperiment();
                     //<editor-fold desc="LOG STOP EXPERIMENTATION">
                     clearCache(); //Remove all entries from cache before we start again
                     StatisticsManager.close();
                     //</editor-fold>
+
+
+					//Do it all again
+					//Warm-up cache
+				//	mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
+					//(warmupQueries);
+					mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
+					//Gather Queries
+					queriesToProcess = getQueries(this, myExperiment[i]);
+					sizeOfQuerySet = queriesToProcess.size();
+					if (nbQueriesToExecute != 0) {
+						mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_STARTED,
+								String.valueOf((sizeOfQuerySet < nbQueriesToExecute) ? sizeOfQuerySet : nbQueriesToExecute));
+					} else {
+						mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_STARTED,
+								String.valueOf(sizeOfQuerySet));
+					}
+
+					//Begin experiment
+					//<editor-fold desc="LOG START EXPERIMENTATION">
+					StatisticsManager.createFileWriter("test_experiment_" + i + "_LFUSQEP");
+					//</editor-fold>
+					//Second run, LFUSQEP
+					((AndroidCachePrototypeApplication) getApplicationContext()).updateQueryCache("LFU");
+					StatisticsManager.finishedExperiment(); //Clear experiment log writer before starting
+					//TODO: Edit logger to have CSV format
+					runExperimentation(queriesToProcess, nbQueriesToExecute);
+					StatisticsManager.finishedExperiment();
+					//<editor-fold desc="LOG STOP EXPERIMENTATION">
+					clearCache(); //Remove all entries from cache before we start again
+					StatisticsManager.close();
 
 
                     if (!handleErrors()) {
@@ -320,6 +335,7 @@ public class ExperimentationService extends IntentService
 	private Query getQuery(String line) {
 		
 		Query query = null;
+		String predicateStr = " ";
 		Set<Predicate> predicates = new HashSet<Predicate>();
 
 		String rightFrom = line.split("FROM")[1].trim();
@@ -328,7 +344,8 @@ public class ExperimentationService extends IntentService
 
 		query = new Query(table);
 
-		String predicateStr = rightFrom.split("WHERE")[1].trim();
+		if(rightFrom.contains("WHERE") || rightFrom.contains("where"))
+		    predicateStr = rightFrom.split("WHERE")[1].trim();
 
 		predicateStr = predicateStr.substring(0,predicateStr.length()-1);
 

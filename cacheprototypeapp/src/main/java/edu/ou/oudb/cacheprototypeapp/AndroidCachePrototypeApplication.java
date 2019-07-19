@@ -341,4 +341,44 @@ public class AndroidCachePrototypeApplication extends Application {
 		mDataLoader = new DecisionalSemanticCacheDataLoader(this,mDataAccessProvider,mMobileEstimationCache,mCloudEstimationCache,mQueryCache,mOptimizationParameters,useReplacement);
 	}
 
+	public void updateQueryCache(String type)
+    {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        int maxQueryCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_SIZE, "100000"));
+        int maxQueryCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_QUERY_CACHE_NUMBER_SEGMENT, "0"));
+        int maxMobileEstimationCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_MOBILE_ESTIMATION_CACHE_SIZE, "10000000"));
+        int maxMobileEstimationCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_MOBILE_ESTIMATION_CACHE_NUMBER_SEGMENT, "0"));
+        int maxCloudEstimationCacheSize = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_CLOUD_ESTIMATION_CACHE_SIZE, "10000000"));
+        int maxCloudEstimationCacheSegments = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_MAX_CLOUD_ESTIMATION_CACHE_NUMBER_SEGMENT, "0"));
+        boolean useReplacement = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_REPLACEMENT_TYPE, "1"))!=0; //If the "Cache Replacement" strategy is not 0 (no replacement), then we're using a strategy.
+
+        //build query cache
+        SemanticQueryCacheContentManager semanticCacheContentManager = new SemanticQueryCacheContentManager();
+        SemanticQueryCacheResolutionManager semanticCacheResolutionManager = new SemanticQueryCacheResolutionManager();
+        CacheBuilder<Query,QuerySegment> queryCacheBuilder = CacheBuilder.<Query,QuerySegment>newBuilder();
+        queryCacheBuilder.setCacheContentManager(semanticCacheContentManager);
+        queryCacheBuilder.setCacheResolutionManager(semanticCacheResolutionManager);
+        switch(type) {
+            case "LRU":
+                queryCacheBuilder.setCacheReplacementManager(new LRUCacheReplacementManager());
+            break;
+            case "LFUSQEP":
+                queryCacheBuilder.setCacheReplacementManager(new LFUSQEPCacheReplacementManager());
+            break;
+            default:
+                queryCacheBuilder.setCacheReplacementManager(new LRUCacheReplacementManager());
+                break;
+
+        }
+        queryCacheBuilder.setMaxSize(maxQueryCacheSize);
+        if (maxQueryCacheSegments > 0)//not default
+        {
+            queryCacheBuilder.setMaxSegment(maxQueryCacheSegments);
+        }
+        mQueryCache = queryCacheBuilder.build();
+
+
+    }
+
 }

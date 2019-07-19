@@ -408,10 +408,10 @@ public class StatisticsManager {
     {
         if(mLogPW != null)
         {
-            mLogPW.println("RESULTS:");
-            mLogPW.println("Time: " + String.valueOf(totalTime));
-            mLogPW.println("Energy: " + String.valueOf(totalEnergy));
-            mLogPW.println("Cost: " + String.valueOf(totalCost));
+          //  mLogPW.println("RESULTS:");
+            mLogPW.print(/*"Time: " + */String.valueOf(totalTime)+",");
+            mLogPW.print(/*"Energy: " + */String.valueOf(totalEnergy)+",");
+            mLogPW.println(/*"Cost: " + */String.valueOf(totalCost));
             Log.i("RESULTS", String.valueOf(totalTime));
             Log.i("RESULTS", String.valueOf(totalEnergy));
             Log.i("RESULTS", String.valueOf(totalCost));

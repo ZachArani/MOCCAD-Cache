@@ -23,7 +23,7 @@ public class GenerateTuples {
     GregorianCalendar gc;
     String tableName;
 
-    String url = "http://172.27.232.49:8080/CloudWebService/rest/result?query=";
+    String url = "http://18.221.57.70:8080/CloudWebService/rest/result?query=";
 
     public GenerateTuples(String tableName, int total)
     {
