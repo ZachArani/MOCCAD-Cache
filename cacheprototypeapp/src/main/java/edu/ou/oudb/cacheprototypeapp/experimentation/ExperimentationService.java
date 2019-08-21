@@ -125,7 +125,7 @@ public class ExperimentationService extends IntentService
                     //Warm-up cache
                  //   mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
                //     warmupCache(warmupQueries);
-                    mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
+                  //  mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
                     //Gather Queries
                     queriesToProcess = getQueries(this, myExperiment[i]);
                     sizeOfQuerySet = queriesToProcess.size();
@@ -157,7 +157,7 @@ public class ExperimentationService extends IntentService
 					//Warm-up cache
 				//	mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
 					//(warmupQueries);
-					mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
+				//	mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
 					//Gather Queries
 					queriesToProcess = getQueries(this, myExperiment[i]);
 					sizeOfQuerySet = queriesToProcess.size();
@@ -347,7 +347,8 @@ public class ExperimentationService extends IntentService
 		if(rightFrom.contains("WHERE") || rightFrom.contains("where"))
 		    predicateStr = rightFrom.split("WHERE")[1].trim();
 
-		predicateStr = predicateStr.substring(0,predicateStr.length()-1);
+		if(predicateStr.contains(";"))
+		    predicateStr = predicateStr.substring(0,predicateStr.length()-1); //fixed bug where the last char was being cut off
 
 		String[] predicateList = predicateStr.split("AND");
 

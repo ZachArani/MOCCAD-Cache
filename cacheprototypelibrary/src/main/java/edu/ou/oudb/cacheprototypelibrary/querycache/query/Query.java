@@ -153,7 +153,7 @@ public class Query implements Sizeable {
 			mSize += ObjectSizer.getStringSize32bits(attribute.length());
 			return mAttributes.add(attribute);
 		} else { //if attribute is *, adds all attributes
-			String[] attributes = new String[]{"noteid", "patientfirstname", "patientlastname", "doctorfirstname", "doctorlastname", "description", "p_date_time", "heartrate"};
+			String[] attributes = new String[]{"noteid", "patientfirstname", "patientlastname", "doctorfirstname", "doctorlastname", "description", "p_date_time", "heartrate"}; //TODO: Stop this legacy code
 			for(String a: attributes) {
 				addAttribute(a);
 			}

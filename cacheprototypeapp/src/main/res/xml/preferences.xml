@@ -34,7 +34,7 @@
 	        android:title="@string/pref_data_access_provider"/>
 
 	    <EditTextPreference
-            android:defaultValue="192.168.5.174"
+            android:defaultValue="192.168.5.195"
             android:title="@string/pref_ip_address"
             android:key="pref_ip_address"
             android:summary="%s"

@@ -39,7 +39,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 
     private static final int CLOUD_COEFF = 5;
 	
-    private String mURLBase = "http://192.168.5.138:8080/CloudWebService/rest/";
+    private String mURLBase = "http://192.168.5.195:8080/CloudWebService/rest/";
 
 	private String mURLGetRelationMetadata = mURLBase + URL_DB_INFO;
 	
@@ -52,7 +52,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 	public CloudDataAccessProvider(Context context) throws DownloadDataException, JSONParserException
 	{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		String ipAddress = pref.getString(PREF_IP_ADDRESS,"192.168.5.174"); //school is 10.204.69.210, Jason home is 192.168.0.132 - change in two places here, and in preferences.xml in cacheprototypeapp
+		String ipAddress = pref.getString(PREF_IP_ADDRESS,"192.168.5.195"); //school is 10.204.69.210, Jason home is 192.168.0.132 - change in two places here, and in preferences.xml in cacheprototypeapp
 		String port = pref.getString(PREF_PORT,"8080");
 	
 		StringBuilder urlBaseBuilder = new StringBuilder("http://");
@@ -132,6 +132,8 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 						.replace(" ", "%20")
 						.replace("<", "%3C")
 						.replace(">","%3E")
+						.replace("=", "%3D")
+						.replace("'", "%27")
 						.replace(";", ""));
 		String urlString = sb.toString();
 
