@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 import edu.ou.oudb.cacheprototypeapp.AndroidCachePrototypeApplication;
 import edu.ou.oudb.cacheprototypeapp.R;
 import edu.ou.oudb.cacheprototypeapp.ui.SettingsActivity;
@@ -336,7 +337,9 @@ public class ExperimentationService extends IntentService
 		
 		Query query = null;
 		String predicateStr = " ";
+		//Set<String> attributes = new HashSet<>();
 		Set<Predicate> predicates = new HashSet<Predicate>();
+        String queryAttributes = (line.split("SELECT")[1].split("FROM")[0]; //Grab attributes (SELECT * )
 
 		String rightFrom = line.split("FROM")[1].trim();
 
@@ -349,9 +352,65 @@ public class ExperimentationService extends IntentService
 
 		if(predicateStr.contains(";"))
 		    predicateStr = predicateStr.substring(0,predicateStr.length()-1); //fixed bug where the last char was being cut off
+		if(predicateStr.contains("between")) //If we're dealing with a query with one or more 'between' statements
+		{
+			String[] betweenList = predicateStr.split("BETWEEN");
+			for(int i = 0; i<betweenList.length; i++) //For each series of statements in the between split
+			{
+				String[] andList = betweenList[i].split("AND"); //Split each between split by and
+				String[] predicateItems;
+				for(int j = 0; j<andList.length-1; j++) //For each and split besides the last (our between statement
+				{
+					predicateItems = andList[i].trim().split(" "); //Split simple predicates into parts
+					try { //Ship them onward
+						Predicate p = PredicateFactory.createPredicate(predicateItems[0], predicateItems[1], predicateItems[2]);
+						predicates.add(p);
+					} catch (TrivialPredicateException | InvalidPredicateException e) {
+						Log.e("PARSE_QUERY_LINE", "invalid predicate");
+						return null;
+					}
+				}
+				//Now for our between statement we have to look ahead to the next split and grab the first two statements
+				//So if we had something like C between X and Y then our variables are
+				String column = andList[andList.length-1]; //Grab the final column before the between split ("column between x and y") aka C
+				String[] nextAndList = betweenList[i+1].split("AND"); //Split the next series of statements after between
+				String op1 = nextAndList[0]; //X
+				String op2 = nextAndList[1]; //Y
+				double result1 = 0;
+				double result2 = 0;
+				if(op1!=null && !op1.matches("[-+]?\\d*\\.?\\d+")) //If our first op exists and isn't purely a number (i.e., it is an arithmetic statement
+				{
+					result1 = eval(op1); //Evaluate number
+				}
+				else if(op1==null) //Log parsing issues
+				{
+					Log.e("OPERATION PARSE ERROR", "Operation 1 not parsed when analyzing between prediate");
+				}
+				if(op2!=null && op2.matches("[-+]?\\d*\\.?\\d+"))
+				{
+					result2 = eval(op2); //Evaluate number
+				}
+				if(result1>result2) //Figure out which one is larger
+				{
+					 //Result2 is smaller so it goes first
+					predicates.add(PredicateFactory.createPredicate(column, ">=", String.valueOf(result2))); //C >= Y
+					predicates.add(PredicateFactory.createPredicate(column, "<=", String.valueOf(result1))); //AND C <= X
+				}
+				else if(result2>result1) //If result 2 is larger
+				{
+					predicates.add(PredicateFactory.createPredicate(column, ">=", String.valueOf(result1))); //C >= Y
+					predicates.add(PredicateFactory.createPredicate(column, "<=", String.valueOf(result2))); //AND C <= X
+				}
+				else //If they're equal
+				{
+					predicates.add(PredicateFactory.createPredicate(column, "==", String.valueOf(result1)));
+				}
+
+			}
+		}
 
 		String[] predicateList = predicateStr.split("AND");
-
+        String[] attributeList = queryAttributes.split(","); //Get list of attributes by csv
 		int size = predicateList.length;
 
 		String predicateItems[] = null;
@@ -370,5 +429,85 @@ public class ExperimentationService extends IntentService
 		query.addPredicates(predicates);
 
 		return query;
+	}
+
+	public static double eval(final String str) { //For evaluating string arithmetic expressions. From https://stackoverflow.com/questions/3422673/how-to-evaluate-a-math-expression-given-in-string-form
+		return new Object() {
+			int pos = -1, ch;
+
+			void nextChar() {
+				ch = (++pos < str.length()) ? str.charAt(pos) : -1;
+			}
+
+			boolean eat(int charToEat) {
+				while (ch == ' ') nextChar();
+				if (ch == charToEat) {
+					nextChar();
+					return true;
+				}
+				return false;
+			}
+
+			double parse() {
+				nextChar();
+				double x = parseExpression();
+				if (pos < str.length()) throw new RuntimeException("Unexpected: " + (char)ch);
+				return x;
+			}
+
+			// Grammar:
+			// expression = term | expression `+` term | expression `-` term
+			// term = factor | term `*` factor | term `/` factor
+			// factor = `+` factor | `-` factor | `(` expression `)`
+			//        | number | functionName factor | factor `^` factor
+
+			double parseExpression() {
+				double x = parseTerm();
+				for (;;) {
+					if      (eat('+')) x += parseTerm(); // addition
+					else if (eat('-')) x -= parseTerm(); // subtraction
+					else return x;
+				}
+			}
+
+			double parseTerm() {
+				double x = parseFactor();
+				for (;;) {
+					if      (eat('*')) x *= parseFactor(); // multiplication
+					else if (eat('/')) x /= parseFactor(); // division
+					else return x;
+				}
+			}
+
+			double parseFactor() {
+				if (eat('+')) return parseFactor(); // unary plus
+				if (eat('-')) return -parseFactor(); // unary minus
+
+				double x;
+				int startPos = this.pos;
+				if (eat('(')) { // parentheses
+					x = parseExpression();
+					eat(')');
+				} else if ((ch >= '0' && ch <= '9') || ch == '.') { // numbers
+					while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
+					x = Double.parseDouble(str.substring(startPos, this.pos));
+				} else if (ch >= 'a' && ch <= 'z') { // functions
+					while (ch >= 'a' && ch <= 'z') nextChar();
+					String func = str.substring(startPos, this.pos);
+					x = parseFactor();
+					if (func.equals("sqrt")) x = Math.sqrt(x);
+					else if (func.equals("sin")) x = Math.sin(Math.toRadians(x));
+					else if (func.equals("cos")) x = Math.cos(Math.toRadians(x));
+					else if (func.equals("tan")) x = Math.tan(Math.toRadians(x));
+					else throw new RuntimeException("Unknown function: " + func);
+				} else {
+					throw new RuntimeException("Unexpected: " + (char)ch);
+				}
+
+				if (eat('^')) x = Math.pow(x, parseFactor()); // exponentiation
+
+				return x;
+			}
+		}.parse();
 	}
 }
