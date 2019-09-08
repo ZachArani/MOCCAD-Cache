@@ -47,7 +47,7 @@ public class ExperimentationService extends IntentService
 	protected void onHandleIntent(Intent workIntent) {
 
 		//FIXME: WAS THE MIKAEL'S CACHE QUERIES VERSION
-		//List<Query> warmupQueries = getQueries(this, R.raw.tpch_warmup);
+		List<Query> warmupQueries = getQueries(this, R.raw.tpch_warmup);
 		List<Query> queriesToProcess = null;
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		int nbQueriesToExecute = Integer.parseInt(sharedPref.getString(SettingsActivity.KEY_PREF_NB_QUERIES_TO_PROCESS,"0"));
@@ -339,29 +339,58 @@ public class ExperimentationService extends IntentService
 		String predicateStr = " ";
 		//Set<String> attributes = new HashSet<>();
 		Set<Predicate> predicates = new HashSet<Predicate>();
-        String queryAttributes = (line.split("SELECT")[1].split("FROM")[0]; //Grab attributes (SELECT * )
+        HashSet<String> queryAttributes = new HashSet<String>(); //Grab attributes (SELECT * )
+		for(String attr : line.split("SELECT")[1].split("FROM")[0].split(",")) //For each attribute
+		{
+			queryAttributes.add(attr);
+		}
 
 		String rightFrom = line.split("FROM")[1].trim();
 
 		String table = rightFrom.split(" ")[0];
 
 		query = new Query(table);
+		query.addAttributes(queryAttributes);
 
 		if(rightFrom.contains("WHERE") || rightFrom.contains("where"))
 		    predicateStr = rightFrom.split("WHERE")[1].trim();
 
 		if(predicateStr.contains(";"))
 		    predicateStr = predicateStr.substring(0,predicateStr.length()-1); //fixed bug where the last char was being cut off
-		if(predicateStr.contains("between")) //If we're dealing with a query with one or more 'between' statements
+		if(predicateStr.contains("ORDER BY") && predicateStr.contains("LIMIT")) //If we have both specifications
+		{
+			query.addLimit("LIMIT " + predicateStr.split("LIMIT")[1].split(" ")[0]); //Split the query by the word LIMIT and grab the first number following the word
+			query.addLimit("ORDER BY " + predicateStr.split("ORDER BY")[1].split(" ")[0]); //The same for ORDER BY
+
+			if(predicateStr.indexOf("LIMIT") < predicateStr.indexOf("ORDER BY")) //If limit comes before order by
+				predicateStr = predicateStr.substring(0, predicateStr.indexOf("LIMIT")); //Remove the LIMIT and ORDER BY segments from the query
+			else
+				predicateStr = predicateStr.substring(0, predicateStr.indexOf("ORDER BY"));
+		}
+
+
+		if(predicateStr.contains("LIMIT"))
+		{
+			query.addLimit("LIMIT " + predicateStr.split("LIMIT")[1].split(" ")[0]); //Split the query by the word LIMIT and grab the first number following the word
+			predicateStr = predicateStr.substring(0, predicateStr.indexOf("LIMIT")); //Remove limit from predicate statement
+		}
+
+		else if(predicateStr.contains("ORDER BY"))
+		{
+			query.addLimit("ORDER BY " + predicateStr.split("ORDER BY")[1].split(" ")[0]); //The same for ORDER BY
+			predicateStr = predicateStr.substring(0, predicateStr.indexOf("ORDER BY")); //remove orderby from predicate statement
+		}
+
+		if(predicateStr.contains("BETWEEN")) //If we're dealing with a query with one or more 'between' statements
 		{
 			String[] betweenList = predicateStr.split("BETWEEN");
-			for(int i = 0; i<betweenList.length; i++) //For each series of statements in the between split
+			for(int i = 0; i<betweenList.length-1; i++) //For each series of statements in the between split
 			{
 				String[] andList = betweenList[i].split("AND"); //Split each between split by and
 				String[] predicateItems;
 				for(int j = 0; j<andList.length-1; j++) //For each and split besides the last (our between statement
 				{
-					predicateItems = andList[i].trim().split(" "); //Split simple predicates into parts
+					predicateItems = andList[j].trim().split(" "); //Split simple predicates into parts
 					try { //Ship them onward
 						Predicate p = PredicateFactory.createPredicate(predicateItems[0], predicateItems[1], predicateItems[2]);
 						predicates.add(p);
@@ -380,49 +409,75 @@ public class ExperimentationService extends IntentService
 				double result2 = 0;
 				if(op1!=null && !op1.matches("[-+]?\\d*\\.?\\d+")) //If our first op exists and isn't purely a number (i.e., it is an arithmetic statement
 				{
-					result1 = eval(op1); //Evaluate number
+					result1 = eval(op1.trim()); //Evaluate number
 				}
 				else if(op1==null) //Log parsing issues
 				{
 					Log.e("OPERATION PARSE ERROR", "Operation 1 not parsed when analyzing between prediate");
 				}
-				if(op2!=null && op2.matches("[-+]?\\d*\\.?\\d+"))
+				if(op2!=null && !op2.matches("[-+]?\\d*\\.?\\d+"))
 				{
-					result2 = eval(op2); //Evaluate number
+					result2 = eval(op2.trim()); //Evaluate number
 				}
 				if(result1>result2) //Figure out which one is larger
 				{
-					 //Result2 is smaller so it goes first
-					predicates.add(PredicateFactory.createPredicate(column, ">=", String.valueOf(result2))); //C >= Y
-					predicates.add(PredicateFactory.createPredicate(column, "<=", String.valueOf(result1))); //AND C <= X
-				}
+					try {
+						//Result2 is smaller so it goes first
+						predicates.add(PredicateFactory.createPredicate(column, ">=", String.valueOf(result2))); //C >= Y
+						predicates.add(PredicateFactory.createPredicate(column, "<=", String.valueOf(result1))); //AND C <= X
+					} catch (TrivialPredicateException | InvalidPredicateException e) {
+						Log.e("PARSE_QUERY_LINE", "invalid predicate");
+						return null;
+					}
+
+					}
 				else if(result2>result1) //If result 2 is larger
 				{
+					try {
 					predicates.add(PredicateFactory.createPredicate(column, ">=", String.valueOf(result1))); //C >= Y
 					predicates.add(PredicateFactory.createPredicate(column, "<=", String.valueOf(result2))); //AND C <= X
+					} catch (TrivialPredicateException | InvalidPredicateException e) {
+						Log.e("PARSE_QUERY_LINE", "invalid predicate");
+						return null;
+					}
 				}
 				else //If they're equal
 				{
-					predicates.add(PredicateFactory.createPredicate(column, "==", String.valueOf(result1)));
+					try {
+						predicates.add(PredicateFactory.createPredicate(column, "==", String.valueOf(result1)));
+					} catch (TrivialPredicateException | InvalidPredicateException e) {
+						Log.e("PARSE_QUERY_LINE", "invalid predicate");
+						return null;
+					}
 				}
 
 			}
+			String[] andSplit = betweenList[betweenList.length-1].split("AND"); //After the last between, catch the rest of the ends
+			for(int k = 2; k<andSplit.length; k++) //Start from 2 to ignore the two predicates from the last between
+			{
+				String[] pred = andSplit[k].split(" "); //Split predicate into X OP Y
+				try{
+					predicates.add(PredicateFactory.createPredicate(pred[1], pred[2], pred[3])); //Ship predicate
+				} catch (TrivialPredicateException | InvalidPredicateException e) {
+					Log.e("PARSE_QUERY_LINE", "invalid predicate");
+					return null;
+				}
+			}
 		}
+		else { //If we're dealing with a simple case (no between)
+			String[] predicateList = predicateStr.split("AND");
+			int size = predicateList.length;
 
-		String[] predicateList = predicateStr.split("AND");
-        String[] attributeList = queryAttributes.split(","); //Get list of attributes by csv
-		int size = predicateList.length;
-
-		String predicateItems[] = null;
-		for (int i=0; i < size; ++i)
-		{
-			predicateItems = predicateList[i].trim().split(" ");
-			try {
-				Predicate p = PredicateFactory.createPredicate(predicateItems[0], predicateItems[1], predicateItems[2]);
-				predicates.add(p);
-			} catch (TrivialPredicateException | InvalidPredicateException e) {
-				Log.e("PARSE_QUERY_LINE", "invalid predicate");
-				return null;
+			String predicateItems[] = null;
+			for (int i = 0; i < size; ++i) {
+				predicateItems = predicateList[i].trim().split(" ");
+				try {
+					Predicate p = PredicateFactory.createPredicate(predicateItems[0], predicateItems[1], predicateItems[2]);
+					predicates.add(p);
+				} catch (TrivialPredicateException | InvalidPredicateException e) {
+					Log.e("PARSE_QUERY_LINE", "invalid predicate");
+					return null;
+				}
 			}
 		}
 

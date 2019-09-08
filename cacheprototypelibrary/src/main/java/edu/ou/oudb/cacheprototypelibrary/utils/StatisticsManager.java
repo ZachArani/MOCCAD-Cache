@@ -79,6 +79,7 @@ public class StatisticsManager {
     private static long totalTime = 0;
     private static double totalCost = 0;
     private static double totalEnergy = 0;
+    private static boolean onCloud = false;
 
     public static void createFileWriter()
     {
@@ -125,12 +126,12 @@ public class StatisticsManager {
 
     private static void printTag(String tag)
     {
-        if(mLogPW != null)
+        /*if(mLogPW != null)
         {
             mLogPW.print(tag);
             printTimeStamp();
             mLogPW.println();
-        }
+        }*/
     }
 
     private static long printStartTask(String tag)
@@ -138,11 +139,11 @@ public class StatisticsManager {
         long time = 0;
         if(mLogPW != null)
         {
-            mLogPW.print(tag);
-            mLogPW.print(":");
+            //mLogPW.print(tag);
+            //mLogPW.print(":");
             time = SystemClock.elapsedRealtimeNanos();
-            mLogPW.print(time);
-            mLogPW.println();
+            //mLogPW.print(time);
+            //mLogPW.println();
         }
         return time;
     }
@@ -151,25 +152,26 @@ public class StatisticsManager {
     {
         if(mLogPW != null)
         {
-            mLogPW.print(tag);
-            mLogPW.print(":");
+           /* mLogPW.print(tag);
+            mLogPW.print(":");*/
             long time = SystemClock.elapsedRealtimeNanos();
-           // mLogPW.print(time);
-            mLogPW.print(time-startingTime);
+           /* mLogPW.print(time);
+            mLogPW.print(time-startingTime); */
             totalTime+= (time-startingTime);
-            mLogPW.println();
+            //mLogPW.println();
             double localEnergy = MobileEstimationComputationManager.estimateEnergy(time-startingTime);
-            mLogPW.print(ENERGY_COST_TAG);
-            mLogPW.print(":");
+            /*mLogPW.print(ENERGY_COST_TAG);
+            mLogPW.print(":");*/
             totalEnergy+=localEnergy;
-            mLogPW.print(localEnergy);
-            mLogPW.println();
+            /*mLogPW.print(localEnergy);
+            mLogPW.println();*/
         }
     }
 
     public static long startComputeCloudEstimation()
     {
         return printStartTask(START_COMPUTE_CLOUD_ESTIMATION_TAG);
+
     }
 
     public static void stopComputeCloudEstimation(long startTime, long duration, double returnedMoneyCost)
@@ -183,12 +185,12 @@ public class StatisticsManager {
             mLogPW.print(ENERGY_COST_TAG);
             mLogPW.print(":");
             mLogPW.print(CloudEstimationComputationManager.estimateEnergyLowNetwork(duration));
-            mLogPW.println();*/
+            mLogPW.println();
             mLogPW.print(MONEY_COST_TAG);
             mLogPW.print(":");
-           // totalCost+=returnedMoneyCost;
+            totalCost+=returnedMoneyCost;
             mLogPW.print(returnedMoneyCost);
-            mLogPW.println();
+            mLogPW.println(); */
         }
     }
 
@@ -209,11 +211,12 @@ public class StatisticsManager {
             mLogPW.print(":");
             mLogPW.print(CloudEstimationComputationManager.estimateEnergyLowNetwork(duration));
             mLogPW.println();*/
-            mLogPW.print(MONEY_COST_TAG);
-            mLogPW.print(":");
+            //mLogPW.print(MONEY_COST_TAG);
+            //mLogPW.print(":");
             totalCost+=returnedMoneyCost;
-            mLogPW.print(returnedMoneyCost);
-            mLogPW.println();
+            mLogPW.print(returnedMoneyCost + ",");
+            onCloud = true;
+            //mLogPW.println();
         }
     }
 
@@ -311,11 +314,11 @@ public class StatisticsManager {
     {
         if(mLogPW != null)
         {
-            mLogPW.print(POSED_QUERY_TAG);
+            /*mLogPW.print(POSED_QUERY_TAG);
             printTimeStamp();
             mLogPW.print(':');
             mLogPW.print(query);
-            mLogPW.println();
+            mLogPW.println();*/
         }
     }
 
@@ -334,7 +337,7 @@ public class StatisticsManager {
     }
 
     public static void stopCacheAnalysis(long startingTime) {
-     //   printStopTask(startingTime, STOP_CACHE_ANALYSIS_TAG);
+        printStopTask(startingTime, STOP_CACHE_ANALYSIS_TAG);
     }
 
     public static long startQueryProcess() {
@@ -342,7 +345,22 @@ public class StatisticsManager {
     }
 
     public static void stopQueryProcess(long startingTime) {
-        printStopTask(startingTime,STOP_QUERY_PROCESS_TAG);
+
+        if(mLogPW != null) {
+            if (!onCloud) {
+                mLogPW.print("0.0,");
+            }
+            long time = SystemClock.elapsedRealtimeNanos();
+            mLogPW.print(time - startingTime + ",");
+            totalTime += (time - startingTime);
+            //mLogPW.println();
+            double localEnergy = MobileEstimationComputationManager.estimateEnergy(time - startingTime);
+            totalEnergy += localEnergy;
+            mLogPW.print(localEnergy);
+            mLogPW.println();
+        }
+        //printStopTask(startingTime,STOP_QUERY_PROCESS_TAG);
+        onCloud = false;
     }
 
     public static long startQueryExecution() {
@@ -350,7 +368,7 @@ public class StatisticsManager {
     }
 
     public static void stopQueryExecution(long startingTime) {
-        //printStopTask(startingTime,STOP_QUERY_EXECUTION_TAG);
+        printStopTask(startingTime,STOP_QUERY_EXECUTION_TAG);
     }
 
     public static long startCacheReplacement() {
@@ -358,7 +376,7 @@ public class StatisticsManager {
     }
 
     public static void stopCacheReplacement(long startingTime) {
-      //  printStopTask(startingTime, STOP_CACHE_REPLACEMENT_TAG);
+        printStopTask(startingTime, STOP_CACHE_REPLACEMENT_TAG);
     }
 
 
@@ -367,7 +385,7 @@ public class StatisticsManager {
     }
 
     public static void stopDecisionProcess(long startingTime) {
-       // printStopTask(startingTime,STOP_DECISION_PROCESS_TAG);
+        printStopTask(startingTime,STOP_DECISION_PROCESS_TAG);
     }
 
     public static void newMobileEstimationCacheHit()
@@ -382,25 +400,25 @@ public class StatisticsManager {
 
     public static void newCloudEstimationCacheMiss()
     {
-        printTag(CLOUD_ESTIMATION_CACHE_MISS_TAG);
+    //    printTag(CLOUD_ESTIMATION_CACHE_MISS_TAG);
     }
 
     public static void newResultSize(long resultSize) {
         if(mLogPW != null) {
-            mLogPW.print(CLOUD_PROCESS_RESULT_SIZE_TAG);
+            /*mLogPW.print(CLOUD_PROCESS_RESULT_SIZE_TAG);
             mLogPW.print(":");
             mLogPW.print(resultSize);
-            mLogPW.println();
+            mLogPW.println();*/
         }
     }
 
     public static void cloudCoefficient(int coeff)
     {
         if(mLogPW != null) {
-            mLogPW.print(CLOUD_COEFFICIENT_TAG);
+            /*mLogPW.print(CLOUD_COEFFICIENT_TAG);
             mLogPW.print(":");
             mLogPW.print(coeff);
-            mLogPW.println();
+            mLogPW.println();*/
         }
     }
 
@@ -409,12 +427,15 @@ public class StatisticsManager {
         if(mLogPW != null)
         {
           //  mLogPW.println("RESULTS:");
-            mLogPW.print(/*"Time: " + */String.valueOf(totalTime)+",");
-            mLogPW.print(/*"Energy: " + */String.valueOf(totalEnergy)+",");
-            mLogPW.println(/*"Cost: " + */String.valueOf(totalCost));
-            Log.i("RESULTS", String.valueOf(totalTime));
-            Log.i("RESULTS", String.valueOf(totalEnergy));
-            Log.i("RESULTS", String.valueOf(totalCost));
+            if(totalTime != 0)
+            {
+                mLogPW.print(/*"Cost: " + */String.valueOf(totalCost) + ",");
+                mLogPW.print(/*"Time: " + */String.valueOf(totalTime)+",");
+                mLogPW.println(/*"Energy: " + */String.valueOf(totalEnergy));
+                Log.i("RESULTS", String.valueOf(totalCost));
+                Log.i("RESULTS", String.valueOf(totalTime));
+                Log.i("RESULTS", String.valueOf(totalEnergy));
+            }
             totalCost = 0.0; totalEnergy = 0.0; totalTime = 0;
         }
     }

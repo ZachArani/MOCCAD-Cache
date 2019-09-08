@@ -54,19 +54,19 @@ public class RelationMetadata {
 	@Nullable
 	public Double getAttributeMinValue(String attributeName)
 	{
-		return mMinValueForAttributeMap.get(attributeName);
+		return mMinValueForAttributeMap.get(attributeName.trim());
 	}
 	
 	@Nullable
 	public Double getAttributeMaxValue(String attributeName)
 	{
-		return mMaxValueForAttributeMap.get(attributeName);
+		return mMaxValueForAttributeMap.get(attributeName.trim());
 	}
 	
 	@Nullable
 	public Long getAttributeNbValue(String attributeName)
 	{
-		return mNbDifferentValuesForAttributeMap.get(attributeName);
+		return mNbDifferentValuesForAttributeMap.get(attributeName.trim());
 	}
 	
 	

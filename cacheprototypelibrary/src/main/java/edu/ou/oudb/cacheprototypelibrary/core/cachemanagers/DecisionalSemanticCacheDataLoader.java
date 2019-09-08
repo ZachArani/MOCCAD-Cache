@@ -134,7 +134,7 @@ public class DecisionalSemanticCacheDataLoader extends DataLoader<Query,QuerySeg
 		resultEnergyC = 0;
 
         //<editor-fold desc="LOG newPosedQuery">
-        StatisticsManager.newPosedQuery(query.toSQLString());
+        StatisticsManager.newPosedQuery(query.toSQLString()); //Logging info
         //</editor-fold>
 		
 		QuerySegment queryResult = null;

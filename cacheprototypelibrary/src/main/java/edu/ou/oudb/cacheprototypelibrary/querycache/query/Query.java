@@ -31,6 +31,9 @@ public class Query implements Sizeable {
 
 	/** The hash set of attributes of the query */
 	private HashSet<String> mAttributes;
+
+	/** The collection of query limitations (order by, limit, etc) */
+	private HashSet<String> mLimits;
 	
 	/** The hash set of attribute allowing contained in the predicates */
 	private HashSet<String> mPredicateAttributes;
@@ -202,6 +205,31 @@ public class Query implements Sizeable {
 		}
 
 		return true;
+	}
+
+	/**
+	 *
+	 * @param limits
+	 * @return if the limits were added
+	 */
+	public boolean addLimits(Collection<String> limits)
+	{
+		for(String limit: limits)
+		{
+			if(!addLimit(limit))
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 *
+	 * @param limit
+	 * @return if the limit was added to list of limits
+	 */
+	public boolean addLimit(String limit)
+	{
+		return mLimits.add(limit);
 	}
 	
 
@@ -439,6 +467,14 @@ public class Query implements Sizeable {
 			}
 			
 			builder.append(" )");
+		}
+
+		if(mLimits != null && mLimits.size() != 0) // If there's limits
+		{
+			for(String limit : mLimits)
+			{
+				builder.append(limit);
+			}
 		}
 		
 		builder.append(";");
