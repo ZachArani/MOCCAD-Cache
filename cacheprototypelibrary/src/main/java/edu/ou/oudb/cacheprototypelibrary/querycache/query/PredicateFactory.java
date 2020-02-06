@@ -28,8 +28,12 @@ public class PredicateFactory {
             throw new InvalidPredicateException();
         }
 
-        boolean leftOpIsDigit = Character.isDigit(leftOperand.charAt(0));
-        boolean rightOpIsDigit = Character.isDigit(rightOperand.charAt(0));
+        boolean leftOpIsDigit = false;
+        boolean rightOpIsDigit = false;
+        if((leftOperand.charAt(0) == '-' && Character.isDigit(leftOperand.charAt(1))) || Character.isDigit(leftOperand.charAt(0))) //If either negative or positive digit
+            leftOpIsDigit = true;
+        if((rightOperand.charAt(0) == '-' && Character.isDigit(rightOperand.charAt(1))) || Character.isDigit(rightOperand.charAt(0)))
+            rightOpIsDigit = true;
 
         if (!leftOpIsDigit && rightOpIsDigit) {
             //if XopC

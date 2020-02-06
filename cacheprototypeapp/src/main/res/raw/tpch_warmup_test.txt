@@ -1,0 +1,2 @@
+SELECT o_clerk, o_orderkey FROM orders WHERE o_custkey = 42631 AND o_totalprice > 174762;
+SELECT DISTINCT s_phone FROM supplier WHERE s_nationkey = 3 AND s_acctbal < 4738;

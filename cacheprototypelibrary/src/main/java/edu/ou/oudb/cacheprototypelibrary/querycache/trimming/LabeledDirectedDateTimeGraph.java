@@ -153,9 +153,9 @@ public class LabeledDirectedDateTimeGraph extends LabeledDirectedGraph {
 
             curLeftNode = mNodesIndex.get(p.getLeftOperand());
             /*If Date*/
-            if (p.getLeftOperand().equals("substr(p_date_time,0,10)")) {
+            if (p.getLeftOperand().equals("l_shipdate")) { //Replace string with whatever is needed to recognize dating in query type //TODO: FIX
                 try {
-                    curRightOperand = sdf.parse(p.getRightOperand().replace("%27", ""));
+                    curRightOperand = sdf.parse(p.getRightOperand().replace("%27", "").replace("'",""));
                 } catch (ParseException e){
                     e.printStackTrace();
                 }

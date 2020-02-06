@@ -39,7 +39,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 
     private static final int CLOUD_COEFF = 5;
 	
-    private String mURLBase = "http://192.168.5.210:8080/CloudWebService/rest/";
+    private String mURLBase = "http://192.168.6.25:8080/CloudWebService/rest/";
 
 	private String mURLGetRelationMetadata = mURLBase + URL_DB_INFO;
 	
@@ -52,7 +52,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 	public CloudDataAccessProvider(Context context) throws DownloadDataException, JSONParserException
 	{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		String ipAddress = pref.getString(PREF_IP_ADDRESS,"192.168.5.210"); //school is 10.204.69.210, Jason home is 192.168.0.132 - change in two places here, and in preferences.xml in cacheprototypeapp
+		String ipAddress = pref.getString(PREF_IP_ADDRESS,"192.168.6.25"); //school is 10.204.69.210, Jason home is 192.168.0.132 - change in two places here, and in preferences.xml in cacheprototypeapp
 		String port = pref.getString(PREF_PORT,"8080");
 	
 		StringBuilder urlBaseBuilder = new StringBuilder("http://");
@@ -73,7 +73,7 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 		// save the string result into preferences
 		
 		String cloudMetadata = pref.getString(PREF_METADATA, "");
-		if(cloudMetadata.isEmpty()  || cloudMetadata.equals("[]"))
+		if(cloudMetadata.isEmpty()  || cloudMetadata.equals("[]") || cloudMetadata.equals(""))
 		{
 			jsonStream = JSONLoader.getJSONInputStreamFromUrl(mURLGetRelationMetadata);
 			BufferedReader r = new BufferedReader(new InputStreamReader(jsonStream));
@@ -133,7 +133,12 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 						.replace("<", "%3C")
 						.replace(">","%3E")
 						.replace("=", "%3D")
+						.replace("#","%23")
+						.replace("\"", "%22")
 						.replace("'", "%27")
+						.replace("(", "%28")
+						.replace(")", "%29")
+						.replace("+", "%2B")
 						.replace(";", ""));
 		String urlString = sb.toString();
 
@@ -195,6 +200,9 @@ public class CloudDataAccessProvider implements DataAccessProvider{
 						.replace(" ", "%20")
 						.replace("<", "%3C")
 						.replace(">","%3E")
+						.replace("\"", "%22")
+						.replace("'", "%27")
+						.replace("#", "%23")
 						.replace(";", ""));
 		String urlString = sb.toString();
 

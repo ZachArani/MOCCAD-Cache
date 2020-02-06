@@ -140,6 +140,8 @@ public class LabeledDirectedGraph {
         return mSuccessors.keySet();
     }
 
+    public int getmNbNode() { return mNbNode; }
+
     /**
      * Method used to know if the node is within the graph
      *

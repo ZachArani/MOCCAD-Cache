@@ -236,7 +236,7 @@ public class GuoEtAlPredicateAnalyzer implements PredicatesAnalyzer {
 
                 switch (pXopY.getLeftOperand()) {
                     /*If it's the Date*/
-                    case "substr(p_date_time,0,10)":
+                    case "l_shipdate":
                         if (mNodeMapDT.containsKey(pXopY.getLeftOperand())) {
                             curNodeDT = mNodeMapDT.get(pXopY.getLeftOperand());
                         } else {
@@ -246,7 +246,7 @@ public class GuoEtAlPredicateAnalyzer implements PredicatesAnalyzer {
                         /*We convert the String into a Date*/
                         Date rightOperand = null;
                         try {
-                            rightOperand = sdf.parse(pXopY.getRightOperand().replace("%27", ""));
+                            rightOperand = sdf.parse(pXopY.getRightOperand().replace("%27", "").replace("'", ""));
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -496,17 +496,23 @@ public class GuoEtAlPredicateAnalyzer implements PredicatesAnalyzer {
             }
 
             Iterator<Predicate> iterator = cleanCachePredicates.iterator();
+            int stringNum = 0;
+            int regNum = 0;
+            int dateNum = 0;
             Predicate curPredicate;
             while (iterator.hasNext() && respectsImplication) {
                 curPredicate = iterator.next();
                 /*Goes to the corresponding LabeledDirectedGraph
                 * (i.e. Strings, Numbers, or Date and Time)*/
-                if (mNodeStringGraphCollapsed != null) {
+                if (mNodeStringGraphCollapsed != null && stringNum < mNodeStringGraphCollapsed.getmNbNode()  && curPredicate instanceof XopCPredicate) { //If not null and we haven't already visited the node already
                     respectsImplication = mNodeStringGraphCollapsed.impliesPredicateIntegerDomain((XopYPredicate) curPredicate);
-                } else if (mNodeGraphCollapsed != null) {
+                    stringNum++;
+                } else if (mNodeGraphCollapsed != null && regNum < mNodeGraphCollapsed.getmNbNode() && curPredicate instanceof XopCPredicate) {
                     respectsImplication = mNodeGraphCollapsed.impliesPredicateIntegerDomain((XopCPredicate) curPredicate);
-                } else if (mNodeDateTimeGraphCollapsed != null) {
+                    regNum++;
+                } else if (mNodeDateTimeGraphCollapsed != null && dateNum < mNodeDateTimeGraphCollapsed.getNodesDT().size() *2 && curPredicate instanceof XopYPredicate) {
                     respectsImplication = mNodeDateTimeGraphCollapsed.impliesPredicateIntegerDomain((XopYPredicate) curPredicate);
+                    dateNum++;
                 } else {
                     respectsImplication = false;
                 }

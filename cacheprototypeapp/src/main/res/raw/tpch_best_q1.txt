@@ -1,0 +1,20 @@
+SELECT DISTINCT l_shipdate FROM lineitem WHERE l_linestatus = 'O';
+SELECT DISTINCT l_shipdate FROM lineitem WHERE l_linestatus = 'O' AND l_receiptdate <= '1996-02-01';
+SELECT DISTINCT l_shipdate FROM lineitem WHERE l_linestatus = 'O' AND l_receiptdate <= '1995-02-01';
+SELECT DISTINCT l_shipdate FROM lineitem WHERE l_linestatus = 'O' AND l_receiptdate <= '1995-01-15';
+SELECT DISTINCT l_shipdate FROM lineitem WHERE l_linestatus = 'O' AND l_receiptdate <= '1995-01-05';
+SELECT DISTINCT l_shipdate FROM lineitem WHERE l_linestatus = 'O' AND l_receiptdate <= '1995-01-05';
+SELECT s_suppkey FROM supplier WHERE s_nationkey = 1;
+SELECT s_name FROM supplier WHERE s_nationkey = 4;
+SELECT s_phone FROM supplier WHERE s_acctbal < -800 AND s_acctbal > -1000 AND s_nationkey = 2;
+SELECT ps_comment FROM partsupp WHERE ps_partkey > 1000 AND ps_partkey < 5000;
+SELECT ps_partkey FROM partsupp WHERE ps_availqty > 8000;
+SELECT ps_suppkey FROM partsupp WHERE ps_availqty > 9900;
+SELECT p_brand FROM part WHERE p_size = 20 AND p_partkey < 10000;
+SELECT p_size FROM part WHERE p_size = 30;
+SELECT p_comment FROM part WHERE p_partkey < 1000;
+SELECT p_partkey FROM part WHERE p_retailprice < 920;the
+SELECT DISTINCT l_shipdate FROM lineitem WHERE l_linestatus = 'O';
+SELECT DISTINCT l_shipdate FROM lineitem WHERE l_linestatus = 'O' AND l_receiptdate <= '1997-03-01';
+SELECT DISTINCT l_shipdate FROM lineitem WHERE l_linestatus = 'O' AND l_receiptdate <= '1996-05-01';
+SELECT DISTINCT l_shipdate FROM lineitem WHERE l_linestatus = 'O' AND l_receiptdate <= '1995-01-05';

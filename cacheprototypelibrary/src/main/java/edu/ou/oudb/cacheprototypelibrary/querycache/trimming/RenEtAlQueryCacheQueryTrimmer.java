@@ -47,11 +47,11 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
                     HashSet<String> attributeSet1 = new HashSet<String>();
                     attributeSet1.addAll(inputQuery.getAttributes());
                     attributeSet1.retainAll(segmentQuery.getAttributes());
-                    if(!attributeSet1.contains("noteid")) { attributeSet1.add("noteid"); } //vertical trimming requires union with key attribute set; key attribute should be noteid
+                   // if(!attributeSet1.contains("noteid")) { attributeSet1.add("noteid"); } //vertical trimming requires union with key attribute set; key attribute should be noteid
                     HashSet<String> attributeSet2 = new HashSet<String>();
                     attributeSet2.addAll(inputQuery.getAttributes());
                     attributeSet2.removeAll(segmentQuery.getAttributes());
-                    if(!attributeSet2.contains("noteid")) { attributeSet2.add("noteid"); } //vertical trimming requires union with key attribute set; key attribute should be noteid
+                  //  if(!attributeSet2.contains("noteid")) { attributeSet2.add("noteid"); } //vertical trimming requires union with key attribute set; key attribute should be noteid
 
                     result.entryQuery = segmentQuery;
                     result.inputQuery = new Query(inputQuery.getRelation());
@@ -72,13 +72,17 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
                 if(verticalTrim==1) { //horizontal trimming
                     result.type = QueryTrimmingType.CACHE_HORIZONTAL;
                     result.entryQuery = segmentQuery;
-                    result.probeQuery = new Query(inputQuery.getRelation());
+                    result.probeQuery = new Query(inputQuery.getRelation()); //Probe query runs in cloud
                     result.probeQuery.addPredicates(inputQuery.getPredicates());
                     result.probeQuery.addAttributes(inputQuery.getAttributes());
-                    result.remainderQuery = new Query(inputQuery.getRelation());
+                    result.probeQuery.addLimits(inputQuery.getLimits());
+                    result.probeQuery.setDistinct(inputQuery.getDistinct());
+                    result.remainderQuery = new Query(inputQuery.getRelation()); //Remainder query executes locally
                     result.remainderQuery.addPredicates(inputQuery.getPredicates());
                     result.remainderQuery.addExcludedPredicates(segmentQuery.getPredicates());
                     result.remainderQuery.addAttributes(inputQuery.getAttributes());
+                    result.remainderQuery.addLimits(inputQuery.getLimits());
+                    result.remainderQuery.setDistinct(segmentQuery.getDistinct());
                     return result;
                 } else if(verticalTrim==2) {
                     result.type = QueryTrimmingType.CACHE_HYBRID;
@@ -86,11 +90,11 @@ public class RenEtAlQueryCacheQueryTrimmer implements QueryCacheQueryTrimmer {
                     HashSet<String> attributeSet1 = new HashSet<String>();
                     attributeSet1.addAll(inputQuery.getAttributes());
                     attributeSet1.retainAll(segmentQuery.getAttributes());
-                    if(!attributeSet1.contains("noteid")) { attributeSet1.add("noteid"); } //vertical trimming requires union with key attribute set; key attribute should be noteid
+                   // if(!attributeSet1.contains("noteid")) { attributeSet1.add("noteid"); } //vertical trimming requires union with key attribute set; key attribute should be noteid
                     HashSet<String> attributeSet2 = new HashSet<String>();
                     attributeSet2.addAll(inputQuery.getAttributes());
                     attributeSet2.removeAll(segmentQuery.getAttributes());
-                    if(!attributeSet2.contains("noteid")) { attributeSet2.add("noteid"); } //vertical trimming requires union with key attribute set; key attribute should be noteid
+                  //  if(!attributeSet2.contains("noteid")) { attributeSet2.add("noteid"); } //vertical trimming requires union with key attribute set; key attribute should be noteid
 
                     HashSet<Predicate> qPsP = new HashSet<Predicate>();
                     qPsP.addAll(inputQuery.getPredicates());

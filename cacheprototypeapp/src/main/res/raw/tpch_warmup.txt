@@ -1,0 +1,16 @@
+SELECT * FROM lineitem WHERE l_shipdate >= '1995-01-01' AND l_shipdate <= '1995-01-15';
+SELECT c_custkey, c_name, c_address, c_phone FROM customer WHERE c_mktsegment = 'AUTOMOBILE' AND c_acctbal < 1000;
+SELECT o_clerk FROM orders WHERE o_custkey = 42631 AND o_totalprice > 1000;
+SELECT * FROM customer WHERE c_nationkey = 5 AND c_acctbal > 2000 AND c_mktsegment = 'HOUSEHOLD';
+SELECT DISTINCT l_suppkey FROM lineitem WHERE l_shipdate >= '1995-01-01' AND l_shipdate <= '1995-06-01';
+SELECT r_name, r_comment FROM region WHERE r_regionkey < 2;
+SELECT l_partkey, l_suppkey, l_orderkey FROM lineitem WHERE l_tax < 0.05 AND l_discount = 0 AND l_quantity > 45;
+SELECT DISTINCT s_phone FROM supplier WHERE s_nationkey = 3 AND s_acctbal < 10000 AND s_suppkey < 15000;
+SELECT c_acctbal FROM customer  WHERE c_nationkey = 6 OR c_nationkey = 2;
+SELECT l_commitdate FROM lineitem WHERE l_quantity < 100 AND l_shipdate = '1998-05-05';
+SELECT * FROM lineitem WHERE l_shipdate >= '1995-02-01' AND l_shipdate <= '1995-03-01';
+SELECT c_custkey, c_name, c_address, c_phone FROM customer WHERE c_mktsegment = 'AUTOMOBILE' AND c_acctbal > 500 AND c_acctbal < 800;
+SELECT * FROM lineitem WHERE l_shipdate >= '1995-02-05' AND l_shipdate <= '1995-02-10';
+SELECT * FROM customer WHERE c_nationkey = 5 AND c_acctbal < 1000 AND c_mktsegment = 'HOUSEHOLD';
+SELECT DISTINCT l_suppkey FROM lineitem WHERE l_shipdate >= '1995-01-01' AND l_shipdate <= '1996-01-01';
+SELECT DISTINCT l_suppkey FROM lineitem WHERE l_shipdate >= '1995-01-01' AND l_shipdate <= '1995-02-01';

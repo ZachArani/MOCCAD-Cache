@@ -1,0 +1,20 @@
+SELECT l_commitdate FROM lineitem WHERE l_shipdate = '1998-05-05' AND l_quantity = 45;
+SELECT l_partkey, l_suppkey, l_orderkey , l_extendedprice FROM lineitem WHERE l_tax < 0.05 AND l_discount = 0 AND l_quantity > 48;
+SELECT o_orderdate FROM orders WHERE o_custkey < 10000;
+SELECT o_clerk, o_orderstatus FROM orders WHERE o_custkey = 42631 AND o_totalprice > 105538;
+SELECT p_comment FROM part WHERE p_partkey < 1000;
+SELECT ps_suppkey FROM partsupp WHERE ps_availqty > 9900;
+SELECT s_phone FROM supplier WHERE s_acctbal < -800 AND s_acctbal > -1000 AND s_nationkey = 2;
+SELECT c_mktsegment FROM customer WHERE c_nationkey = 5 AND c_acctbal > 114563 AND c_mktsegment = 'HOUSEHOLD';
+SELECT s_name FROM supplier WHERE s_nationkey = 4;
+SELECT c_custkey, c_name, c_address, c_phone, c_comment FROM customer WHERE c_mktsegment = "AUTOMOBILE" AND c_acctbal < -983;
+SELECT o_custkey FROM orders WHERE o_shippriority = 0 AND o_totalprice < 1000;
+SELECT ps_comment FROM partsupp WHERE ps_partkey > 1000 AND ps_partkey < 5000;
+SELECT r_name, r_comment FROM region WHERE r_regionkey < 4
+SELECT DISTINCT l_suppkey FROM lineitem WHERE l_shipdate >= '1995-01-01' AND l_shipdate <= '1996-01-11';
+SELECT p_type FROM part WHERE p_size < 17 AND p_retailprice > 1298;
+SELECT c_mktsegment FROM customer WHERE c_nationkey = 5 AND c_acctbal > 139328 AND c_mktsegment = 'HOUSEHOLD';
+SELECT * FROM lineitem WHERE l_shipdate >= '1995-01-01' AND l_shipdate <= '1995-01-05';
+SELECT p_type FROM part WHERE p_size < 35 AND p_retailprice > 1014;
+SELECT r_name, r_comment FROM region WHERE r_regionkey < 1
+SELECT c_mktsegment FROM customer WHERE c_nationkey = 5 AND c_acctbal > 112032 AND c_mktsegment = 'HOUSEHOLD';

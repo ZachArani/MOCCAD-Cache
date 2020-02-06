@@ -84,6 +84,8 @@ public class QueryAdapter extends ArrayAdapter<Query> {
 
 
         holder.predicates.setText(sb.toString().replace("%27", "'")
+                .replace("#", "%23")
+                .replace("\"", "%22")
                 .replace("%20", " "));
 
 

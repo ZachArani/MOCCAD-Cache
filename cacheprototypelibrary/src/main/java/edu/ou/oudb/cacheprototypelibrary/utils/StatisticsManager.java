@@ -24,7 +24,7 @@ public class StatisticsManager {
     private static final String FOLDER_NAME = "/MOCCADCacheStatistics";
     private static final String DATE_FORMAT = "yyyyMMddHHmmss";
     private static final String PREFIX_FILE_NAME = "stats";
-    private static final String EXTENSION= ".txt";
+    private static final String EXTENSION= ".csv";
     private static final String SPLIT_CHAR = "_";
 
     private static final String QUERY_CACHE_EXACT_HIT_TAG = "QUERY_CACHE_EXACT_HIT";

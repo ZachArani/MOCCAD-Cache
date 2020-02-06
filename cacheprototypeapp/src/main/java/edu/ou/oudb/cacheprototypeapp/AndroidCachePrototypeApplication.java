@@ -20,6 +20,7 @@ import edu.ou.oudb.cacheprototypelibrary.connection.DataAccessProvider;
 import edu.ou.oudb.cacheprototypelibrary.connection.StubDataAccessProvider;
 import edu.ou.oudb.cacheprototypelibrary.core.cache.Cache;
 import edu.ou.oudb.cacheprototypelibrary.core.cache.CacheBuilder;
+import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheContentManager;
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.CacheReplacementManager;
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.DataLoader;
 import edu.ou.oudb.cacheprototypelibrary.core.cachemanagers.DecisionalSemanticCacheDataLoader;
@@ -35,6 +36,8 @@ import edu.ou.oudb.cacheprototypelibrary.querycache.query.Query;
 import edu.ou.oudb.cacheprototypelibrary.querycache.query.QuerySegment;
 import edu.ou.oudb.cacheprototypelibrary.utils.StatisticsManager;
 import edu.ou.oudb.cacheprototypelibrary.LFUSQEPCacheReplacementManager;
+import edu.ou.oudb.cacheprototypelibrary.LFUCacheReplacementManager;
+
 
 public class AndroidCachePrototypeApplication extends Application {
 	
@@ -83,6 +86,10 @@ public class AndroidCachePrototypeApplication extends Application {
 		int time = sharedPref.getInt(WeightProfilesActivity.WEIGHT_TIME, WeightProfilesActivity.MAX/3);
 		int money = sharedPref.getInt(WeightProfilesActivity.WEIGHT_MONEY, WeightProfilesActivity.MAX/3);
 		int energy = sharedPref.getInt(WeightProfilesActivity.WEIGHT_ENERGY, WeightProfilesActivity.MAX/3);
+
+		time = 80;
+		money = 5;
+		energy = 15;
 
 		mOptimizationParameters.setTime(time);
 		mOptimizationParameters.setMoney(money);
@@ -363,6 +370,9 @@ public class AndroidCachePrototypeApplication extends Application {
             case "LRU":
                 queryCacheBuilder.setCacheReplacementManager(new LRUCacheReplacementManager());
             break;
+			case "LFU":
+				queryCacheBuilder.setCacheReplacementManager(new LFUCacheReplacementManager());
+				break;
             case "LFUSQEP":
                 queryCacheBuilder.setCacheReplacementManager(new LFUSQEPCacheReplacementManager());
             break;

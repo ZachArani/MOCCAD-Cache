@@ -29,11 +29,13 @@ public class Query implements Sizeable {
 	/** The relation on which the query is posed */
 	private String mRelation;
 
+	private boolean distinct = false;
+
 	/** The hash set of attributes of the query */
 	private HashSet<String> mAttributes;
 
 	/** The collection of query limitations (order by, limit, etc) */
-	private HashSet<String> mLimits;
+	private String mLimits;
 	
 	/** The hash set of attribute allowing contained in the predicates */
 	private HashSet<String> mPredicateAttributes;
@@ -212,26 +214,20 @@ public class Query implements Sizeable {
 	 * @param limits
 	 * @return if the limits were added
 	 */
-	public boolean addLimits(Collection<String> limits)
+	public boolean addLimits(String limits)
 	{
-		for(String limit: limits)
-		{
-			if(!addLimit(limit))
-				return false;
-		}
-		return true;
+        mLimits = limits;
+        return true;
 	}
 
 	/**
 	 *
-	 * @param limit
-	 * @return if the limit was added to list of limits
+	 * @return the limits of the query (ORDER BY, LIMIT, GROUP BY) etc
 	 */
-	public boolean addLimit(String limit)
+	public String getLimits()
 	{
-		return mLimits.add(limit);
+		return mLimits;
 	}
-	
 
 	/**
 	 * @return the id
@@ -333,6 +329,13 @@ public class Query implements Sizeable {
 		return isValidTuple;
 	}
 
+	public void setDistinct(boolean val)
+	{
+		distinct=val;
+	}
+
+	public boolean getDistinct() { return distinct; }
+
 	@Override
 	public long size() {
 		return mSize;
@@ -411,6 +414,9 @@ public class Query implements Sizeable {
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT ");
 
+		if(distinct)
+			builder.append("DISTINCT ");
+
 		int sizeAttributes = mAttributes.size();
 
 		if (sizeAttributes == 0)
@@ -469,13 +475,8 @@ public class Query implements Sizeable {
 			builder.append(" )");
 		}
 
-		if(mLimits != null && mLimits.size() != 0) // If there's limits
-		{
-			for(String limit : mLimits)
-			{
-				builder.append(limit);
-			}
-		}
+		if(mLimits != null)
+			builder.append(mLimits);
 		
 		builder.append(";");
 		

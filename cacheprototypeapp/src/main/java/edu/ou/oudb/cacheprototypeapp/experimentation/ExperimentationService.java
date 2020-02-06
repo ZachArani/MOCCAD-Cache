@@ -12,10 +12,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+
 
 
 import edu.ou.oudb.cacheprototypeapp.AndroidCachePrototypeApplication;
@@ -77,7 +84,7 @@ public class ExperimentationService extends IntentService
 
 		//FIXME: WASN'T THERE
 		int[] myExperiment = {
-				R.raw.tpch_test
+				R.raw.tpch_semantic_50
         };
 
 		//FIXME: WASN'T COMMENTED
@@ -120,13 +127,14 @@ public class ExperimentationService extends IntentService
             }*/
 
             //System.gc(); // clean memory
-			for (int k=0; k < 1; ++k) {
+			for (int k=0; k < 3; ++k) {
                 // experimentation for exact hit
                 for (int i = 0; i < myExperiment.length; ++i) {
+                    ((AndroidCachePrototypeApplication) getApplicationContext()).updateQueryCache("LFU");
                     //Warm-up cache
-                 //   mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
-               //     warmupCache(warmupQueries);
-                  //  mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
+                    mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
+                    warmupCache(warmupQueries);
+                    mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
                     //Gather Queries
                     queriesToProcess = getQueries(this, myExperiment[i]);
                     sizeOfQuerySet = queriesToProcess.size();
@@ -140,10 +148,9 @@ public class ExperimentationService extends IntentService
 
                     //Begin experiment
                     //<editor-fold desc="LOG START EXPERIMENTATION">
-                    StatisticsManager.createFileWriter("test_experiment_" + i + "_LRU");
+                    StatisticsManager.createFileWriter("test_experiment_" + ((i + 1) * 10) + "_" + k + "_LFU");
                     //</editor-fold>
 					//First run, LRU
-					((AndroidCachePrototypeApplication) getApplicationContext()).updateQueryCache("LRU");
                     StatisticsManager.finishedExperiment(); //Clear experiment log writer before starting
 					//TODO: Edit logger to have CSV format
                     runExperimentation(queriesToProcess, nbQueriesToExecute);
@@ -156,10 +163,41 @@ public class ExperimentationService extends IntentService
 
 					//Do it all again
 					//Warm-up cache
-				//	mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
-					//(warmupQueries);
-				//	mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
+					mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
+					warmupCache(warmupQueries);
+					mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
 					//Gather Queries
+                    ((AndroidCachePrototypeApplication) getApplicationContext()).updateQueryCache("LFUSQEP");
+                    queriesToProcess = getQueries(this, myExperiment[i]);
+					sizeOfQuerySet = queriesToProcess.size();
+					if (nbQueriesToExecute != 0) {
+						mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_STARTED,
+								String.valueOf((sizeOfQuerySet < nbQueriesToExecute) ? sizeOfQuerySet : nbQueriesToExecute));
+					} else {
+						mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_STARTED,
+								String.valueOf(sizeOfQuerySet));
+					}
+
+					//Begin experiment
+					//<editor-fold desc="LOG START EXPERIMENTATION">
+                    StatisticsManager.createFileWriter("test_experiment_" + ((i + 1) * 10) + "_" + k + "_LSR");
+					//</editor-fold>
+					//Second run, LFUSQEP
+					StatisticsManager.finishedExperiment(); //Clear experiment log writer before starting
+					//TODO: Edit logger to have CSV format
+					runExperimentation(queriesToProcess, nbQueriesToExecute);
+					StatisticsManager.finishedExperiment();
+					//<editor-fold desc="LOG STOP EXPERIMENTATION">
+					clearCache(); //Remove all entries from cache before we start again
+					StatisticsManager.close();
+
+					//Do it all again
+					//Warm-up cache
+					mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_STARTED, String.valueOf(warmupQueries.size()));
+					warmupCache(warmupQueries);
+					mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_WARMUP_COMPLETED, "");
+					//Gather Queries
+					((AndroidCachePrototypeApplication) getApplicationContext()).updateQueryCache("LRU");
 					queriesToProcess = getQueries(this, myExperiment[i]);
 					sizeOfQuerySet = queriesToProcess.size();
 					if (nbQueriesToExecute != 0) {
@@ -172,10 +210,9 @@ public class ExperimentationService extends IntentService
 
 					//Begin experiment
 					//<editor-fold desc="LOG START EXPERIMENTATION">
-					StatisticsManager.createFileWriter("test_experiment_" + i + "_LFUSQEP");
+					StatisticsManager.createFileWriter("test_experiment_" + ((i + 1) * 10) + "_" + k + "_LRU");
 					//</editor-fold>
 					//Second run, LFUSQEP
-					((AndroidCachePrototypeApplication) getApplicationContext()).updateQueryCache("LFU");
 					StatisticsManager.finishedExperiment(); //Clear experiment log writer before starting
 					//TODO: Edit logger to have CSV format
 					runExperimentation(queriesToProcess, nbQueriesToExecute);
@@ -183,8 +220,6 @@ public class ExperimentationService extends IntentService
 					//<editor-fold desc="LOG STOP EXPERIMENTATION">
 					clearCache(); //Remove all entries from cache before we start again
 					StatisticsManager.close();
-
-
                     if (!handleErrors()) {
                         mBroadcaster.notifyProgress(BroadcastNotifier.STATE_ACTION_COMPLETED, "");
                     }
@@ -307,7 +342,7 @@ public class ExperimentationService extends IntentService
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 		try {
 			String line;
-			while((line= reader.readLine()) != null)
+			while((line= reader.readLine()) != null && line != "")
 			{
 				query = getQuery(line);
 				queries.add(query);
@@ -337,19 +372,29 @@ public class ExperimentationService extends IntentService
 		
 		Query query = null;
 		String predicateStr = " ";
+		boolean hasDistinct = false;
 		//Set<String> attributes = new HashSet<>();
 		Set<Predicate> predicates = new HashSet<Predicate>();
         HashSet<String> queryAttributes = new HashSet<String>(); //Grab attributes (SELECT * )
-		for(String attr : line.split("SELECT")[1].split("FROM")[0].split(",")) //For each attribute
+		if(line.contains("DISTINCT"))
 		{
-			queryAttributes.add(attr);
+			hasDistinct = true;
+			for(String attr : line.split("DISTINCT")[1].split("FROM")[0].split(","))
+				queryAttributes.add(attr);
 		}
+		else
+			for(String attr : line.split("SELECT")[1].split("FROM")[0].split(",")) //For each attribute
+				queryAttributes.add(attr);
+
 
 		String rightFrom = line.split("FROM")[1].trim();
 
 		String table = rightFrom.split(" ")[0];
 
 		query = new Query(table);
+		if(hasDistinct)
+			query.setDistinct(true);
+
 		query.addAttributes(queryAttributes);
 
 		if(rightFrom.contains("WHERE") || rightFrom.contains("where"))
@@ -357,29 +402,27 @@ public class ExperimentationService extends IntentService
 
 		if(predicateStr.contains(";"))
 		    predicateStr = predicateStr.substring(0,predicateStr.length()-1); //fixed bug where the last char was being cut off
-		if(predicateStr.contains("ORDER BY") && predicateStr.contains("LIMIT")) //If we have both specifications
-		{
-			query.addLimit("LIMIT " + predicateStr.split("LIMIT")[1].split(" ")[0]); //Split the query by the word LIMIT and grab the first number following the word
-			query.addLimit("ORDER BY " + predicateStr.split("ORDER BY")[1].split(" ")[0]); //The same for ORDER BY
 
-			if(predicateStr.indexOf("LIMIT") < predicateStr.indexOf("ORDER BY")) //If limit comes before order by
-				predicateStr = predicateStr.substring(0, predicateStr.indexOf("LIMIT")); //Remove the LIMIT and ORDER BY segments from the query
-			else
-				predicateStr = predicateStr.substring(0, predicateStr.indexOf("ORDER BY"));
+		if(predicateStr.contains("GROUP BY") || predicateStr.contains("ORDER BY") || predicateStr.contains("LIMIT"))
+		{
+            //Find starting index of each keyword. If it doesn't exist then set it to the max int value
+		    int groupIndex = (predicateStr.indexOf("GROUP BY") > 1) ? predicateStr.indexOf("GROUP BY") : Integer.MAX_VALUE;
+		    int orderIndex = (predicateStr.indexOf("ORDER BY") > 1) ? predicateStr.indexOf("ORDER BY"): Integer.MAX_VALUE;
+		    int limitIndex = (predicateStr.indexOf("LIMIT") > 1) ? predicateStr.indexOf("LIMIT") : Integer.MAX_VALUE;
+
+		    String splitter = "";
+		    if(groupIndex < orderIndex && groupIndex < limitIndex)
+		        splitter = "GROUP BY";
+		    else if(orderIndex<groupIndex && orderIndex<limitIndex)
+		        splitter = "ORDER BY";
+		    else if(limitIndex<groupIndex && limitIndex<orderIndex)
+		        splitter = "LIMIT";
+
+
+			query.addLimits(" " + splitter + predicateStr.split(splitter)[1]); //Split the query by the word decided above
+			predicateStr = predicateStr.substring(0, predicateStr.indexOf(splitter)); //Remove limit from predicate statement
 		}
 
-
-		if(predicateStr.contains("LIMIT"))
-		{
-			query.addLimit("LIMIT " + predicateStr.split("LIMIT")[1].split(" ")[0]); //Split the query by the word LIMIT and grab the first number following the word
-			predicateStr = predicateStr.substring(0, predicateStr.indexOf("LIMIT")); //Remove limit from predicate statement
-		}
-
-		else if(predicateStr.contains("ORDER BY"))
-		{
-			query.addLimit("ORDER BY " + predicateStr.split("ORDER BY")[1].split(" ")[0]); //The same for ORDER BY
-			predicateStr = predicateStr.substring(0, predicateStr.indexOf("ORDER BY")); //remove orderby from predicate statement
-		}
 
 		if(predicateStr.contains("BETWEEN")) //If we're dealing with a query with one or more 'between' statements
 		{
@@ -455,9 +498,30 @@ public class ExperimentationService extends IntentService
 			String[] andSplit = betweenList[betweenList.length-1].split("AND"); //After the last between, catch the rest of the ends
 			for(int k = 2; k<andSplit.length; k++) //Start from 2 to ignore the two predicates from the last between
 			{
-				String[] pred = andSplit[k].split(" "); //Split predicate into X OP Y
+				String[] pred = andSplit[k].trim().split(" "); //Split predicate into X OP Y
 				try{
-					predicates.add(PredicateFactory.createPredicate(pred[1], pred[2], pred[3])); //Ship predicate
+					if(pred[2].contains("DATE_SUB"))
+					{
+						DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+						Date startDate;
+						Calendar cal = Calendar.getInstance();
+						String date = pred[2].substring(pred[2].indexOf("DATE_SUB")+ 9).replace("'", "").replace(",", "");
+						try {
+							startDate = df.parse(date);
+							System.out.println("");
+							int numDates = Integer.valueOf(pred[3].replace(")", ""));
+							cal.setTime(startDate);
+							cal.add(Calendar.DATE, -numDates);
+							String calculatedDate = "'" + df.format(cal.getTime()) + "'";
+							Predicate p = PredicateFactory.createPredicate(pred[0], pred[1], calculatedDate);
+							predicates.add(p);
+						} catch(ParseException e) {e.printStackTrace();}
+					}
+					else
+					{
+						Predicate p = PredicateFactory.createPredicate(pred[0], pred[1], pred[2]);
+						predicates.add(p);
+					}
 				} catch (TrivialPredicateException | InvalidPredicateException e) {
 					Log.e("PARSE_QUERY_LINE", "invalid predicate");
 					return null;
@@ -472,8 +536,28 @@ public class ExperimentationService extends IntentService
 			for (int i = 0; i < size; ++i) {
 				predicateItems = predicateList[i].trim().split(" ");
 				try {
-					Predicate p = PredicateFactory.createPredicate(predicateItems[0], predicateItems[1], predicateItems[2]);
-					predicates.add(p);
+                    if(predicateItems[2].contains("DATE_SUB"))
+                    {
+                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                        Date startDate;
+                        Calendar cal = Calendar.getInstance();
+                        String date = predicateItems[2].substring(predicateItems[2].indexOf("DATE_SUB")+ 9).replace("'", "").replace(",", "");
+						try {
+							startDate = df.parse(date);
+							System.out.println("");
+                            int numDates = Integer.valueOf(predicateItems[3].replace(")", ""));
+                            cal.setTime(startDate);
+                            cal.add(Calendar.DATE, -numDates);
+                            String calculatedDate = "'" + df.format(cal.getTime()) + "'";
+							Predicate p = PredicateFactory.createPredicate(predicateItems[0], predicateItems[1], calculatedDate);
+							predicates.add(p);
+						} catch(ParseException e) {e.printStackTrace();}
+                    }
+                    else
+					{
+						Predicate p = PredicateFactory.createPredicate(predicateItems[0], predicateItems[1], predicateItems[2]);
+						predicates.add(p);
+					}
 				} catch (TrivialPredicateException | InvalidPredicateException e) {
 					Log.e("PARSE_QUERY_LINE", "invalid predicate");
 					return null;

@@ -34,7 +34,7 @@
 	        android:title="@string/pref_data_access_provider"/>
 
 	    <EditTextPreference
-            android:defaultValue="192.168.5.210"
+			android:defaultValue="192.168.6.25"
             android:title="@string/pref_ip_address"
             android:key="pref_ip_address"
             android:summary="%s"
@@ -59,7 +59,7 @@
         <EditTextPreference
             android:defaultValue="0"
             android:title="@string/pref_money_constraint"
-            android:key="pref_money_contraint"
+            android:key="pref_money_contraint"zaq
             android:hint="@string/pref_money_constraint_hint"
             android:inputType="numberDecimal"/>
         <EditTextPreference
